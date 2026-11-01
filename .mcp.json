@@ -1,0 +1,46 @@
+{
+  "mcpServers": {
+    "solidcraft": {
+      "command": "solidcraft-cli",
+      "args": [
+        "mcp",
+        "--connect",
+        "127.0.0.1:7878",
+        "--allow-path",
+        "/Volumes/Proj/proj/CAD/gears/solidcraft"
+      ]
+    },
+    "solidcraft-buzzkill": {
+      "command": "ssh",
+      "args": [
+        "-T",
+        "-o",
+        "BatchMode=yes",
+        "buzzkill",
+        "sh",
+        "designs/gears/bin/solidcraft-remote.sh"
+      ]
+    },
+    "solidcraft-buzzkill-gui": {
+      "command": "ssh",
+      "args": [
+        "-T",
+        "-o",
+        "BatchMode=yes",
+        "buzzkill",
+        "sh",
+        "designs/gears/bin/solidcraft-remote.sh",
+        "--gui"
+      ]
+    },
+    "openscad": {
+      "command": "uvx",
+      "args": [
+        "openscad-mcp==0.6.1"
+      ],
+      "env": {
+        "MCP_ALLOWED_PATHS": "/Volumes/Proj/proj/CAD/gears"
+      }
+    }
+  }
+}

@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buzzkill Viewer</title>
+<style>
+  :root { --bg: #1e2126; --panel: #2a2e35cc; --fg: #e6e6e6; --muted: #9aa0a6; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--fg);
+    font: 13px system-ui, sans-serif; overflow: hidden; }
+  #bar { position: fixed; top: 10px; left: 10px; right: 10px; display: flex; gap: 10px;
+    align-items: center; flex-wrap: wrap; background: var(--panel); padding: 8px 12px;
+    border-radius: 8px; z-index: 1; }
+  select, button { background: #3a3f47; color: var(--fg); border: 1px solid #555;
+    border-radius: 4px; padding: 3px 6px; font: inherit; }
+  #status { color: var(--muted); margin-left: auto; }
+  canvas { display: block; }
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<div id="bar">
+  <select id="pick"></select>
+  <label><input type="checkbox" id="follow" checked> follow latest</label>
+  <label><input type="checkbox" id="edges" checked> edges</label>
+  <button id="fit">Fit</button>
+  <span id="status">waiting for models…</span>
+</div>
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { STLLoader } from "three/addons/loaders/STLLoader.js";
+import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
+import { ThreeMFLoader } from "three/addons/loaders/3MFLoader.js";
+
+THREE.Object3D.DEFAULT_UP.set(0, 0, 1);  // SolidCraft is Z up
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(devicePixelRatio);
+document.body.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x1e2126);
+const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100000);
+camera.position.set(150, -200, 150);
+const controls = new OrbitControls(camera, renderer.domElement);
+scene.add(new THREE.HemisphereLight(0xffffff, 0x444455, 1.2));
+const sun = new THREE.DirectionalLight(0xffffff, 1.5);
+scene.add(sun);
+const grid = new THREE.GridHelper(400, 40, 0x555a62, 0x3a3e45);
+grid.rotation.x = Math.PI / 2;
+scene.add(grid, new THREE.AxesHelper(30));
+
+const $ = id => document.getElementById(id);
+const material = new THREE.MeshStandardMaterial({ color: 0x8fb4d9, metalness: 0.1, roughness: 0.6 });
+let model = null, current = null, models = [];
+
+function resize() {
+  renderer.setSize(innerWidth, innerHeight);
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+}
+addEventListener("resize", resize);
+resize();
+
+function fit() {
+  if (!model) return;
+  const box = new THREE.Box3().setFromObject(model);
+  const size = box.getSize(new THREE.Vector3()).length() || 100;
+  const center = box.getCenter(new THREE.Vector3());
+  controls.target.copy(center);
+  camera.position.copy(center).add(new THREE.Vector3(0.9, -1.4, 0.9).multiplyScalar(size));
+  camera.near = size / 1000; camera.far = size * 100;
+  camera.updateProjectionMatrix();
+}
+
+function addEdges(obj) {
+  obj.traverse(o => {
+    if (o.isMesh) {
+      const e = new THREE.LineSegments(new THREE.EdgesGeometry(o.geometry, 25),
+        new THREE.LineBasicMaterial({ color: 0x1a1a1a }));
+      e.userData.edge = true;
+      e.visible = $("edges").checked;
+      o.add(e);
+    }
+  });
+}
+
+async function load(m) {
+  const url = `/models/${encodeURIComponent(m.name)}?t=${m.mtime}`;
+  const ext = m.name.split(".").pop().toLowerCase();
+  let obj;
+  if (ext === "stl") {
+    const geom = await new STLLoader().loadAsync(url);
+    geom.computeVertexNormals();
+    obj = new THREE.Mesh(geom, material);
+  } else if (ext === "obj") {
+    obj = await new OBJLoader().loadAsync(url);
+    obj.traverse(o => { if (o.isMesh) o.material = material; });
+  } else {
+    obj = await new ThreeMFLoader().loadAsync(url);
+  }
+  addEdges(obj);
+  const first = !model;
+  if (model) scene.remove(model);
+  model = obj;
+  scene.add(model);
+  current = m;
+  if (first) fit();
+  $("status").textContent = `${m.name} · ${new Date(m.mtime * 1000).toLocaleTimeString()}`;
+}
+
+async function poll() {
+  try {
+    models = await (await fetch("/api/models")).json();
+    const pick = $("pick"), sel = pick.value;
+    pick.innerHTML = models.map(m => `<option>${m.name}</option>`).join("");
+    if (!models.length) return;
+    const want = $("follow").checked ? models[0]
+      : models.find(m => m.name === sel) || models[0];
+    pick.value = want.name;
+    if (!current || want.name !== current.name || want.mtime !== current.mtime) await load(want);
+  } catch (e) {
+    $("status").textContent = "error: " + e.message;
+  }
+}
+
+$("pick").onchange = () => { $("follow").checked = false; current = null; poll(); };
+$("fit").onclick = fit;
+$("edges").onchange = () => model?.traverse(o => { if (o.userData.edge) o.visible = $("edges").checked; });
+setInterval(poll, 1000);
+poll();
+
+renderer.setAnimationLoop(() => {
+  controls.update();
+  sun.position.copy(camera.position);
+  renderer.render(scene, camera);
+});
+</script>
+</body>
+</html>

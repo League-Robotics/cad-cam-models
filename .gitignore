@@ -1,0 +1,18 @@
+# Generated viewer pages and meshes (rebuild with tools/make_views.sh, tilt9g/export.sh)
+/view/
+/tilt9g/view/
+
+# Videos
+/video/
+
+# SolidCraft designs (not kept)
+/solidcraft/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# OS / editor
+.DS_Store
+.claude/settings.local.json

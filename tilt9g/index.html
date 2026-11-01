@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>9 g Tilt Table</title>
+<style>
+:root {
+  --bg: #f4f4f2; --panel: #ffffffee; --ink: #1d1d1b; --muted: #6b6b66; --line: #d9d9d4;
+  --accent: #d9822b; --scene: #ecebe7;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #161615; --panel: #222220ee; --ink: #ecebe7; --muted: #9c9b95; --line: #3a3a37;
+    --accent: #f0a050; --scene: #1c1c1b;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #161615; --panel: #222220ee; --ink: #ecebe7; --muted: #9c9b95; --line: #3a3a37;
+  --accent: #f0a050; --scene: #1c1c1b;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink);
+  font: 14px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; overflow: hidden; }
+#view { position: fixed; inset: 0; }
+.panel { position: fixed; background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+  padding: 12px 14px; backdrop-filter: blur(6px); }
+#ctl { left: 16px; right: 16px; bottom: 16px; max-width: 760px; margin: 0 auto; }
+#info { top: 16px; left: 16px; max-width: 330px; }
+h1 { font-size: 15px; margin: 0 0 6px; }
+p { margin: 0 0 8px; color: var(--muted); }
+.row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.row + .row { margin-top: 10px; }
+button, select { font: inherit; color: var(--ink); background: transparent; border: 1px solid var(--line);
+  border-radius: 6px; padding: 4px 10px; cursor: pointer; }
+button:hover, select:hover { border-color: var(--accent); }
+label { display: inline-flex; gap: 5px; align-items: center; color: var(--muted); cursor: pointer; }
+.slider { position: relative; flex: 1; min-width: 200px; }
+input[type=range] { width: 100%; accent-color: var(--accent); }
+.ticks { position: relative; height: 14px; font-size: 11px; color: var(--muted); }
+.ticks span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+.readout { font-variant-numeric: tabular-nums; min-width: 190px; }
+.readout b { color: var(--accent); }
+.legend { display: grid; grid-template-columns: 14px 1fr; gap: 4px 8px; align-items: center; font-size: 13px; }
+.sw { width: 12px; height: 12px; border-radius: 3px; }
+#status { color: var(--muted); font-size: 12px; margin-top: 6px; }
+@media (max-width: 600px) { #info { right: 16px; max-width: none; } #info p { display: none; } }
+</style>
+</head>
+<body>
+<div id="view"></div>
+
+<div class="panel" id="info">
+  <h1>9 g tilt table</h1>
+  <p>No gripper idler arm. The spline nub folds 90° over the servo, and a second idler nub turns under
+     the servo on the same axis. A plate pinned across both stubs' back faces is the table: driven on
+     one side, carried on the other.</p>
+  <div class="legend">
+    <span class="sw" style="background:#c9c9c4"></span><span>Frame (top unchanged, 3 units added below)</span>
+    <span class="sw" style="background:#4a4a48"></span><span>9 g servo</span>
+    <span class="sw" style="background:#e8902a"></span><span>Spline nub (driven)</span>
+    <span class="sw" style="background:#3c6fd8"></span><span>Idler nub, flipped, on a 3L axle</span>
+    <span class="sw" style="background:#3caa6e"></span><span>Table (3 × 7 holes) on 4 pins</span>
+    <span class="sw" style="background:#9370db"></span><span>Pan head: spline plate pinned to the table</span>
+    <span class="sw" style="background:#e8c22a"></span><span>Pan frame (camera face), pan at 0°</span>
+  </div>
+  <div id="status">Loading meshes…</div>
+</div>
+
+<div class="panel" id="ctl">
+  <div class="row">
+    <button id="play">Pause</button>
+    <select id="mode">
+      <option value="range">Sweep the whole clear range</option>
+      <option value="tilt">Tilt ±20° about flat</option>
+      <option value="fold">Fold over from gripper-closed</option>
+    </select>
+    <span class="readout">θ <b id="th">0°</b> · table <b id="tilt">0°</b> from flat</span>
+  </div>
+  <div class="row">
+    <div class="slider">
+      <input type="range" id="theta" min="-112" max="54" step="0.5" value="-90">
+      <div class="ticks" id="ticks"></div>
+    </div>
+  </div>
+  <div class="row">
+    <label><input type="checkbox" id="base" checked> Stand on LEGO wall</label>
+    <label><input type="checkbox" id="ghost"> See-through frame</label>
+    <label><input type="checkbox" id="servo" checked> Servo</label>
+    <label><input type="checkbox" id="table" checked> Table</label>
+  </div>
+</div>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { STLLoader } from "three/addons/loaders/STLLoader.js";
+
+// From tilt9g.scad: spline axis at x = 0, z = SPLINE_Z, along +Y. theta is the
+// spline arm's angle as in the gripper (0 closed, -90 table flat); the meshes
+// are exported at theta = 0 and turn about -Y by theta. The clear range comes
+// from the part="clash" sweep (table included).
+const SPLINE_Z = -5.375;
+const TH_MIN = -112, TH_MAX = 54, FLAT = -90;
+
+const view = document.getElementById("view");
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(window.devicePixelRatio);
+view.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(35, 1, 1, 2000);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+
+scene.add(new THREE.HemisphereLight(0xffffff, 0x8a8a80, 1.6));
+const key = new THREE.DirectionalLight(0xffffff, 1.6); key.position.set(-80, 140, 120); scene.add(key);
+const fill = new THREE.DirectionalLight(0xffffff, 0.6); fill.position.set(120, -40, -100); scene.add(fill);
+
+// world: the model in servo coordinates; turned so +X (the LEGO wall) points down when "stand on wall"
+const world = new THREE.Group(); scene.add(world);
+const pivot = new THREE.Group(); pivot.position.set(0, 0, SPLINE_Z); world.add(pivot);
+const grid = new THREE.GridHelper(160, 20, 0x888880, 0x888880);
+grid.material.transparent = true; grid.material.opacity = 0.25; scene.add(grid);
+
+const mat = (c, o = {}) => new THREE.MeshStandardMaterial({ color: c, roughness: 0.6, metalness: 0.05, ...o });
+const parts = {
+  frame:  { color: 0xc9c9c4, moving: false },
+  servo:  { color: 0x4a4a48, moving: false },
+  spline: { color: 0xe8902a, moving: true },
+  bottom: { color: 0x3c6fd8, moving: true },
+  table:  { color: 0x3caa6e, moving: true, opacity: 0.85 },
+  pan_plate: { color: 0x9370db, moving: true },
+  pan_frame: { color: 0xe8c22a, moving: true },
+  pan_servo: { color: 0x4a4a48, moving: true },
+};
+const loader = new STLLoader();
+let loaded = 0;
+for (const [name, p] of Object.entries(parts)) {
+  loader.load(`view/${name}.stl`, geo => {
+    geo.computeVertexNormals();
+    const m = mat(p.color, p.opacity ? { transparent: true, opacity: p.opacity } : {});
+    const mesh = new THREE.Mesh(geo, m);
+    if (p.moving) { mesh.position.z = -SPLINE_Z; pivot.add(mesh); } else world.add(mesh);
+    p.mesh = mesh;
+    if (++loaded === Object.keys(parts).length) { document.getElementById("status").textContent = ""; applyToggles(); frameView(); }
+  }, undefined, () => {
+    document.getElementById("status").textContent =
+      `Couldn't load view/${name}.stl. Serve this folder over http (see README) and run tilt9g/export.sh.`;
+  });
+}
+
+// ---- controls ----
+const $ = id => document.getElementById(id);
+const slider = $("theta");
+let playing = true, theta = FLAT, t0 = performance.now();
+
+const ticks = $("ticks");
+for (const [v, label] of [[TH_MIN, `${TH_MIN}°`], [FLAT, "flat"], [0, "upright"], [TH_MAX, `+${TH_MAX}°`]]) {
+  const s = document.createElement("span");
+  s.style.left = `${(v - TH_MIN) / (TH_MAX - TH_MIN) * 100}%`;
+  s.textContent = label; ticks.appendChild(s);
+}
+
+function setTheta(v) {
+  theta = v;
+  pivot.rotation.y = -THREE.MathUtils.degToRad(v);
+  slider.value = v;
+  $("th").textContent = `${v.toFixed(0)}°`;
+  const d = v - FLAT;
+  $("tilt").textContent = `${d > 0 ? "+" : ""}${d.toFixed(0)}°`;
+}
+
+// smooth back-and-forth between a and b, period in seconds
+const swing = (a, b, period, s) => a + (b - a) * (0.5 - 0.5 * Math.cos(2 * Math.PI * s / period));
+function animTheta(s) {
+  const m = $("mode").value;
+  if (m === "tilt") return swing(FLAT - 20, FLAT + 20, 4, s);
+  if (m === "fold") return swing(0, FLAT, 5, s);
+  return swing(TH_MIN, TH_MAX, 9, s);
+}
+
+$("play").onclick = () => { playing = !playing; $("play").textContent = playing ? "Pause" : "Play"; t0 = performance.now(); };
+$("mode").onchange = () => { t0 = performance.now(); if (!playing) $("play").click(); };
+slider.oninput = () => { if (playing) $("play").click(); setTheta(+slider.value); };
+
+function applyToggles() {
+  world.rotation.z = $("base").checked ? -Math.PI / 2 : 0;
+  if (parts.frame.mesh) {
+    const g = $("ghost").checked, m = parts.frame.mesh.material;
+    m.transparent = g; m.opacity = g ? 0.3 : 1; m.depthWrite = !g; m.needsUpdate = true;
+  }
+  if (parts.servo.mesh) parts.servo.mesh.visible = $("servo").checked;
+  if (parts.table.mesh) parts.table.mesh.visible = $("table").checked;
+  placeGrid();
+}
+for (const id of ["base", "ghost", "servo", "table"]) $(id).onchange = applyToggles;
+
+function placeGrid() {
+  world.updateMatrixWorld(true);
+  const box = new THREE.Box3().setFromObject(world);
+  if (!box.isEmpty()) grid.position.set((box.min.x + box.max.x) / 2, box.min.y - 0.5, (box.min.z + box.max.z) / 2);
+}
+
+function frameView() {
+  world.updateMatrixWorld(true);
+  const box = new THREE.Box3().setFromObject(world);
+  const c = box.getCenter(new THREE.Vector3());
+  const r = box.getSize(new THREE.Vector3()).length();
+  controls.target.copy(c);
+  camera.position.copy(c).add(new THREE.Vector3(-0.9, 0.55, 1.0).normalize().multiplyScalar(r * 1.9));
+  camera.updateProjectionMatrix();
+}
+
+function resize() {
+  const w = view.clientWidth, h = view.clientHeight;
+  renderer.setSize(w, h); camera.aspect = w / h; camera.updateProjectionMatrix();
+}
+window.addEventListener("resize", resize); resize();
+
+function bg() { scene.background = new THREE.Color(getComputedStyle(document.documentElement).getPropertyValue("--scene").trim()); }
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", bg); bg();
+
+setTheta(FLAT);
+renderer.setAnimationLoop(now => {
+  if (playing) setTheta(animTheta((now - t0) / 1000));
+  controls.update();
+  renderer.render(scene, camera);
+});
+</script>
+</body>
+</html>

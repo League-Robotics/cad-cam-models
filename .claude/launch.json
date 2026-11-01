@@ -1,0 +1,40 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "scad-viewer",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-u",
+        "tools/scad_view.py",
+        "--port",
+        "8766"
+      ],
+      "port": 8766
+    },
+    {
+      "name": "tilt9g-viewer",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8767",
+        "--directory",
+        "tilt9g"
+      ],
+      "port": 8767
+    },
+    {
+      "name": "views",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8768",
+        "--directory",
+        "view"
+      ],
+      "port": 8768
+    }
+  ]
+}
