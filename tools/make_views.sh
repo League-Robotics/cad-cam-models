@@ -11,7 +11,9 @@
 #   view/block_gripper_low.html  the same 8 lower: the top two wall rows on the block
 #   view/block_gripper_front.html  16 lower: the top row on the block's lower row, paddles 0.4 off the ground
 #   view/cutebot_gripper.html    the same frame and a post on the Cutebot Pro's nose (a stand-in slab with the two bosses) with the tab
+#   view/brick_frame.html        the cage round the Nezha brick (two sides, two end bars, pins); brick_frame_stand.html stood up
 #   view/tilt_pan9g.html         the 9 g tilt table (flat, the frame on its LEGO wall) with the pan head on it; the Pan slider turns it
+#   view/tilt_table.html         the friction tilt table: two 5 x 5 plates hinged on snap-together triangles; the Tilt slider tilts it
 # Usage: bash tools/make_views.sh [view ...]   (default: all; add --open to open them)
 #
 # How it works: each assembly .scad has a `show` parameter ("all" or one
@@ -25,7 +27,7 @@ S="openscad --backend=manifold --export-format=binstl"
 one() { $S -o "$T/$1.stl" "${@:2}" 2>&1 | grep -iE '^error|warning:' || true; }
 open_=0; views=()
 for a in "$@"; do [ "$a" = --open ] && open_=1 || views+=("$a"); done
-[ ${#views[@]} -eq 0 ] && views=(servo9g nezha plate front plates robot_level robot_low robot_front cutebot tiltpan)
+[ ${#views[@]} -eq 0 ] && views=(servo9g nezha plate front plates robot_level robot_low robot_front cutebot tiltpan brickframe tilttable)
 
 for v in "${views[@]}"; do case $v in
 servo9g)
@@ -146,6 +148,24 @@ tiltpan)
     "Table + pins=$T/tp_table.stl:#3cb371:0.9" "+Spline plate + pins + screw=$T/tp_pan_plate.stl:#9370db" \
     "+Pan frame=$T/tp_pan_frame.stl:#e8c22a:$P" "+Pan servo=$T/tp_pan_servo.stl:#333333:0.85:$P"
   [ $open_ = 1 ] && open -a "Google Chrome" view/tilt_pan9g.html ;;
-*) echo "unknown view $v (servo9g, nezha, plate, front, plates, robot_level, robot_low, robot_front, cutebot, tiltpan)"; exit 1 ;;
+brickframe)
+  for st in false true; do
+    for c in side_j side_iic bar_bottom bar_top pins brick; do one bf_${st}_$c -D "part=\"$c\"" -D "stand=$st" scad/brick_frame.scad & done
+  done; wait
+  for st in false true; do
+    out=view/brick_frame.html; [ $st = true ] && out=view/brick_frame_stand.html
+    python3 tools/mockup_html.py $out "Cage round the Nezha brick (first draft)" \
+      "J side=$T/bf_${st}_side_j.stl:#f29a00" "IIC side=$T/bf_${st}_side_iic.stl:#4169e1" \
+      "Bottom end bar=$T/bf_${st}_bar_bottom.stl:#3cb371" "Top end bar=$T/bf_${st}_bar_top.stl:#2e8b57" \
+      "2L pins=$T/bf_${st}_pins.stl:#333333" \
+      "+Nezha brick=$T/bf_${st}_brick.stl:#eeeeee:0.85"
+  done
+  [ $open_ = 1 ] && open -a "Google Chrome" view/brick_frame.html ;;
+tilttable)
+  for c in bottom top; do one tt_$c -D "part=\"$c\"" -D 'theta=0' scad/tilt_table.scad & done; wait
+  python3 tools/mockup_html.py --slider=Tilt,-63,63 view/tilt_table.html "Friction tilt table: the same 5 x 5 plate twice, the top one turned over, snapped together on the triangles" \
+    "Bottom plate=$T/tt_bottom.stl:#3cb371" "+Top plate=$T/tt_top.stl:#e8c22a:xpivot=0,19.8,1"
+  [ $open_ = 1 ] && open -a "Google Chrome" view/tilt_table.html ;;
+*) echo "unknown view $v (servo9g, nezha, plate, front, plates, robot_level, robot_low, robot_front, cutebot, tiltpan, brickframe, tilttable)"; exit 1 ;;
 esac; done
 rm -rf "$T"

@@ -57,7 +57,12 @@ CORNER_R = 2.0
 SOCKET_PITCH = 12.8           # measured 12.7-12.95 on all three sides
 SOCKETS = [(-1.5 + i) * SOCKET_PITCH for i in range(4)]     # centred rows of four
 SOCKET_W, SOCKET_Y0, SOCKET_Y1, SOCKET_CHAMFER_Y = 7.9, -7.4, 7.1, 5.6
-SIDE_HOLE_X = 28.0            # one round hole and one bottom-open notch per long side (+-27.6 measured)
+SIDE_HOLE_X = 28.0            # two arched holes per long side (+-27.6 measured)
+# Each side hole: an arch open to the bottom edge, 1.86 deep (the user's measurement,
+# 2026-11-01), then a normal Technic hole; all four alike (2026-11-02). The arch is exactly a
+# LEGO beam's rounded end (the user: a beam fits it perfectly), so its width is Technic.scad's
+# beam width, 7.36.
+ARCH_R, ARCH_D = 7.36 / 2, 1.86
 SIDE_SLOTS_X = (-15.0, 0.0, 15.0)
 BOTTOM_ROWS_X = (-32.0, -24.0, -16.0, 32.0)                 # from the photo of the bottom
 # The on/off button (caliper-measured): 7.8 across, centre 18.7 from the motor end; it slides
@@ -148,9 +153,9 @@ def face_hole(face, u, y, r, d0, d1, seg=SEG):
     raise ValueError(face)
 
 
-def lego_hole(face, u, y, depth=7.0):
-    """A Technic hole: 4.8 mm bore with the shallow 6.2 mm counterbore at the mouth."""
-    return union([face_hole(face, u, y, LEGO_R, -1, depth), face_hole(face, u, y, LEGO_CB_R, -1, LEGO_CB_D)])
+def lego_hole(face, u, y, depth=7.0, d0=0.0):
+    """A Technic hole: 4.8 mm bore with the shallow 6.2 mm counterbore at the mouth, d0 in from the face."""
+    return union([face_hole(face, u, y, LEGO_R, -1, d0 + depth), face_hole(face, u, y, LEGO_CB_R, -1, d0 + LEGO_CB_D)])
 
 
 # ---- the case ---------------------------------------------------------------------------
@@ -166,12 +171,12 @@ def base():
     # Both ends: a row of five.
     for face in ("+x", "-x"):
         cuts += [lego_hole(face, ZC + k * LEGO_PITCH, Y_HOLE) for k in range(-2, 3)]
-    # Long sides: a round hole in a shallow round recess at one end, and at the other end the
-    # same hole opened out to the bottom edge; the two sides are mirror images of each other.
-    for face, hole_x in (("+z", SIDE_HOLE_X), ("-z", -SIDE_HOLE_X)):
-        cuts += [face_hole(face, hole_x, Y_HOLE, 3.6, -1, 1.0), lego_hole(face, hole_x, Y_HOLE)]
-        notch_x = -hole_x
-        cuts += [lego_hole(face, notch_x, Y_HOLE), face_box(face, notch_x - LEGO_R, notch_x + LEGO_R, Y_BOT - 1, Y_HOLE, -1, 7.0)]
+    # Long sides: at each end a normal hole behind an arch open to the bottom edge.
+    for face in ("+z", "-z"):
+        for arch_x in (SIDE_HOLE_X, -SIDE_HOLE_X):
+            cuts += [face_hole(face, arch_x, Y_HOLE, ARCH_R, -1, ARCH_D),
+                     face_box(face, arch_x - ARCH_R, arch_x + ARCH_R, Y_BOT - 1, Y_HOLE, -1, ARCH_D),
+                     lego_hole(face, arch_x, Y_HOLE, d0=ARCH_D)]
         for x in SIDE_SLOTS_X:
             cuts.append(face_box(face, x - 1.15, x + 1.15, Y_BOT - 1, Y_BASE + 0.01, -1, 1.5))
     return b - union(cuts)
