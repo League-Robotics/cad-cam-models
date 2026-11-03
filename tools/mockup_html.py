@@ -3,13 +3,14 @@
 
 The STLs are embedded (base64), so the page works straight from file://.
 
-    mockup_html.py OUT.html TITLE name=file.stl:#color[:opacity][:pivot=x,y,sign] ...
+    mockup_html.py OUT.html TITLE name=file.stl:#color[:opacity][:pivot=x,y,sign | :xpivot=y,z,sign] ...
 
 Each name becomes a "Show" checkbox. Z is up (OpenSCAD coordinates). A name
 starting with "+" also follows the Lift slider (the part being fitted); one
 starting with "-" starts hidden (an alternative part, e.g. the can arms). A
 part with a pivot (x, y of a vertical axis, sign +-1) turns about it with the
-Jaws slider: the STL is the part at theta 0 and it turns sign * theta.
+Jaws slider: the STL is the part at theta 0 and it turns sign * theta. xpivot
+is the same about an axis along x through (y, z), e.g. a tilt hinge.
 An option --slider=LABEL,MIN,MAX renames and re-ranges that slider (e.g.
 --slider=Pan,-90,90).
 """
@@ -30,13 +31,16 @@ for spec in specs:
     name, rest = spec.split("=", 1)
     path, color, *op = rest.split(":")
     lift = name.lstrip("-").startswith("+")
-    pivot = None
+    pivot = xpivot = None
     for o in list(op):
         if o.startswith("pivot="):
             pivot = [float(v) for v in o[6:].split(",")]
             op.remove(o)
+        elif o.startswith("xpivot="):
+            xpivot = [float(v) for v in o[7:].split(",")]
+            op.remove(o)
     parts.append({
-        "name": name.lstrip("+-"), "lift": lift, "hidden": name.startswith("-"), "color": color, "pivot": pivot,
+        "name": name.lstrip("+-"), "lift": lift, "hidden": name.startswith("-"), "color": color, "pivot": pivot, "xpivot": xpivot,
         "opacity": float(op[0]) if op else 1.0,
         "data": base64.b64encode(Path(path).read_bytes()).decode(),
     })
@@ -85,6 +89,8 @@ for (const p of PARTS) {
   const m = new THREE.Mesh(g, new THREE.MeshStandardMaterial({ color: p.color, roughness: .55,
     transparent: p.opacity < 1, opacity: p.opacity, side: THREE.DoubleSide }));
   if (p.pivot) { g.translate(-p.pivot[0], -p.pivot[1], 0); m.position.set(p.pivot[0], p.pivot[1], 0); }
+  if (p.xpivot) { g.translate(0, -p.xpivot[0], -p.xpivot[1]); m.position.set(0, p.xpivot[0], p.xpivot[1]); }
+  p.z0 = m.position.z;
   m.userData = p; m.visible = !p.hidden; scene.add(m); meshes.push(m); if (!p.hidden) box.expandByObject(m);
   const l = document.createElement('label');
   l.innerHTML = `<input type="checkbox" ${p.hidden ? '' : 'checked'}> <i style="background:${p.color}"></i>${p.name}`;
@@ -92,9 +98,10 @@ for (const p of PARTS) {
   document.getElementById('toggles').appendChild(l);
 }
 const c = box.getCenter(new THREE.Vector3()), r = box.getSize(new THREE.Vector3()).length();
-document.getElementById('lift').oninput = e => meshes.forEach(m => { if (m.userData.lift) m.position.z = +e.target.value; });
+document.getElementById('lift').oninput = e => meshes.forEach(m => { if (m.userData.lift) m.position.z = m.userData.z0 + +e.target.value; });
 document.getElementById('jaws').oninput = e => { document.getElementById('jawv').textContent = e.target.value;
-  meshes.forEach(m => { if (m.userData.pivot) m.rotation.z = m.userData.pivot[2] * e.target.value * Math.PI / 180; }); };
+  meshes.forEach(m => { if (m.userData.pivot) m.rotation.z = m.userData.pivot[2] * e.target.value * Math.PI / 180;
+    if (m.userData.xpivot) m.rotation.x = m.userData.xpivot[2] * e.target.value * Math.PI / 180; }); };
 const V = { iso: [1, -1.2, .9], top: [0, -0.001, 1.6], front: [0, -1.6, .2], side: [1.6, 0, .2], under: [.6, -.9, -1.1] };
 function setView(v) { const d = V[v]; camera.position.set(c.x + d[0]*r, c.y + d[1]*r, c.z + d[2]*r); controls.target.copy(c); controls.update(); }
 document.querySelectorAll('[data-v]').forEach(b => b.onclick = () => setView(b.dataset.v));

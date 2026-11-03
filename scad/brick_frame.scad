@@ -45,7 +45,8 @@ include <lego.scad>
 
 /* [Show] */
 // "assembly" (brick, cage, pins), "side" (J) / "end_bar" in place, "print"
-// (the four pieces on the bed, each on its outer face), or one component in
+// (the four pieces on the bed, each on its outer face), "print_side_j" /
+// "print_side_iic" / "print_end_bar" (one piece so), or one component in
 // place for the viewer: "side_j", "side_iic", "bar_bottom", "bar_top", "pins", "brick"
 part = "assembly";
 // in place parts stood up as on a robot: motor end down on z = 0, display facing +x (forward)
@@ -106,11 +107,15 @@ assert(bar_along(end_hole_y[2]), "the bar's middle pins into the brick");
 
 // ---- holes --------------------------------------------------------------
 // pd_pin_hole / pd_blind_pin_hole run along +z from z = 0; these turn them.
-module hole_y(x, y0, dir, z, h, is_blind = false)  // from the face at y0, into the part along dir (+-1)
+// Each starts at the face x0 / y0 / z0 and goes into the part along dir (+-1).
+// taper: Part Designer's cone, for a hole that opens on the face the piece
+// prints on (start the hole there): the sides' outer faces, the bars' end faces.
+module hole_y(x, y0, dir, z, h, is_blind = false, taper = false)
     translate([x, y0, z]) rotate([dir > 0 ? -90 : 90, 0, 0])
-        if (is_blind) pd_blind_pin_hole(h, taper = false); else pd_pin_hole(h, taper = false);
-module hole_x(y, x0, z, h) translate([x0, y, z]) rotate([0, 90, 0]) pd_pin_hole(h, taper = false);
-module hole_z(x, y, z0, dir, h) translate([x, y, z0]) mirror([0, 0, dir > 0 ? 0 : 1]) pd_pin_hole(h);
+        if (is_blind) pd_blind_pin_hole(h, taper = taper); else pd_pin_hole(h, taper = taper);
+module hole_x(y, x0, dir, z, h, taper = false)
+    translate([x0, y, z]) rotate([0, dir > 0 ? 90 : -90, 0]) pd_pin_hole(h, taper = taper);
+module hole_z(x, y, z0, dir, h) translate([x, y, z0]) mirror([0, 0, dir > 0 ? 0 : 1]) pd_pin_hole(h, taper = false);
 
 // ---- the pieces ----------------------------------------------------------
 // The beam ends on the bottom rail's pads, s the side (+1 J, -1 IIC).
@@ -147,9 +152,9 @@ module side(s) difference() {
         dir = i == 0 ? 1 : -1;
         for (j = [0 : cells - 1]) {
             x = cell_x[j];
-            // out holes start at the inner face, or the pad's or beam end's face
+            // out holes: from the outer face (the bed) to the inner face, or the beam end's face
             face = i == 0 ? pin_face(s, x) : side_y[0];
-            if (rail_out(j)) hole_y(x, s * face, s, zc, side_y[1] - face);
+            if (rail_out(j)) hole_y(x, s * side_y[1], -s, zc, side_y[1] - face, taper = true);
             else hole_z(x, s * col_y, z0, dir, pd_cell);
         }
     }
@@ -160,14 +165,14 @@ module side(s) difference() {
         if (!rail_out(j)) hole_y(x, s * face, s, ring_z[0], blind_pin_end - face, is_blind = true);
     }
     for (x = post_x, k = [0 : len(post_z) - 1])
-        if (post_across(k)) hole_x(s * col_y, x - unit / 2 + pd_edge, post_z[k], pd_cell);
-        else hole_y(x, s * side_y[0], s, post_z[k], side_y[1] - side_y[0]);
+        if (post_across(k)) hole_x(s * col_y, x - unit / 2 + pd_edge, 1, post_z[k], pd_cell);
+        else hole_y(x, s * side_y[1], -s, post_z[k], side_y[1] - side_y[0], taper = true);
 }
 
 module end_bar(zc) difference() {
     translate([bar_x[0], -bar_half_w, zc - unit / 2 + pd_edge]) cube([pd_cell, 2 * bar_half_w, pd_cell]);
     for (y = bar_cell_y)
-        if (bar_along(y)) hole_x(y, bar_x[0], zc, pd_cell);
+        if (bar_along(y)) hole_x(y, bar_x[1], -1, zc, pd_cell, taper = true);     // from the outer face (the bed)
         else hole_z(joint_x, y, zc - unit / 2 + pd_edge, 1, pd_cell);
     for (s = [-1, 1]) hole_y(joint_x, s * bar_half_w, -s, zc, blind, is_blind = true);
 }
@@ -196,12 +201,15 @@ module cage() {
 
 module placed() if (stand) translate([0, 0, frame_x[1]]) rotate([0, 90, 0]) children(); else children();
 
-if (part == "print") {
-    // each on its outer face: the sides' out holes and the bars' along holes vertical
-    translate([0, 0, side_y[1]]) rotate([-90, 0, 0]) side(1);
-    translate([0, 2 * height + 6, side_y[1]]) rotate([90, 0, 0]) side(-1);
-    for (i = [0, 1]) translate([-60 - i * 14, height / 2, bar_x[1]]) rotate([0, 90, 0]) end_bar(ring_z[0]);
-}
+// On the bed, each on its outer face: the sides' out holes and the bars' along holes vertical.
+module print_side_j() translate([0, 0, side_y[1]]) rotate([-90, 0, 0]) side(1);
+module print_side_iic() translate([0, 2 * height + 6, side_y[1]]) rotate([90, 0, 0]) side(-1);
+module print_end_bar(i = 0) translate([-60 - i * 14, height / 2, bar_x[1]]) rotate([0, 90, 0]) end_bar(ring_z[0]);
+
+if (part == "print") { print_side_j(); print_side_iic(); for (i = [0, 1]) print_end_bar(i); }
+else if (part == "print_side_j") print_side_j();
+else if (part == "print_side_iic") print_side_iic();
+else if (part == "print_end_bar") print_end_bar();
 else placed() {
     if (part == "assembly") { brick(); cage(); pins(); }
     else if (part == "side" || part == "side_j") side(1);

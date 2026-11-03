@@ -1,0 +1,108 @@
+{
+  "_about": [
+    "Catalog of the Carvera bit racks (photos in carvera/photos/, 2026-11-01; orange re-shot after rearranging).",
+    "Each rack is described as photographed: portrait, the horizontal slots on the left with the caps to the right, two vertical pairs on the right with the caps up.",
+    "Slots 1-12: the left column, top to bottom (1-6 above the handle, 7-12 below). A, B: the top-right pair, left to right. C, D: the bottom-right pair.",
+    "Sizes are as printed on the Makera labels: diameter x cutting length, mm. null = empty slot.",
+    "build: the tool number in the standard Carvera buildout (the 'Carvera Tool Rack' artifact). spare: a second copy of a buildout tool. drawer: a spare the buildout's drawer list asks for.",
+    "Regenerate the map with: python3 tools/tool_rack_map.py  ->  view/tool_racks.html"
+  ],
+  "buildout": [
+    {"t": "T1", "tool": "2.0 mm corn cutter", "want": "Ø2.0 corn, already in the machine since 2026-10-30"},
+    {"t": "T2", "tool": "Single-flute O-flute upcut", "want": "Ø3.175, 12-17 mm flute"},
+    {"t": "T3", "tool": "1.0 mm flat end mill", "want": "Ø1.0, 1 or 2 flutes"},
+    {"t": "T4", "tool": "30° V-bit", "want": "30°, 0.1 mm tip"},
+    {"t": "T5", "tool": "0.8 mm corn cutter", "want": "Ø0.8 corn"},
+    {"t": "T6", "tool": "1.0 mm carbide PCB drill", "want": "Ø1.0 drill"}
+  ],
+  "racks": [
+    {
+      "id": "green_round", "name": "Green, round handle", "plate": "#3fd14a", "handle": "round",
+      "photo": "photos/green_round.jpg",
+      "slots": {
+        "1":  {"kind": "oflute", "d": "2.0",   "l": "8",  "cap": "#7ad66a"},
+        "2":  {"kind": "oflute", "d": "3.175", "l": "12", "cap": "#7ad66a", "build": "T2"},
+        "3":  {"kind": "oflute", "d": "1.0",   "l": "3",  "cap": "#7ad66a", "build": "T3"},
+        "4":  {"kind": "oflute", "d": "1.0",   "l": "3",  "cap": "#7ad66a", "spare": "T3"},
+        "5":  {"kind": "oflute", "d": "2.0",   "l": "8",  "cap": "#7ad66a"},
+        "6":  {"kind": "oflute", "d": "3.175", "l": "12", "cap": "#7ad66a", "spare": "T2"},
+        "7":  {"kind": "ball",   "d": "3.175", "l": "10", "cap": "#2f7de0"},
+        "8":  {"kind": "ball",   "d": "3.175", "l": "10", "cap": "#2f7de0"},
+        "9":  {"kind": "ball",   "d": "2.0",   "l": "6",  "cap": "#2f7de0", "drawer": "2 mm ball nose"},
+        "10": {"kind": "ball",   "d": "2.0",   "l": "6",  "cap": "#2f7de0", "drawer": "2 mm ball nose"},
+        "11": {"kind": "ball",   "d": "1.0",   "l": "3",  "cap": "#2f7de0"},
+        "12": {"kind": "ball",   "d": "1.0",   "l": "3",  "cap": "#2f7de0"},
+        "A":  {"kind": "loose", "note": "bare bit, no case (black collar)"},
+        "B":  {"kind": "thread", "m": "M3", "d": "2.4", "l": "9",  "cap": "#2f7de0"},
+        "C":  {"kind": "thread", "m": "M5", "d": "4.0", "l": "15", "cap": "#2f7de0"},
+        "D":  {"kind": "thread", "m": "M4", "d": "3.15", "l": "12", "cap": "#2f7de0"}
+      }
+    },
+    {
+      "id": "green_square", "name": "Green, square handles", "plate": "#3fd14a", "handle": "square",
+      "photo": "photos/green_square.jpg",
+      "slots": {
+        "1":  {"kind": "drill", "d": "3.0", "l": "12", "cap": "#f5c518"},
+        "2":  {"kind": "drill", "d": "3.0", "l": "12", "cap": "#f5c518"},
+        "3":  {"kind": "drill", "d": "2.5", "l": "12", "cap": "#f5c518"},
+        "4":  {"kind": "drill", "d": "2.5", "l": "12", "cap": "#f5c518"},
+        "5":  {"kind": "drill", "d": "2.0", "l": "12", "cap": "#f5c518"},
+        "6":  {"kind": "drill", "d": "2.0", "l": "12", "cap": "#f5c518"},
+        "7":  {"kind": "drill", "d": "1.0", "l": "10", "cap": "#f5c518", "build": "T6"},
+        "8":  {"kind": "drill", "d": "1.0", "l": "10", "cap": "#f5c518", "spare": "T6"},
+        "9":  {"kind": "ball",  "d": "2.0", "l": "12", "cap": "#f5c518", "drawer": "2 mm ball nose"},
+        "10": {"kind": "ball",  "d": "2.0", "l": "12", "cap": "#f5c518", "drawer": "2 mm ball nose"},
+        "11": {"kind": "ball",  "d": "1.0", "l": "4",  "cap": "#f5c518"},
+        "12": {"kind": "ball",  "d": "1.0", "l": "4",  "cap": "#f5c518"},
+        "A":  {"kind": "ball",   "d": "3.175", "l": "22", "cap": "#f5c518"},
+        "B":  {"kind": "ball",   "d": "3.175", "l": "22", "cap": "#f5c518"},
+        "C":  {"kind": "oflute", "d": "3.175", "l": "25", "cap": "#f5c518"},
+        "D":  {"kind": "oflute", "d": "3.175", "l": "25", "cap": "#f5c518"}
+      }
+    },
+    {
+      "id": "orange", "name": "Orange", "plate": "#ff7a1a", "handle": "round",
+      "photo": "photos/orange.jpg",
+      "slots": {
+        "1":  {"kind": "corn", "d": "0.6", "l": "3",    "cap": "#f5c518"},
+        "2":  {"kind": "corn", "d": "0.6", "l": "3",    "cap": "#f5c518"},
+        "3":  {"kind": "corn", "d": "0.8", "l": "5.5",  "cap": "#f5c518", "build": "T5"},
+        "4":  {"kind": "corn", "d": "0.8", "l": "5.5",  "cap": "#f5c518", "spare": "T5"},
+        "5":  {"kind": "corn", "d": "1.0", "l": "7",    "cap": "#f5c518"},
+        "6":  null,
+        "7":  {"kind": "corn", "d": "2.0", "l": "10.5", "cap": "#f5c518", "build": "T1"},
+        "8":  {"kind": "corn", "d": "2.0", "l": "10.5", "cap": "#f5c518", "spare": "T1"},
+        "9":  {"kind": "corn", "d": "3.0", "l": "12",   "cap": "#f5c518"},
+        "10": {"kind": "corn", "d": "3.0", "l": "12",   "cap": "#f5c518"},
+        "11": {"kind": "uv",   "cap": "#f5c518"},
+        "12": {"kind": "uv",   "cap": "#f5c518"},
+        "A":  null,
+        "B":  {"kind": "oflute", "d": "3.175", "l": "25", "cap": "#f5c518"},
+        "C":  {"kind": "oflute", "d": "3.175", "l": "42", "cap": "#f5c518"},
+        "D":  {"kind": "oflute", "d": "3.175", "l": "42", "cap": "#f5c518"}
+      }
+    },
+    {
+      "id": "purple", "name": "Purple", "plate": "#7b3fd0", "handle": "round",
+      "photo": "photos/purple.jpg",
+      "slots": {
+        "1":  null,
+        "2":  {"kind": "chamfer", "a": "90", "cap": "#ff7a33", "drawer": "90° chamfer"},
+        "3":  {"kind": "chamfer", "a": "90", "cap": "#ff7a33", "drawer": "90° chamfer"},
+        "4":  {"kind": "chamfer", "a": "90", "cap": "#ff7a33", "drawer": "90° chamfer"},
+        "5":  {"kind": "chamfer", "a": "90", "cap": "#ff7a33", "drawer": "90° chamfer"},
+        "6":  {"kind": "chamfer", "a": "90", "cap": "#ff7a33", "drawer": "90° chamfer"},
+        "7":  {"kind": "vbit", "a": "30", "tip": "0.3", "cap": "#ff7a33"},
+        "8":  {"kind": "vbit", "a": "30", "tip": "0.3", "cap": "#ff7a33"},
+        "9":  {"kind": "vbit", "a": "30", "tip": "0.2", "cap": "#ff7a33", "build": "T4"},
+        "10": {"kind": "vbit", "a": "30", "tip": "0.2", "cap": "#ff7a33", "spare": "T4"},
+        "11": {"kind": "vbit", "a": "30", "tip": "0.2", "cap": "#ff7a33", "spare": "T4"},
+        "12": {"kind": "vbit", "a": "30", "tip": "0.2", "cap": "#ff7a33", "spare": "T4"},
+        "A":  {"kind": "vbit", "a": "60", "tip": "0.1", "cap": "#ff7a33", "drawer": "T4 alternative"},
+        "B":  {"kind": "vbit", "a": "60", "tip": "0.1", "cap": "#ff7a33", "drawer": "T4 alternative"},
+        "C":  {"kind": "vbit", "a": "60", "tip": "0.1", "cap": "#ff7a33", "drawer": "T4 alternative"},
+        "D":  {"kind": "vbit", "a": "60", "tip": "0.1", "cap": "#ff7a33", "drawer": "T4 alternative"}
+      }
+    }
+  ]
+}

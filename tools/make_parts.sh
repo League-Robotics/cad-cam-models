@@ -15,13 +15,19 @@
 #                            the Cutebot Pro's nose, flat) and a caster post per height (post_level,
 #                            post_low, post_front for the two-plate robot, post_cutebot; on their
 #                            back faces), all pinned together with 2L pins and glued
+#   grippers/tilt_table      the friction camera tilt table (2026-11-01): plate (print two; the second
+#                            turned over snaps onto the first; with the click teeth), plate_x2 (both
+#                            on one bed), plate_smooth (no clicks: the first print)
+#   grippers/brick_frame     the cage round the Nezha brick (2026-11-02): plate (all four pieces on one
+#                            bed), side_j, side_iic, end_bar (print two), each on its outer face;
+#                            11 2L pins to put it together
 # Usage: bash tools/make_parts.sh [set ...]   (default: all sets)
 set -e
 cd "$(dirname "$0")/.."
 S="openscad --backend=manifold"
 out() { mkdir -p "grippers/$1"; echo "grippers/$1/$2.stl"; $S -o "grippers/$1/$2.stl" "${@:3}" 2>&1 | grep -iE '^error|warning:' || true; }
 
-sets=${*:-"arms nezha servo_standard servo_9g extensions plates block_gripper"}
+sets=${*:-"arms nezha servo_standard servo_9g extensions plates block_gripper tilt_table brick_frame"}
 for s in $sets; do case $s in
 arms)   # one copy for every set, at the servo sets' smoothness
   out arms left_arm -D 'part="nub_print"' -D side=-1 -D '$fn=72' scad/swap_gripper.scad
@@ -49,4 +55,11 @@ block_gripper)
     out block_gripper post_$st -D 'part="print_post"' -D "stance=\"$st\"" -D '$fn=64' scad/block_gripper.scad
   done
   out block_gripper post_cutebot -D 'part="print_post"' -D '$fn=64' scad/cutebot_gripper.scad ;;
+tilt_table)
+  out tilt_table plate -D 'part="plate"' scad/tilt_table.scad
+  out tilt_table plate_x2 -D 'part="print"' scad/tilt_table.scad
+  out tilt_table plate_smooth -D 'part="plate"' -D 'clicks=0' scad/tilt_table.scad ;;
+brick_frame)
+  out brick_frame plate -D 'part="print"' -D '$fn=64' scad/brick_frame.scad
+  for p in side_j side_iic end_bar; do out brick_frame $p -D "part=\"print_$p\"" -D '$fn=64' scad/brick_frame.scad; done ;;
 esac; done
