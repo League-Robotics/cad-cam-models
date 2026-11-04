@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<export version="E">
+  <design>
+    <source>/home/ros/projects/nezha-qwiic/plug-tail/design/servo-tail/servo-tail.kicad_sch</source>
+    <date>2026-11-04T05:15:57+0000</date>
+    <tool>Eeschema 9.0.8+dfsg-1</tool>
+    <sheet number="1" name="/" tstamps="/">
+      <title_block>
+        <title>Nezha 4P4C plug to servo pins</title>
+        <company/>
+        <rev>A</rev>
+        <date>2026-11-03</date>
+        <source>servo-tail.kicad_sch</source>
+        <comment number="1" value="Front copper only. J1 pads are the plug contacts, left to right seen from the contact side, nose away."/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+        <comment number="5" value=""/>
+        <comment number="6" value=""/>
+        <comment number="7" value=""/>
+        <comment number="8" value=""/>
+        <comment number="9" value=""/>
+      </title_block>
+    </sheet>
+  </design>
+  <components>
+    <comp ref="J1">
+      <value>4P4C PLUG PINS</value>
+      <footprint>PlugTail:PlugPins_1x04_P1.02_SMD</footprint>
+      <fields>
+        <field name="Footprint">PlugTail:PlugPins_1x04_P1.02_SMD</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="PlugTail" part="Conn4" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="servo-tail.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>50fc1419-adf1-5d29-a455-f0682bce491b</tstamps>
+    </comp>
+    <comp ref="J2">
+      <value>SERVO G V S</value>
+      <footprint>PlugTail:FlatPins_1x03_P2.54_SMD</footprint>
+      <fields>
+        <field name="Footprint">PlugTail:FlatPins_1x03_P2.54_SMD</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="PlugTail" part="Conn3" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="servo-tail.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>e62e9684-2318-5c3e-acef-0c8ed4453fa3</tstamps>
+    </comp>
+  </components>
+  <libparts>
+    <libpart lib="PlugTail" part="Conn3">
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">Conn3</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+        <pin num="3" name="3" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="PlugTail" part="Conn4">
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">Conn4</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+        <pin num="3" name="3" type="passive"/>
+        <pin num="4" name="4" type="passive"/>
+      </pins>
+    </libpart>
+  </libparts>
+  <libraries>
+    <library logical="PlugTail">
+      <uri>/home/ros/projects/nezha-qwiic/plug-tail/design/servo-tail/PlugTail.kicad_sym</uri>
+    </library>
+  </libraries>
+  <nets>
+    <net code="1" name="/GND" class="Default">
+      <node ref="J1" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="J2" pin="1" pinfunction="1" pintype="passive"/>
+    </net>
+    <net code="2" name="/SIG" class="Default">
+      <node ref="J1" pin="3" pinfunction="3" pintype="passive"/>
+      <node ref="J2" pin="3" pinfunction="3" pintype="passive"/>
+    </net>
+    <net code="3" name="/VS" class="Default">
+      <node ref="J1" pin="2" pinfunction="2" pintype="passive"/>
+      <node ref="J2" pin="2" pinfunction="2" pintype="passive"/>
+    </net>
+    <net code="4" name="unconnected-(J1-Pad4)" class="Default">
+      <node ref="J1" pin="4" pinfunction="4" pintype="passive+no_connect"/>
+    </net>
+  </nets>
+</export>

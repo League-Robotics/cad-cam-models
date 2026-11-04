@@ -1,0 +1,17 @@
+NEZHA / QWIIC ADAPTER - REV B MILLING INPUTS
+J1: Amphenol 73306-111LF (latch up). J2 pin 1 / GND is at the bottom
+in the component-side drawing. Do not use revision A tooling for this board.
+These are design inputs, not machine G-code.
+Single-sided copper stock, component/copper side up. Nominal thickness 1.40 mm.
+Finished outline: 44.00 x 24.00 mm; apply tool-radius compensation in CAM.
+RS-274X front copper + outline; metric Excellon non-plated drills.
+Origin: upper-left board corner. X = 0..44 mm; Y = 0..-24 mm.
+Do not mirror. Keep copper, outline and drill files aligned to their common origin.
+Two 3.00 mm holes at (4,-3) and (40,-21) in exported coordinates.
+Tracks 0.40 mm; required copper clearance >=0.30 mm; Qwiic pad gaps 0.40 mm.
+Choose an effective isolation cut width below the smallest gap with margin.
+Determine speeds, feeds, depth, outline tabs, and panel spacing for actual tools,
+stock, machine calibration and fixturing; review simulation and cut a coupon.
+Fit the insulated-body 1206 zero-ohm resistor R1: it bridges SCL over SDA.
+Check cable-to-header continuity and power shorts before first power.
+No physical prototype or machine toolpath has been tested.

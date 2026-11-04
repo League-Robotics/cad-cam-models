@@ -1,0 +1,40 @@
+{
+  "status": "PASS",
+  "revision": "B",
+  "jack": "Amphenol 73306-111LF",
+  "board_mm": [
+    44,
+    24
+  ],
+  "copper": "F.Cu only",
+  "vias": 0,
+  "holes_diameter_mm": 3.0,
+  "holes_xy_mm": [
+    [
+      4.0,
+      3.0
+    ],
+    [
+      40.0,
+      21.0
+    ]
+  ],
+  "header_pitch_mm": 2.54,
+  "erc_violations": 0,
+  "drc_violations": 0,
+  "unconnected_items": 0,
+  "schematic_parity_issues": 0,
+  "checks": [
+    "Amphenol 73306 land dimensions and project contact mapping",
+    "J2 and J3 GND positions in revision B",
+    "saved CAD versus independent pin table",
+    "exported schematic netlist versus independent pin table",
+    "SMT-only components",
+    "no vias or bottom tracks",
+    "header between connectors",
+    "3 mm NPTH drill tools and locations",
+    "RS-274X Gerber compatibility",
+    "ERC and DRC including schematic parity"
+  ],
+  "limitation": "No physical prototype, cable continuity measurement, or on-machine cutting trial has been performed."
+}

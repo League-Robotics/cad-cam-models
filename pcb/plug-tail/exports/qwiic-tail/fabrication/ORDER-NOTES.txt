@@ -1,0 +1,1 @@
+Single copper layer on TOP (F.Cu), no holes, no vias. Nominal thickness 1.4 mm; the tongue must fit the plug cavity, so confirm thickness against the measured cavity before ordering. Do not mirror.

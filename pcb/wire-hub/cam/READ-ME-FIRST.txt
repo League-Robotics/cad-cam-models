@@ -1,0 +1,49 @@
+NEZHA WIRE HUB A - ORIGINAL SIX-SLOT CARVERA - 1.4 mm PCB
+
+These programs are ALTERNATIVES for fresh stock:
+  nezha-wire-hub-A-25up-iso120-cut155.nc : complete 25-board sheet
+  nezha-wire-hub-A-one-iso120-cut155.nc : one-board trial at stock X6 Y6
+Do not run the full sheet after the single trial on that same sheet: it would
+revisit the cut area. Use separate trial stock, or request a remaining-board
+program after confirming the sheet has retained its exact registration.
+
+1. Put a fresh 150 x 100 x 1.4 mm single-sided PCB on a flat backer, with
+   BOTTOM COPPER FACING UP. Use firm, even, full-area tape support without
+   foam, bubbles or loose corners. Leveling does not correct moving stock.
+2. X is the 150 mm direction; Y is the 100 mm direction. Set G54 X0 Y0 at
+   the lower-left stock corner and Z0 on the copper surface. Clear old job
+   XY offsets. Finished G-code already includes placement and mirroring.
+3. Tools, both with 3.175 mm shanks:
+   ATC SLOT 2: standard 30-degree PCB V-bit, 0.2 mm tip.
+   ATC SLOT 3: 0.8 mm corn bit. It mills the small holes as circular pockets
+               and cuts the board perimeter; no extra drill tool is needed.
+   Confirm the installed bit sizes and tool lengths in Carvera Controller.
+4. Enable fresh Auto Z Probe AND Auto Leveling in Carvera Controller.
+   Auto Z suggestion: Work Origin mode, X offset +16 mm, Y offset +8 mm;
+   this is a bare-copper point on the first board before machining.
+   Full sheet: suggested 16 x 11 leveling matrix, 2 mm lift; map must cover
+   the whole path, approximately X5.6..144.4 and Y5.6..94.4.
+   Single trial: suggested 6 x 4 matrix, 2 mm lift; approximately
+   X5.6..32.4 / Y5.6..22.4. Check the controller's actual preview bounds.
+5. Use boundary scanning / the controller preview to confirm the stock
+   orientation, all 25 copies (or just one), and clearance from clamps and
+   the dust shoe. The 6 mm border is not itself a clamp-clearance guarantee.
+6. Run trace isolation first, then holes, then tabbed outlines. The files
+   do these operations in this order and make one change from T2 to T3.
+
+SETTINGS
+Spindle: 12,000 RPM for both tools. XY feed: 300 mm/min.
+Isolation: Z -0.12 mm; nominal V-bit width 0.264308 mm at that depth.
+Holes: helical entry feed 100 mm/min; final circular cleanup 300 mm/min.
+Through depth: Z -1.55 mm = 0.15 mm beyond the specified 1.4 mm PCB.
+Maximum depth increment: 0.25 mm. Tape thickness is NOT added to depth.
+Four tabs per board: 2.0 mm minimum neck, 0.5 mm remaining thickness.
+Below-surface tab lifts are fed moves. Safe Z5; final retract Z10.
+Native G54 and height compensation are preserved. No G92/G10/G53/G43/G49
+or M370 commands are emitted. No toolpath was sent to the machine.
+
+Fit and continuity-test the single board before committing a full sheet if
+this is the first cut with this geometry. The full-panel file is provided
+as requested, but has only been checked offline, not physically test-cut.
+Expected machine-motion times are in validation.json and exclude probing,
+ATC delays, acceleration, controller processing, and manual tab removal.

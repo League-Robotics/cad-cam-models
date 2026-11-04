@@ -10,6 +10,8 @@
     uv run tools/bambu_printer.py NAME stop
     uv run tools/bambu_printer.py NAME wipe     A1, idle: home, wipe the nozzle as the start G-code does, cool down
     uv run tools/bambu_printer.py NAME clear    clear the reported print error (does not clear HMS notices)
+    uv run tools/bambu_printer.py NAME resume   resume a paused job
+    uv run tools/bambu_printer.py NAME watch    follow a job to the end, resuming nozzle-clumping pauses
 
 NAME is verlet, slerp, catmull or nurbs. The access code comes from the
 busboom-home-network .env (<NAME>_ACCESS_CODE) and is never printed. Printer
@@ -25,7 +27,25 @@ it goes in chunks of CHUNK lines, which the printer queues; each chunk ends by
 setting the bed target to a marker (30, 31, ...), and wipe watches the markers
 until the last one. Takes about 2 minutes. The HMS notice itself stays listed
 afterwards (and through a good print): neither wipe nor clean_print_error
-removes it over MQTT; it does not block printing.
+removes it over MQTT; it does not block printing, and it comes back at the
+next homing. A wipe can stall (2026-11-03: markers stopped at 36 of 39); wipe
+then exits non-zero.
+
+watch is for the same notice in the middle of a job. The A1's nozzle
+clumping check dips the nozzle just off the bed at about layer 2-3; a hit
+pauses the job (verlet, 2026-11-02 23:14: tilt_table_v3 sat paused at layer
+3 all night). The user clears it by rubbing the nozzle and resuming; forum
+reports say plain resume mostly works too, and the check does not run again.
+watch polls every minute; on a pause with print_error CLUMP_ERROR
+(0300_8014), or with a clumping notice raised during this job, it saves a
+camera frame and resumes, at most MAX_RESUMES times. The notice alone is not
+enough: on catmull (2026-11-03) its timestamp was the job's start homing, not
+the pause, and the notice stays listed after it is dealt with. Any
+other pause, a repeat, FAILED, or no report for OFFLINE_S ends it non-zero
+without touching the printer; FINISH ends it 0. A wipe while paused is not
+done: the start G-code's wipe re-homes Z and turns bed levelling off, and
+whether gcode_line runs during a pause (and resume returns the head) is
+untested. Camera frames and the log go to LOG_DIR.
 """
 import json
 import os
@@ -34,6 +54,7 @@ import ssl
 import subprocess
 import sys
 import time
+import urllib.request
 from pathlib import Path
 
 import paho.mqtt.client as mqtt
@@ -49,6 +70,14 @@ PRINTERS = {   # name: (ip, serial, model)
 }
 WIPE_TEMP = 170
 CHUNK = 18                     # wipe G-code lines per gcode_line message
+PRINTERS_API = ("http://192.168.5.11", "printers.home")   # agony's Caddy (printers.home may not resolve)
+CLUMP_HMS = "0300_1A00_0002_0001"
+CLUMP_ERROR = 0x03008014       # print_error of a nozzle-clumping pause
+MAX_RESUMES = 2                # clumping pauses resumed per job; one more ends the watch
+STALE_S = 300                  # an HMS raised this long before the job was last seen running is old
+OFFLINE_S = 900
+START_S = 300                  # how long `watch` waits for a job it was started for to show as running
+LOG_DIR = Path.home() / "Library" / "Logs" / "bambu_watch"
 
 
 def access_code(name):
@@ -127,13 +156,95 @@ def report(name):
     return next((r["print"] for r in reps if "vt_tray" in r.get("print", {})), {})
 
 
+def hms_id(h):
+    """An HMS entry as the printers page and Bambu's wiki write it, AAAA_BBBB_CCCC_DDDD."""
+    return "%04X_%04X_%04X_%04X" % (h["attr"] >> 16, h["attr"] & 0xFFFF, h["code"] >> 16, h["code"] & 0xFFFF)
+
+
 def status(name):
     p = report(name)
     t = p.get("vt_tray", {})
     return {"state": p.get("gcode_state"), "job": p.get("subtask_name"), "percent": p.get("mc_percent"),
+            "layer": [p.get("layer_num"), p.get("total_layer_num")],
             "nozzle": p.get("nozzle_diameter"), "print_error": p.get("print_error"),
-            "hms": ["%08X_%08X" % (h["attr"], h["code"]) for h in p.get("hms", [])],
+            "hms": [hms_id(h) for h in p.get("hms", [])],
             "spool": {k: t.get(k) for k in ("tray_type", "tray_color")}}
+
+
+def camera(name, out):
+    """Save a camera frame from the printers service; False if there is none."""
+    base, host = PRINTERS_API
+    try:
+        req = urllib.request.Request(f"{base}/camera/{name}.jpg", headers={"Host": host})
+        Path(out).write_bytes(urllib.request.urlopen(req, timeout=30).read())
+        return True
+    except OSError:
+        return False
+
+
+def watch(name, every=60):
+    """Follow the job to its end (see the module notes). Returns the exit code."""
+    LOG_DIR.mkdir(parents=True, exist_ok=True)
+    log = open(LOG_DIR / f"{name}.log", "a")
+
+    def say(msg):
+        line = f"{time.strftime('%Y-%m-%d %H:%M:%S')} {name} {msg}"
+        print(line, flush=True)
+        log.write(line + "\n"), log.flush()
+
+    def frame(tag):
+        f = LOG_DIR / f"{name}_{time.strftime('%Y%m%d_%H%M%S')}_{tag}.jpg"
+        say(f"camera {f}" if camera(name, f) else "camera: no frame")
+
+    last_running, last_report, resumes, shown = time.time(), time.time(), 0, None
+    t0, started = time.time(), False
+    while True:
+        p = report(name)
+        if not p:
+            if time.time() - last_report > OFFLINE_S:
+                say(f"no report for {OFFLINE_S // 60} min: giving up")
+                return 2
+            time.sleep(every)
+            continue
+        last_report = time.time()
+        st, job, layer = p.get("gcode_state"), p.get("subtask_name"), p.get("layer_num")
+        hms = {hms_id(h): h.get("timestamp", 0) for h in p.get("hms", [])}
+        now_shown = (st, job, (layer or 0) // 10)
+        if now_shown != shown:
+            say(f"{st} {job} layer {layer}/{p.get('total_layer_num')} {p.get('mc_percent')}% "
+                f"{p.get('mc_remaining_time')} min left print_error {p.get('print_error')} hms {sorted(hms)}")
+            shown = now_shown
+        if st in ("RUNNING", "PREPARE", "SLICING"):
+            last_running, started = time.time(), True
+        elif not started and st in ("FINISH", "FAILED", "IDLE"):
+            # just after `start` the printer still reports the last job's end for a few seconds
+            if time.time() - t0 > START_S:
+                say(f"job never started ({st} after {START_S // 60} min)")
+                return 1
+        elif st == "FINISH":
+            frame("finish")
+            return 0
+        elif st in ("FAILED", "IDLE"):
+            say(f"job ended {st}")
+            frame(st.lower())
+            return 1
+        elif st == "PAUSE":
+            clump = p.get("print_error") == CLUMP_ERROR or hms.get(CLUMP_HMS, 0) > last_running - STALE_S
+            frame("pause")
+            if not clump:
+                say(f"paused, not for nozzle clumping (print_error {p.get('print_error')}): left alone")
+                return 1
+            if resumes >= MAX_RESUMES:
+                say(f"nozzle clumping pause number {resumes + 1}: not resuming again, needs a look")
+                return 1
+            resumes += 1
+            say(f"nozzle clumping pause (print_error {p.get('print_error')}): resume {resumes}: "
+                f"{command(name, {'print': {'sequence_id': '6', 'command': 'resume', 'param': ''}})}")
+            time.sleep(45)
+            last_running = time.time()
+            frame("resumed")
+            continue
+        time.sleep(every)
 
 
 def command(name, req, wait=10):
@@ -170,8 +281,15 @@ def main():
         s = status(name)
         if s["state"] in ("PREPARE", "RUNNING", "PAUSE"):
             sys.exit(f"{name} is {s['state']}: not wiping during a job")
-        print(json.dumps(wipe(name)))
+        w = wipe(name)
+        print(json.dumps(w))
         print(json.dumps(status(name), indent=1))
+        if not w["done"]:
+            sys.exit("wipe did not finish (last marker not seen): check the printer before starting a job")
+    elif verb == "resume":
+        print(command(name, {"print": {"sequence_id": "6", "command": "resume", "param": ""}}))
+    elif verb == "watch":
+        sys.exit(watch(name))
     elif verb == "clear":
         print(command(name, {"print": {"sequence_id": "5", "command": "clean_print_error", "subtask_id": "",
                                        "print_error": status(name)["print_error"] or 0}}))

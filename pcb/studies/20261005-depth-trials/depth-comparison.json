@@ -1,0 +1,121 @@
+{
+  "tool": "30 degree included angle, 0.2 mm flat tip",
+  "formula": "effective_diameter = 0.2 + 2 * depth * tan(15 degrees)",
+  "original_isolation_depth_mm": 0.08,
+  "original_cutout_depth_mm": 1.45,
+  "recommended_next_test_isolation_mm": 0.12,
+  "recommended_next_test_cutout_mm": 1.55,
+  "limits": "Nominal geometry checks only. Not a measured machine/process depth limit. Extra depth does not compensate for moving stock or an invalid height map.",
+  "trials": [
+    {
+      "isolation_depth_mm": 0.08,
+      "effective_tool_diameter_mm": 0.242872,
+      "cutout_depth_mm": 1.55,
+      "extra_below_nominal_stock_mm": 0.15,
+      "trial": "iso080-cut155",
+      "status": "PASS",
+      "minimum_cad_copper_gap_mm": 0.4,
+      "nearest_copper_nets": [
+        "/+3V3",
+        "/SDA"
+      ],
+      "gap_minus_tool_diameter_mm": 0.157128,
+      "theoretical_depth_at_gap_width_mm": 0.373205,
+      "program_sha256": "13f06c594064f6faa4fca5d8155cb2b94b1eecabfcc14afcd81a0acf034df838",
+      "tab_widths_mm": [
+        2.496,
+        2.496,
+        2.496,
+        2.496
+      ]
+    },
+    {
+      "isolation_depth_mm": 0.1,
+      "effective_tool_diameter_mm": 0.25359,
+      "cutout_depth_mm": 1.55,
+      "extra_below_nominal_stock_mm": 0.15,
+      "trial": "iso100-cut155",
+      "status": "PASS",
+      "minimum_cad_copper_gap_mm": 0.4,
+      "nearest_copper_nets": [
+        "/+3V3",
+        "/SDA"
+      ],
+      "gap_minus_tool_diameter_mm": 0.14641,
+      "theoretical_depth_at_gap_width_mm": 0.373205,
+      "program_sha256": "bff6fc73e8708248065c90d71b6a17893f91a655065c16a7ea9d626f81627e98",
+      "tab_widths_mm": [
+        2.496,
+        2.496,
+        2.496,
+        2.496
+      ]
+    },
+    {
+      "isolation_depth_mm": 0.12,
+      "effective_tool_diameter_mm": 0.264308,
+      "cutout_depth_mm": 1.55,
+      "extra_below_nominal_stock_mm": 0.15,
+      "trial": "iso120-cut155",
+      "status": "PASS",
+      "minimum_cad_copper_gap_mm": 0.4,
+      "nearest_copper_nets": [
+        "/+3V3",
+        "/SDA"
+      ],
+      "gap_minus_tool_diameter_mm": 0.135692,
+      "theoretical_depth_at_gap_width_mm": 0.373205,
+      "program_sha256": "8ec9c4bc873893245ee16b3fc4669130b5d51637ed799eada2bd3b43bb095d45",
+      "tab_widths_mm": [
+        2.496,
+        2.496,
+        2.496,
+        2.496
+      ]
+    },
+    {
+      "isolation_depth_mm": 0.15,
+      "effective_tool_diameter_mm": 0.280385,
+      "cutout_depth_mm": 1.55,
+      "extra_below_nominal_stock_mm": 0.15,
+      "trial": "iso150-cut155",
+      "status": "PASS",
+      "minimum_cad_copper_gap_mm": 0.4,
+      "nearest_copper_nets": [
+        "/+3V3",
+        "/SDA"
+      ],
+      "gap_minus_tool_diameter_mm": 0.119615,
+      "theoretical_depth_at_gap_width_mm": 0.373205,
+      "program_sha256": "8030baab0d0e233c553b8e1301761282a7909b965eb6ce2f6831e41559a68a76",
+      "tab_widths_mm": [
+        2.496,
+        2.496,
+        2.496,
+        2.496
+      ]
+    },
+    {
+      "isolation_depth_mm": 0.2,
+      "effective_tool_diameter_mm": 0.30718,
+      "cutout_depth_mm": 1.55,
+      "extra_below_nominal_stock_mm": 0.15,
+      "trial": "iso200-cut155",
+      "status": "PASS",
+      "minimum_cad_copper_gap_mm": 0.4,
+      "nearest_copper_nets": [
+        "/+3V3",
+        "/SDA"
+      ],
+      "gap_minus_tool_diameter_mm": 0.09282,
+      "theoretical_depth_at_gap_width_mm": 0.373205,
+      "program_sha256": "f19ae5d88fe6e7ee51aeb04a84644a49da6c2fd236567ed6de724dd91bbb9e27",
+      "tab_widths_mm": [
+        2.496,
+        2.496,
+        2.496,
+        2.496
+      ]
+    }
+  ]
+}

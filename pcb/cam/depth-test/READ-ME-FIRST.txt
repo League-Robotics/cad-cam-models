@@ -1,0 +1,91 @@
+NEZHA / QWIIC REV B - FRESH-STOCK DEPTH TEST
+
+PROGRAM: nezha-qwiic-revB-one-board-carvera-iso120-cut155.nc
+Use this for ONE new board on FRESH UNCUT STOCK. The previously cut stock
+has been removed or repositioned. This is not a salvage/re-cut program for
+those boards; do not try to align it by eye over existing traces.
+The existing one-board and four-board CUT145 files remain unchanged.
+
+CHANGES FROM THE PREVIOUS JOB
+Copper isolation: 0.08 -> 0.12 mm below top copper (+0.04 mm).
+Mounting holes and outer cutout: 1.45 -> 1.55 mm (+0.10 mm).
+For nominal 1.4 mm PCB this leaves 0.15 mm penetration below the laminate,
+into the adhesive. Tape thickness is NOT added to the cut depth.
+Tabs remain four per board, 2.5 mm minimum neck width and 0.5 mm thick.
+The nominal V-bit width increases from 0.242872 to 0.264308 mm.
+The isolation paths were REGENERATED for this width; this is not simply a
+Z-value edit to the previous paths.
+
+WHY THE FAILED RIGHT SIDE NEEDS A SETUP CHECK
+The user reports a good second individual board, two good left boards in the
+four-board run, and shallow traces AND cutouts on both right boards, worst at
+the upper right. These are visual/user reports, not measured depth readings.
+A position-dependent problem affecting two different tools suggests stock
+support/flatness or an absent/inaccurate height map. It does not prove a cause.
+The old isolation and through-cut depths were the same for all four boards.
+Extra depth gives a modest margin; it cannot correct a board moving under
+cutting loads or soft tape changing thickness during probing.
+
+WORKHOLDING FIRST
+Remove old adhesive/debris and establish a flat, rigid backer.
+Use thin, firm tape suitable for CNC work, with even support under the complete
+machining area. Avoid stacked, overlapped, spongy or loosely bonded tape.
+Press the stock down evenly; check especially the far/right corners for lift
+or movement under light pressure before probing. Do not force a bowed blank
+flat only at its edges and leave the middle unsupported.
+Measure PCB thickness if the stock differs from the stated 1.4 mm.
+The 1.55 mm cut is based on 1.4 mm material, not on a measured new blank.
+Keep clamps/brackets clear of the cutter, probe and larger dust-shoe envelope.
+
+TOOLS / MACHINING
+Original six-slot Carvera automatic tool changer.
+T2 / slot 2: 30-degree V-bit with 0.2 mm flat tip, 3.175 mm shank.
+T3 / slot 3: 0.8 mm corn bit, 3.175 mm shank; not a drill.
+Inspect the V-tip for chips/wear, confirm its identity, clean the collet and
+use the correct tool collars. No tool or feed increase is required.
+Both tools: 12,000 RPM; XY feed 300 mm/min; Z feed 100 mm/min.
+Holes and outlines: maximum 0.25 mm stepdown, ending at Z-1.55 mm.
+Sequence: isolate copper, pocket both complete 3 mm holes, then cut outline.
+Normal clearance Z5; final retraction Z10. Automatic vacuum enabled.
+Motion estimate about 7 minutes, excluding probing and automatic tool changes.
+Keep the enclosure closed and dust collection operating.
+
+PLACEMENT / FRESH PROBING
+Stock: X150 by Y100 mm, 1.4 mm thick, copper UP.
+G54 XY0 = lower-left corner of this stock; Z0 = TOP COPPER SURFACE.
+Remove any old 60 mm X offset and establish the new stock datum accurately.
+One finished board at X15..59, Y15..39, 44 x 24 mm.
+Full cutter sweep approximately X14.20..59.80, Y14.20..39.80 mm.
+1. Load the file and inspect the placement preview before machining.
+2. Enable Auto Z Probe using Work Origin offsets X37, Y27 mm. This point must
+   be intact copper on the NEW blank; it is not suitable on the old cut sheet.
+3. Enable Auto Leveling as well as Auto Z Probe. Use a NEW height map covering
+   this entire file's machining area. A 6 x 4 grid, with 2 mm probing lift,
+   gives about 9 x 8 mm spacing, consistent with Makera's PCB guidance.
+4. Enable Scan Margin. Check every leveling dot lies on supported intact stock
+   and all probe/dust-shoe travel clears clamps. Watch for stock deflection.
+5. Leave the new leveling compensation active throughout machining. This NC
+   preserves G54/leveling but does not set the datum or generate the map itself.
+   Do not apply an additional external leveling correction.
+
+AFTER THE TEST
+Confirm isolation exposes laminate consistently around the board, with no
+copper bridges. Check continuity and shorts before connecting power.
+The outline remains attached ONLY by the four intentional tabs; tabs are not
+an incomplete cut. Inspect the rest of the outline before breaking the tabs.
+If one side still barely cuts, stop depth escalation and resolve support,
+probing/leveling coverage, tool condition and actual material thickness.
+
+VALIDATION AND LIMITS
+The file passed offline checks for copper preservation, intended net
+connectivity, no shorts/opens, complete hole pockets, four tabs, stock bounds,
+clearance moves, tool slots, spindle/feed commands and the new depths.
+The same nominal layout also passed geometry checks at 0.15 and 0.20 mm
+isolation depth. Those are NOT measured machine/process limits or recommended
+first settings. The selected next test is 0.12 mm isolation / 1.55 mm through.
+No physical result is guaranteed from the geometry check. Secure and probe the
+stock first; increase depth alone is not a substitute for sound workholding.
+
+Manufacturer setup reference: https://wiki.makera.com/carvera/manual/software
+Manufacturer PCB workholding: https://wiki.makera.com/Air/Manual/Air-LED-Light
+The latter is used for PCB/tool/workholding guidance, not Air tool-change codes.

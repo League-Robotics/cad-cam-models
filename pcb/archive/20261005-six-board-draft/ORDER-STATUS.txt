@@ -1,0 +1,16 @@
+MOUSER ORDER - QUANTITY CONFIRMATION PENDING
+
+All four exact Rev B parts were verified in the Mouser browser on 2026-10-05.
+See mouser-order-draft.csv for the exact part numbers and product links.
+No purchase has been made. Adding 11 resistors to the cart was blocked by
+automatic approval review because the quantity had not been confirmed.
+No successful cart addition has been verified.
+
+The final layout contains SIX new boards, not the earlier proposed seven.
+Suggested order: 10 of each part, approximately $29.99 before shipping, tax
+and tariffs. This gives four spare sets beyond the six new boards; existing
+Rev B boards can use those spares. Any earlier Rev A board needs its old jack.
+11 of each would cost approximately $32.99 before shipping, tax and tariffs.
+Choose cut tape for J1/J3/R1 and tube packaging for J2. Do not select MouseReel.
+Mouser displayed potential tariffs of 8% on J1/J2/R1 and 30% on J3; actual
+checkout fees and delivery are not yet calculated. Prices can change.

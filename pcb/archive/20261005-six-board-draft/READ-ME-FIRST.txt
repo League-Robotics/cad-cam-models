@@ -1,0 +1,96 @@
+NEZHA / QWIIC REV B - SIX MORE BOARDS ON THE PARTLY CUT SHEET
+
+STATUS: REVIEW DRAFT - existing cut positions await user confirmation.
+The .nc.draft file is not released for machining yet. Do not rename it and run
+until the positions below have been confirmed. The checked layout and paths
+are otherwise complete. No CNC machine was connected or commanded.
+
+LOCATION
+/Volumes/Proj/proj/CAM/nezha-qwiic/cam/panel
+Drawing: panel-layout.pdf
+Draft: nezha-qwiic-revB-six-more-carvera-cut145.nc.draft
+Validation: validation.json
+
+EXISTING CUTOUTS / WORK ORIGIN
+The first finished board is assumed to occupy X15..59, Y15..39 mm.
+The second is assumed to occupy X75..119, Y15..39 mm, shifted 60 mm in X.
+The exclusion areas extend another 0.8 mm on all four sides for the old kerfs.
+Confirm these positions against the partly cut stock and the hatched drawing.
+All coordinates use the ORIGINAL lower-left corner of the 150 x 100 mm stock.
+IMPORTANT: remove the previous 60 mm X shift from the work origin. Keep G54
+at the original stock corner; do not zero on a new board or add layout offsets.
+Copper face UP. Z zero is the TOP COPPER SURFACE.
+
+NEW BOARD POSITIONS
+Each board is 44 x 24 mm, in the same orientation as the Rev B test board.
+Board   Lower-left X   Lower-left Y
+B3      11             44
+B4      57             44
+B5      103            44
+B6      11             72
+B7      57             72
+B8      103            72
+This makes six new boards, eight including the two existing cuts. Existing
+boards may be different revisions; this job and the parts list are Rev B only.
+A seventh new board was excluded because it would require cutting less than
+1 mm from the front stock edge, near the usual locating bracket.
+
+TOOLS AND WORKHOLDING
+Original six-slot Carvera ATC, not Carvera Air.
+Slot 2: 30-degree V-bit with 0.2 mm tip, 3.175 mm shank.
+Slot 3: 0.8 mm corn bit, 3.175 mm shank. Use a mill, not a drill.
+Use the correct collars and maintain the normal wireless-probe holder.
+Retain the flat sacrificial backer and evenly supported double-sided tape.
+The entire cutter sweep is X10.20..147.80, Y43.20..96.80 mm.
+The dust shoe and probe require more clearance than this tool-only envelope.
+Keep clamps, screws and the locating bracket clear of their travel.
+There is 0.4 mm of stock left between adjacent column kerfs; the tape must
+support the narrow strips and each individual board. Cut all outlines last.
+Keep the enclosure shut and dust collection running.
+
+PROBING IN CARVERA CONTROLLER
+1. Inspect the preview and confirm G54 is the ORIGINAL stock corner.
+2. Enable Auto Z Probe. Select Work Origin with X33, Y56 mm probe offsets.
+   This point is on intact copper in the first new board; do NOT use the old
+   single-board probe point X37 Y27, which is now in an existing cutout.
+3. Enable Scan Margin and Auto Leveling for THIS program's machining area.
+   Use 15 X points, 7 Y points, 2 mm probing lift. Spacing is about 9.77 x 8.8 mm.
+   Expected tool-center/leveling rectangle: X10.60..147.40, Y43.60..96.40 mm.
+   The entire rectangle is above the existing cutouts. Confirm every preview
+   probe point lies on intact supported stock before starting the scan.
+   Do NOT scan the whole 150 x 100 mm sheet or reuse a previous height map.
+4. Leave the new native leveling compensation active through the full program.
+   The G-code preserves G54 and leveling; it does not establish either itself.
+   Do not apply a second external leveling correction to the same program.
+5. One combined job performs all copper isolation, then all 12 hole pockets,
+   then all six outlines. It selects T2 once and T3 once.
+
+CUTTING SETTINGS
+Spindle: 12,000 RPM. XY feed: 300 mm/min. Z feed: 100 mm/min.
+Isolation: Z-0.08 mm, effective V-bit width 0.242872 mm.
+Holes: two completely pocketed 3.00 mm holes per board; no loose center slugs.
+Outline and holes: final Z-1.45 mm, maximum stepdown 0.25 mm.
+The 1.4 mm PCB gets ONLY 0.05 mm extra depth, into the adhesive.
+Tape thickness is not added to cutting depth. Leveling follows the top surface;
+it does not measure actual laminate thickness or tape compression.
+Four tabs per board: 2.5 mm neck width, 0.5 mm remaining thickness.
+Clearance Z5; final retraction Z10. Nominal motion time about 37 minutes,
+excluding probing, automatic tool changes and machine acceleration.
+
+AFTER CUTTING
+Leave the sheet fixed until machining is complete. Remove the sheet, sever
+tabs and dress the edges. Inspect/deburr isolation cuts and check shorts and
+continuity. Fit the insulated 1206 zero-ohm resistor before electrical testing.
+Use the Rev B assembly drawing and Amphenol 73306-111LF jack.
+Do not fit that jack to a Rev A board, which used a different footprint.
+
+VALIDATION
+Offline checks passed: original CAD connectivity and copper retention;
+every panel feed segment matches the translated validated original;
+feeds/tool slots/clearance; stock bounds; 3.4 mm minimum clearance to the old
+cut-region envelopes; non-overlapping new kerfs; full holes; four tabs per
+board; and a leveling rectangle entirely clear of the old cutouts.
+Physical stock positions, machine, tool runout and workholding still need
+operator verification. The draft is held only for the old-cut position check.
+
+Controller reference: https://wiki.makera.com/carvera/manual/software

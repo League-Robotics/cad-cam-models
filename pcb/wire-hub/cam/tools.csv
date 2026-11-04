@@ -1,0 +1,3 @@
+slot,description,spindle_rpm,xy_feed_mm_min,notes
+2,"30 degree V-bit; 0.2 mm tip; 3.175 mm shank",12000,300,Isolation depth 0.12 mm
+3,"0.8 mm corn bit; 3.175 mm shank",12000,300,Helical holes at 100 mm/min; through depth 1.55 mm

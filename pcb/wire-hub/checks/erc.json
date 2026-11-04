@@ -1,0 +1,18 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-10-29T17:18:53+0000",
+    "included_severities": [
+        "error",
+        "warning"
+    ],
+    "kicad_version": "9.0.8",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/e5340e3e-c6a7-5882-b6f6-81eb5048fbf1",
+            "violations": []
+        }
+    ],
+    "source": "nezha-wire-hub.kicad_sch"
+}

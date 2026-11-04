@@ -1,0 +1,172 @@
+(footprint "Harwin_M20_9990446_Male"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "4 pins on 2.54 mm pitch; bottom copper only; locally milled holes are unplated")
+	(property "Reference" "REF**"
+		(at 0 0 0)
+		(layer "F.SilkS")
+		(uuid "8d7d9e05-e1e2-4a02-8ad7-37e1ad877264")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "Harwin_M20_9990446_Male"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "b439440e-188f-4dd1-803f-f5a2717e899c")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d3a4b171-e978-4266-998a-efdd8678dfbc")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "7e3a8417-75af-4f1f-bde4-343a7f1f8329")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr through_hole)
+	(fp_line
+		(start -1.57 -1.57)
+		(end 1.57 -1.57)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(layer "F.CrtYd")
+		(uuid "c5f14a8b-5519-458a-8a71-6cc3e69ef2a1")
+	)
+	(fp_line
+		(start -1.57 9.19)
+		(end -1.57 -1.57)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(layer "F.CrtYd")
+		(uuid "31ae4d16-7874-4f2b-a83f-9b1e04b2eee3")
+	)
+	(fp_line
+		(start 1.57 -1.57)
+		(end 1.57 9.19)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(layer "F.CrtYd")
+		(uuid "c1c14420-4be9-458e-a1d3-0fb817645d44")
+	)
+	(fp_line
+		(start 1.57 9.19)
+		(end -1.57 9.19)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(layer "F.CrtYd")
+		(uuid "eb048657-cdcb-4ef7-a760-b66375c18e32")
+	)
+	(fp_line
+		(start -1.27 -1.27)
+		(end 1.27 -1.27)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.Fab")
+		(uuid "04130cd4-d751-4425-9fee-4e6253270acf")
+	)
+	(fp_line
+		(start -1.27 8.89)
+		(end -1.27 -1.27)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.Fab")
+		(uuid "615ff01c-f502-4e20-8920-f9f153771150")
+	)
+	(fp_line
+		(start 1.27 -1.27)
+		(end 1.27 8.89)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.Fab")
+		(uuid "b15803b8-5f1e-457c-8dda-b84dc469402a")
+	)
+	(fp_line
+		(start 1.27 8.89)
+		(end -1.27 8.89)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(layer "F.Fab")
+		(uuid "66011416-9796-4917-afd8-c6499b93b79c")
+	)
+	(pad "1" thru_hole rect
+		(at 0 0)
+		(size 2 2)
+		(drill 1.05)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers yes)
+		(keep_end_layers no)
+		(thermal_bridge_angle 45)
+		(uuid "07b4a9b7-805b-4580-b943-28f275fb9bd6")
+	)
+	(pad "2" thru_hole circle
+		(at 0 2.54)
+		(size 2 2)
+		(drill 1.05)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers yes)
+		(keep_end_layers no)
+		(uuid "57e72af8-9a43-4628-a5e0-ba4b136bfffc")
+	)
+	(pad "3" thru_hole circle
+		(at 0 5.08)
+		(size 2 2)
+		(drill 1.05)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers yes)
+		(keep_end_layers no)
+		(uuid "ba67af67-5e02-4d76-b697-caa5e1e29b58")
+	)
+	(pad "4" thru_hole circle
+		(at 0 7.62)
+		(size 2 2)
+		(drill 1.05)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers yes)
+		(keep_end_layers no)
+		(uuid "2a376acf-3cf6-4d6c-b17b-7aeb0e607891")
+	)
+	(embedded_fonts no)
+)

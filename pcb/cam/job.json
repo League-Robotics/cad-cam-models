@@ -1,0 +1,71 @@
+{
+  "revision": "B",
+  "machine": "Original Makera Carvera, six-slot automatic tool changer",
+  "stock_mm": [
+    150,
+    100,
+    1.4
+  ],
+  "stock_orientation": "150 mm left-right (X); 100 mm front-back (Y)",
+  "material": "Bare copper FR-4; assumed 35 um copper; confirm if different",
+  "board_mm": [
+    44,
+    24
+  ],
+  "board_lower_left_mm": [
+    15,
+    15
+  ],
+  "gerber_translation_mm": [
+    15,
+    39
+  ],
+  "work_origin": "G54 at stock lower-left; Z0 copper top, set/probe in Carvera Controller",
+  "isolation": {
+    "tool_slot": 2,
+    "tool": "30 degree V-bit, 0.2 mm tip, 3.175 mm shank",
+    "depth_mm": 0.08,
+    "effective_diameter_mm": 0.242872,
+    "rpm": 12000,
+    "feed_mm_min": 300,
+    "plunge_mm_min": 100
+  },
+  "cutting": {
+    "tool_slot": 3,
+    "tool": "0.8 mm corn bit, 3.175 mm shank",
+    "diameter_mm": 0.8,
+    "depth_mm": 1.45,
+    "max_stepdown_mm": 0.25,
+    "rpm": 12000,
+    "feed_mm_min": 300,
+    "plunge_mm_min": 100
+  },
+  "tabs": {
+    "count": 4,
+    "finished_width_mm": 2.5,
+    "remaining_thickness_mm": 0.5,
+    "z_mm": -0.9
+  },
+  "retract_mm": 5,
+  "probe_grid": [
+    6,
+    4
+  ],
+  "probe_retract_mm": 2,
+  "sources": [
+    "https://wiki.makera.com/en/supported-codes",
+    "https://wiki.makera.com/en/speeds-and-feeds",
+    "https://wiki.makera.com/en/carvera/manual/software",
+    "https://wiki.makera.com/en/carvera/manual/tool-kit",
+    "https://wiki.makera.com/Air/Manual/Air-LED-Light",
+    "https://github.com/pcb2gcode/pcb2gcode/releases/tag/v3.0.4"
+  ],
+  "program_file": "nezha-qwiic-revB-one-board-carvera-cut145.nc",
+  "workholding": {
+    "tape_thickness_mm_approx": 1.0,
+    "backer": "User-supplied sacrificial backer",
+    "through_cut_allowance_mm": 0.05,
+    "note": "Tape thickness is not added to cut depth; Z0 is the top copper surface."
+  },
+  "jack": "Amphenol 73306-111LF"
+}

@@ -1,0 +1,6 @@
+isolation_depth_mm,effective_tool_diameter_mm,cutout_depth_mm,extra_below_nominal_stock_mm,status,gap_minus_tool_diameter_mm
+0.08,0.242872,1.55,0.15,PASS,0.157128
+0.1,0.25359,1.55,0.15,PASS,0.14641
+0.12,0.264308,1.55,0.15,PASS,0.135692
+0.15,0.280385,1.55,0.15,PASS,0.119615
+0.2,0.30718,1.55,0.15,PASS,0.09282

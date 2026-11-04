@@ -1,0 +1,5 @@
+# Preserve generated SVG formatting and the verbatim upstream license.
+cam/panel-layout.svg -whitespace
+exports/assembly-preview.svg -whitespace
+design/KICAD-LIBRARY-COPYRIGHT.txt -whitespace
+references/KICAD-LIBRARY-COPYRIGHT.txt -whitespace

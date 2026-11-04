@@ -1,0 +1,18 @@
+design/*.kicad_prl
+design/*-backups/
+design/~*.lck
+checks/*.log
+cam/raw/*.log
+cam/raw/*.svg
+
+# Standalone project: local caches and generated preview/package outputs.
+.DS_Store
+._*
+.AppleDouble
+__pycache__/
+*.py[cod]
+.venv/
+*.log
+*.png
+*.zip
+exports/nezha-qwiic-revA-carvera-one-board/

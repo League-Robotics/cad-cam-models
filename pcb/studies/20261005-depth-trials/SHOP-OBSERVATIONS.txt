@@ -1,0 +1,24 @@
+SHOP OBSERVATIONS - 2026-10-05
+
+User reports: second individual Rev B adapter worked well. In the subsequent
+four-board job, both left boards worked; right-side traces and cutouts were
+too shallow, with the upper right barely engraved. Stock has since been
+removed or repositioned. No measured depths, copper thickness, height map
+or continuity-test results were supplied. Loose tape is the user's hypothesis.
+
+Original depths: isolation 0.08 mm; holes/outline 1.45 mm; 1.4 mm stock.
+Original four-board G-code used identical depths and translated XY geometry
+at every instance. One common position-dependent setup problem is therefore
+more plausible than a right-board-only CAM depth error; this is an inference.
+
+Completed evaluation: regenerate pcb2gcode paths for isolation depths 0.08,
+0.10, 0.12, 0.15, 0.20 mm using the actual wider V-bit diameter at each depth.
+All five passed the nominal geometry checks. Through-cut depth in the trials
+was 1.55 mm. Tabs stayed 0.5 mm thick. See depth-comparison.json.
+The 0.373205 mm gap-width equality number in that JSON is a mathematical
+width calculation only, not a usable machining depth or recommended setting.
+
+Selected new trial: 0.12 mm isolation, 1.55 mm holes/outline, on fresh stock.
+No re-cut files for the removed/repositioned failed boards were released.
+New released files: cam/depth-test/ and exports/nezha-qwiic-revB-depth-test.zip.
+Earlier successful files are retained unchanged for comparison.

@@ -1,0 +1,32 @@
+{
+  "manufacturer": "Amphenol / FCI",
+  "part": "73306-111LF",
+  "document": "73306",
+  "released_revision": "M",
+  "sheets": {
+    "1": "M",
+    "2": "F",
+    "3": "B"
+  },
+  "source_url": "https://www.farnell.com/cad/2569699.pdf",
+  "source_product_url": "https://www.newark.com/amphenol-communications-solutions/73306-111lf/conn-mod-modular-jack-1-x-1-port/dp/65AC3165",
+  "retrieved_date": "2026-10-05",
+  "sha256": "e987cb9f9e9386e16d55b42d83970f94bd02d1bd30e5cdd710cbb78965baaf67",
+  "dimensions_mm": {
+    "body_width": 11.18,
+    "body_depth": 12.7,
+    "body_height": 14.0,
+    "signal_pitch": 1.27,
+    "signal_land_cross_width": 0.76,
+    "signal_land_longitudinal_length": 3.4,
+    "hold_down_land_cross_width": 2.35,
+    "hold_down_land_longitudinal_length": 5.5,
+    "hold_down_cross_center_offsets": [
+      -5.2,
+      5.2
+    ],
+    "hold_down_center_from_rear": 7.05,
+    "hold_down_land_leading_edge_from_front": 2.8
+  },
+  "interpretation": "Sheet 3 land pattern has tails left and mouth right. The local footprint rotates this to mouth at y=0 and rear toward +y. Rear is y=12.7, signal centers y=14.4, hold-down centers y=5.65. Drawing does not assign contact numbers. Project numbers 4-3-2-1 run left to right into the latch-UP mouth, matching the user-supplied mating plug latch-side colors yellow-green-red-black. At 90 degrees on the board, J1 top-to-bottom is SDA-SCL-3V3-GND. Continuity-check the real cable and connector before first power."
+}

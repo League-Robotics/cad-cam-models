@@ -1,0 +1,69 @@
+{
+ "status": "PASS",
+ "boards": {
+  "1": {
+   "name": "servo-tail",
+   "cad_min_clearance_mm": 0.3212,
+   "tab_necks_mm": [
+    1.55,
+    1.55,
+    1.55
+   ],
+   "min_z": {
+    "1": -0.12,
+    "2": -1.55
+   }
+  },
+  "2": {
+   "name": "servo-tail",
+   "cad_min_clearance_mm": 0.3212,
+   "tab_necks_mm": [
+    1.55,
+    1.55,
+    1.55
+   ],
+   "min_z": {
+    "1": -0.12,
+    "2": -1.55
+   }
+  },
+  "3": {
+   "name": "qwiic-tail",
+   "cad_min_clearance_mm": 0.3212,
+   "tab_necks_mm": [
+    1.5,
+    1.5,
+    1.55
+   ],
+   "min_z": {
+    "1": -0.12,
+    "2": -1.55
+   }
+  },
+  "4": {
+   "name": "qwiic-tail",
+   "cad_min_clearance_mm": 0.3212,
+   "tab_necks_mm": [
+    1.5,
+    1.5,
+    1.55
+   ],
+   "min_z": {
+    "1": -0.12,
+    "2": -1.55
+   }
+  }
+ },
+ "program": "plug-tails-A-4up-iso120-cut155.nc",
+ "program_sha256": "1ff9279c1bf0a335324013c42fad0a506e72483786d446e34ebdb660bf7d7181",
+ "motion_minutes": 11.1,
+ "checks": [
+  "Schematic netlists match the independent net table",
+  "Front copper only, SMD only, no vias",
+  "Every net one piece in CAD; clearance at least 0.30 mm; copper 0.2 mm inside the outline",
+  "Replayed V-bit and outline sweeps leave copper undamaged, every net whole and no two nets joined",
+  "Each board has exactly 3 tabs of 1.5 mm, none on the tongue; the tongue is cut free all round",
+  "Bounded feeds and depths, safe rapids, spindle on for every cut, tools T2 then T3"
+ ],
+ "limits": "Offline geometry only. The plug cavity, pin pitch and servo-port pinout are not yet measured; not test-cut."
+}

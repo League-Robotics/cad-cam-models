@@ -1,0 +1,16 @@
+{
+  "status": "Cart assembled and visibly verified; not purchased",
+  "checked_date": "2026-10-05",
+  "cart_url": "https://www.mouser.com/en/Cart/",
+  "sets": 5,
+  "distinct_parts": 4,
+  "availability": "All four lines show 5 Ships Now",
+  "merchandise_usd": 17.6,
+  "selected_shipping": "UPS Ground",
+  "shipping_estimate_usd": 8.49,
+  "tariff_estimate_usd": 2.0,
+  "displayed_subtotal_usd": 28.09,
+  "sales_tax": "Not yet calculated",
+  "packaging": "Cut tape for J1/J3/R1; standard tube-packaged J2. No MouseReel.",
+  "payment_submitted": false
+}

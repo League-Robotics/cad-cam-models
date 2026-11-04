@@ -1,0 +1,18 @@
+MOUSER CART READY - FIVE SETS - NOT PURCHASED
+
+The browser cart was visibly verified on 2026-10-05:
+5 x 649-73306-111LF       Amphenol 4P4C jack        $12.15
+5 x 200-TSM10401LSV       Samtec male header        $2.30
+5 x 306-BM04BSRSSTBLFSN   JST Qwiic socket          $2.65
+5 x 603-RC1206JR-070RL    YAGEO 1206 zero-ohm        $0.50
+Merchandise:                                     $17.60
+UPS Ground shown in cart:                         $8.49
+Estimated tariffs:                                $2.00
+Displayed subtotal before sales tax:             $28.09
+
+All four lines show 5 Ships Now. Cut tape selected for J1, J3 and R1;
+J2 is the standard tube-packaged part. No MouseReel charges.
+Checkout has not been submitted and no payment has been made.
+The cart is open in the in-app browser: https://www.mouser.com/en/Cart/
+Its contents depend on that browser's session. Prices and shipping can change.
+See mouser-order.csv for exact parts, quantities and product links.

@@ -1,0 +1,9 @@
+# Preserve exporter formatting and the verbatim upstream license file.
+exports/*.svg -whitespace
+cam/*.svg -whitespace
+cam/raw/*.ngc -whitespace
+design/KICAD-LIBRARY-COPYRIGHT.txt -whitespace
+*.pdf binary
+cam/panel/*.svg -whitespace
+archive/**/*.svg -whitespace
+cam/depth-test/*.svg -whitespace

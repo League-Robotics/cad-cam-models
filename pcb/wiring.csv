@@ -1,0 +1,5 @@
+signal,nezha_wire_color,J1_contact,J2_header_pin,J3_qwiic_pin,qwiic_wire_color,path
+GND,black,1,1,1,black,Direct
+3V3,red,2,2,2,red,Direct; 3.3 V confirmed by user
+SDA,yellow,4,3,3,blue,Direct; crosses under R1
+SCL,green,3,4,4,yellow,Through 0 ohm resistor R1

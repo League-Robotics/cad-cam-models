@@ -1,0 +1,1 @@
+Single copper layer on BOTTOM, 26 x 16 mm, nominal thickness 1.4 mm. All 16 solder holes are NON-PLATED; copper annuli on bottom only. Quote single-sided manufacture from B_Cu and NPTH drill. Do not mirror these fabrication Gerbers. Top and bottom legend and bottom mask/paste are supplied. A conventional two-layer plated-hole variant has NOT been generated.

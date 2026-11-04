@@ -1,0 +1,87 @@
+NEZHA / QWIIC REV B - FOUR MORE BOARDS - ORIGINAL CARVERA ATC
+
+PROGRAM: nezha-qwiic-revB-four-more-carvera-cut145.nc
+PROJECT: /Volumes/Proj/proj/CAM/nezha-qwiic
+DRAWING: cam/panel/panel-layout.pdf
+This replaces the archived six-board draft. Four new boards plus your current
+Rev B test board gives five usable adapters if that test board passes.
+No machine was connected or commanded during preparation.
+
+PLACEMENT AND THE USED BOTTOM ROW
+Stock: X150 by Y100 mm, 1.4 mm thick, copper UP.
+Reserve the ENTIRE bottom strip X0..150, Y0..40 mm. No new cut or leveling
+point enters this strip. This covers the original bottom-row test jobs at
+nominal Y15..39 with their kerfs, regardless of their X positions.
+The upper machining area must still be intact, flat, evenly supported stock.
+Each new finished board is 44 x 24 mm, in the same orientation as the test:
+B3: lower-left X15 Y44; B4: X75 Y44.
+B5: lower-left X15 Y72; B6: X75 Y72.
+The cutter sweeps X14.20..119.80, Y43.20..96.80 mm. Its nearest point is
+3.20 mm above the excluded bottom strip. The right strip is left unused.
+
+WORK ORIGIN - IMPORTANT
+Restore G54 XY zero to the ORIGINAL lower-left corner of the stock.
+Remove the 60 mm X shift used for the second test. Do not zero on a new board
+or add the above placement offsets: these coordinates are already in the NC.
+If using an anchor, use offsets locating the actual original stock corner.
+Set Z0 at the TOP COPPER SURFACE, not the backer or top of the tape.
+
+TOOLS
+Slot 2: standard 30-degree V-bit with 0.2 mm flat tip, 3.175 mm shank.
+Slot 3: standard 0.8 mm corn bit, 3.175 mm shank; a mill, not a drill.
+Use the correct Carvera collars and normal wireless probe holder.
+This program uses the original six-slot Carvera automatic tool changer.
+It is not for the Carvera Air's manual tool changes.
+
+WORKHOLDING AND PROBING
+Use the flat sacrificial backer and evenly supported double-sided tape.
+Keep clamps, screws and the locating bracket clear of the dust shoe and probe,
+whose travel envelopes are wider than the cutter-only bounds above.
+Keep the enclosure shut and dust collection running.
+1. Home normally, load the NC and inspect its preview. Check the original G54
+   origin and that the full upper machining rectangle is intact supported stock.
+2. Enable Auto Z Probe. Select Work Origin and enter probe offsets X37, Y56 mm.
+   This is the center of the first NEW board. Do not use the old X37 Y27 point,
+   which is inside the already used bottom row.
+3. Enable Scan Margin and Auto Leveling for THIS PROGRAM'S machining area.
+   Use 12 X points, 7 Y points and 2 mm probing lift, about 9.53 x 8.80 mm spacing.
+   Expected tool-center/leveling rectangle: X14.60..119.40, Y43.60..96.40 mm.
+   Inspect the yellow probe dots; all must fall on intact supported copper
+   ABOVE the bottom row. Do not scan the whole stock or reuse an old height map.
+4. Leave the newly measured native leveling active throughout the combined job.
+   The NC preserves G54 and leveling; it does not establish either itself.
+   Do not apply a second external leveling correction.
+
+CUTTING
+All four boards' trace isolation first, then all eight 3 mm mounting holes,
+then all four outlines last. T2 is selected once; T3 is selected once.
+12,000 RPM; 300 mm/min XY feed; 100 mm/min Z feed.
+Isolation: Z-0.08 mm; nominal effective V-bit width 0.242872 mm.
+Holes and outlines: final Z-1.45 mm, maximum 0.25 mm stepdown.
+The 1.4 mm stock gets ONLY 0.05 mm extra cutting depth, into the adhesive.
+The approximately 1 mm tape thickness is NOT added to the cut depth.
+Leveling follows the top surface; it does not measure laminate thickness
+or tape compression. The same nominal depth as your CUT145 test is retained.
+The 3 mm holes are fully pocketed with no loose center slugs.
+Each board retains four tabs: 2.5 mm neck width, 0.5 mm remaining thickness.
+Clearance Z5; final retraction Z10. Automatic vacuum mode enabled.
+Estimated motion time: about 25 minutes, plus probing and tool changes.
+
+AFTER MACHINING
+Leave the stock fixed until the complete job finishes. Remove it, sever the
+tabs and dress the edges. Deburr and inspect the fine copper isolation cuts.
+Use the Rev B assembly drawing and Amphenol 73306-111LF jack. Fit the insulated
+1206 zero-ohm resistor for the SCL crossover, then check shorts and continuity
+with the actual cable before connecting power. Earlier Rev A boards use a
+different jack footprint and are not included in the five-board parts order.
+
+VALIDATION
+Offline checks passed for source CAD connectivity and copper preservation,
+every translated feed segment, feeds/spindle/clearance, two tool selections,
+stock bounds, complete mounting holes, four tabs per board, and exclusion of
+the whole bottom row from both cutting and the leveling rectangle.
+See validation.json for the file hash, measurements and checks.
+Physical machine calibration, tool identity/runout, workholding and probing
+must be checked at the machine; this file has not been executed there.
+
+Controller reference: https://wiki.makera.com/carvera/manual/software

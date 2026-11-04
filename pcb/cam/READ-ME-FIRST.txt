@@ -1,0 +1,88 @@
+NEZHA / QWIIC - REV B - ONE BOARD - ORIGINAL CARVERA ATC
+
+PROGRAM: nezha-qwiic-revB-one-board-carvera-cut145.nc
+J1 is AMPHENOL 73306-111LF. This revision replaces the Kycon jack layout.
+J2 pin 1 / GND is now at the bottom in the component-side board drawing.
+Use the original Carvera with its six-slot automatic tool changer.
+This program does not apply to the Air's manual tool changes.
+
+STOCK AND PLACEMENT
+100 x 150 mm, 1.4 mm thick. Place 150 mm left-right along X, 100 mm
+front-back along Y. Copper face UP. This is the BARE-COPPER version,
+prepared for FR-4 and nominal 35 micrometre copper; no solder-mask removal.
+If the stock is coated or has substantially heavier copper, revise the job.
+Use your flat sacrificial backer and double-sided tape, approximately 1 mm
+thick as reported. Support the board and surrounding blank evenly. Avoid soft
+foam tape that lets the board move under probing or cutting pressure.
+Secure the backer and blank;
+keep clamps and screws out of the cutting AND dust-shoe travel area.
+The finished board occupies X15..59, Y15..39 mm of the stock.
+The cutter sweeps approximately X14.2..59.8, Y14.2..39.8 mm.
+Keep extra clearance for the dust shoe; its envelope is larger than the cutter.
+
+LOAD THESE TOOLS
+Slot 2: standard 30-degree V-bit with a 0.2 mm flat tip, 1/8-inch shank.
+Slot 3: standard 0.8 mm corn bit, 1/8-inch shank (not a 0.8 mm drill).
+Fit the proper Carvera collars. Leave the wireless probe in its normal holder.
+The program selects T2 and T3 automatically and starts/stops the spindle.
+Confirm the tool labels and diameters when loading; a 0.1/0.3 mm tip, different
+V angle, or different corn-bit diameter requires different toolpaths.
+
+ORIGIN AND PROBING IN CARVERA CONTROLLER
+1. Home the machine normally. Upload/open the NC and inspect its preview.
+2. Set G54 XY zero to the LOWER-LEFT CORNER OF THE STOCK, as viewed from above.
+   If that corner coincides with the configured anchor-1 datum, use anchor 1
+   with X/Y offsets of zero. Otherwise use offsets that locate that actual corner.
+   The NC ALREADY places the board 15 mm in from both edges. Do not add 15 again.
+3. Set Z zero to the TOP COPPER SURFACE using Auto Z Probe. Use an unobstructed
+   point on the blank, for example work-coordinate X37 Y27 (center of the board).
+   If choosing 'Work Origin' probing in the dialog, enter those probe offsets.
+4. Enable Scan Margin and Auto Leveling. Use 6 X points and 4 Y points over the
+   machining area, with 2 mm probing lift, approximately 9 x 8 mm spacing.
+   The probe grid must cover the whole X14.6..59.4, Y14.6..39.4 tool-center area
+   and lie on the blank. Observe the scan and ensure the probe/dust shoe clear
+   the clamps and bracket. Probe and level the newly mounted stock before running.
+5. The program preserves the controller's G54 and native height compensation.
+   It does not set XY/Z zero, home the machine, or collect a height map itself.
+   Keep leveling active for the entire combined job. Do not apply a second
+   external auto-level correction to the same NC.
+
+CUTTING SEQUENCE
+T2: isolate copper, 12,000 RPM, 300 mm/min XY, 100 mm/min plunge,
+    Z = -0.08 mm. Nominal effective V-bit width at this depth is 0.2429 mm.
+T3: pocket the two 3.00 mm holes, removing the centers completely.
+T3: cut the outline LAST, 12,000 RPM, 300 mm/min XY, 100 mm/min plunge,
+    maximum 0.25 mm stepdown, final Z = -1.45 mm.
+The final depth extends only 0.05 mm below the nominal 1.4 mm PCB, into the
+adhesive layer. Tape thickness is NOT added to the programmed cutting depth.
+With about 1 mm of tape, the cutter should remain within the tape if the board
+and tape stay flat and supported. Auto-leveling follows the top surface; it
+does not measure PCB thickness, its underside, or tape compression.
+The earlier 2 mm recommendation described backer thickness, not extra cut depth.
+Use this REV B program for the Amphenol jack. REV A programs fit the old jack.
+Four tabs remain: one centered on each edge, minimum neck width 2.5 mm,
+remaining thickness 0.5 mm. Roots are wider because the cutter ends are rounded.
+General clearance is Z5; end-of-job retraction is Z10. Automatic vacuum mode
+is enabled with M331. Keep the enclosure shut and dust collection operating.
+
+AFTER MACHINING
+Wait for the spindle to stop. Remove the blank, cut the four tabs with the small
+saw, and dress the edges. Inspect/deburr the isolation cuts without removing
+fine pads. Before assembly/power, confirm no shorts between signal nets.
+Fit R1, the insulated-body 1206 zero-ohm resistor, and continuity-check the
+actual 4P4C cable against the header labels before connecting a sensor.
+
+VALIDATION AND LIMITS
+The NC passed offline checks for tool slots, command syntax, clearance moves,
+stock/depth bounds, retained copper, separated/connected signal nets, complete
+hole pockets, and four retaining tabs. See validation.json and setup-preview.pdf.
+This file has not been executed on your physical machine. Cutting accuracy
+still depends on actual tools, material, workholding, probing, and calibration.
+
+SOURCES
+CAM: https://github.com/pcb2gcode/pcb2gcode/releases/tag/v3.0.4
+Makera commands: https://wiki.makera.com/en/supported-codes
+Makera feeds: https://wiki.makera.com/en/speeds-and-feeds
+Controller setup: https://wiki.makera.com/en/carvera/manual/software
+Workholding/collars: https://wiki.makera.com/en/carvera/manual/tool-kit
+Tool identification: https://wiki.makera.com/Air/Manual/Air-LED-Light

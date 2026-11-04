@@ -13,7 +13,11 @@
 #   view/cutebot_gripper.html    the same frame and a post on the Cutebot Pro's nose (a stand-in slab with the two bosses) with the tab
 #   view/brick_frame.html        the cage round the Nezha brick (two sides, two end bars, pins); brick_frame_stand.html stood up
 #   view/tilt_pan9g.html         the 9 g tilt table (flat, the frame on its LEGO wall) with the pan head on it; the Pan slider turns it
+#   view/battery_frame.html      the 6 x 6 x 11 LEGO frame round the USB battery: two halves (one print twice), 2L pins
 #   view/tilt_table.html         the friction tilt table: two 5 x 5 plates hinged on snap-together triangles; the Tilt slider tilts it
+#   view/pi_frame.html           the open frame round a Raspberry Pi 4: base with the weld posts, two windows, top bars
+#   view/laser_cam_mount.html    two Arducams and a line laser under the Carvera camera bracket's cap
+#   view/plug_tail.html          the 4P4C plug-tail PCBs, a checkbox per layer (tools/plug_tail_view.py)
 # Usage: bash tools/make_views.sh [view ...]   (default: all; add --open to open them)
 #
 # How it works: each assembly .scad has a `show` parameter ("all" or one
@@ -27,7 +31,7 @@ S="openscad --backend=manifold --export-format=binstl"
 one() { $S -o "$T/$1.stl" "${@:2}" 2>&1 | grep -iE '^error|warning:' || true; }
 open_=0; views=()
 for a in "$@"; do [ "$a" = --open ] && open_=1 || views+=("$a"); done
-[ ${#views[@]} -eq 0 ] && views=(servo9g nezha plate front plates robot_level robot_low robot_front cutebot tiltpan brickframe tilttable)
+[ ${#views[@]} -eq 0 ] && views=(servo9g nezha plate front plates robot_level robot_low robot_front cutebot tiltpan brickframe tilttable batteryframe piframe lasercam plugtail)
 
 for v in "${views[@]}"; do case $v in
 servo9g)
@@ -166,6 +170,27 @@ tilttable)
   python3 tools/mockup_html.py --slider=Tilt,-63,63 view/tilt_table.html "Friction tilt table: the same 5 x 5 plate twice, the top one turned over, snapped together on the triangles" \
     "Bottom plate=$T/tt_bottom.stl:#3cb371" "+Top plate=$T/tt_top.stl:#e8c22a:xpivot=0,19.8,1"
   [ $open_ = 1 ] && open -a "Google Chrome" view/tilt_table.html ;;
-*) echo "unknown view $v (servo9g, nezha, plate, front, plates, robot_level, robot_low, robot_front, cutebot, tiltpan, brickframe, tilttable)"; exit 1 ;;
+batteryframe)
+  for c in half_a half_b pins battery; do one bat_$c -D "part=\"$c\"" scad/battery_frame.scad & done; wait
+  python3 tools/mockup_html.py view/battery_frame.html "LEGO frame round the USB battery (first draft)" \
+    "Half A=$T/bat_half_a.stl:#f29a00" "Half B=$T/bat_half_b.stl:#4169e1" "2L pins=$T/bat_pins.stl:#333333" \
+    "+USB battery=$T/bat_battery.stl:#eeeeee:0.85"
+  [ $open_ = 1 ] && open -a "Google Chrome" view/battery_frame.html ;;
+piframe)
+  for c in base window_a window_b top_bars pins pi; do one pf_$c -D "part=\"$c\"" scad/pi_frame.scad & done; wait
+  python3 tools/mockup_html.py view/pi_frame.html "Frame round a Raspberry Pi (first draft)" \
+    "Base (weld posts)=$T/pf_base.stl:#3cb371" "+y window=$T/pf_window_a.stl:#f29a00" "-y window=$T/pf_window_b.stl:#4169e1" \
+    "Top bars=$T/pf_top_bars.stl:#2e8b57" "2L pins=$T/pf_pins.stl:#333333" "+Raspberry Pi 4=$T/pf_pi.stl:#1f7a3a"
+  [ $open_ = 1 ] && open -a "Google Chrome" view/pi_frame.html ;;
+lasercam)
+  for c in mount bracket cameras laser; do one lc_$c -D 'part="assembly"' -D "show=\"$c\"" scad/laser_cam_mount.scad & done; wait
+  python3 tools/mockup_html.py view/laser_cam_mount.html "Two Arducams and a line laser on the Carvera (first draft)" \
+    "+Mount=$T/lc_mount.stl:#3b7dd8" "Camera bracket=$T/lc_bracket.stl:#888888" \
+    "+Cameras (stand-ins)=$T/lc_cameras.stl:#1f7a3a" "+Laser=$T/lc_laser.stl:#c9a227"
+  [ $open_ = 1 ] && open -a "Google Chrome" view/laser_cam_mount.html ;;
+plugtail)
+  uv run tools/plug_tail_view.py
+  [ $open_ = 1 ] && open -a "Google Chrome" view/plug_tail.html ;;
+*) echo "unknown view $v (servo9g, nezha, plate, front, plates, robot_level, robot_low, robot_front, cutebot, tiltpan, brickframe, tilttable, batteryframe, piframe, lasercam, plugtail)"; exit 1 ;;
 esac; done
 rm -rf "$T"

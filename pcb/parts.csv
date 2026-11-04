@@ -1,0 +1,6 @@
+reference,quantity,manufacturer,part_number,description,footprint,notes
+J1,1,Amphenol FCI,73306-111LF,4P4C latch-up right-angle SMT receptacle,Adapter:Amphenol_73306-111LF,Mouser 649-73306-111LF cut tape; drawing 73306 rev M sheet 3 B
+J2,1,Samtec,TSM-104-01-L-SV,Four-position 2.54 mm vertical SMT male header,Adapter:Samtec_TSM-104-01-L-SV,No alignment pin or locking clip options
+J3,1,JST,BM04B-SRSS-TB(LF)(SN),Four-position 1.0 mm top-entry SMT Qwiic receptacle,Adapter:JST_SH_BM04B-SRSS-TB_1x04-1MP_P1.00mm_Vertical,Use BM04B vertical version
+R1,1,YAGEO,RC1206JR-070RL,0 ohm insulated-body 1206 resistor,Adapter:R_1206_3216Metric,Required SCL crossover; SDA passes underneath; DigiKey 311-0.0ERCT-ND cut tape
+H1 H2,2,,,3.00 mm non-plated mounting hole,Adapter:HeatStake_3mm,Mechanical feature; not a purchased component

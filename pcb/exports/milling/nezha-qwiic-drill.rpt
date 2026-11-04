@@ -1,0 +1,22 @@
+Drill report for nezha-qwiic.kicad_pcb
+Created on 2026-10-05T23:59:19+0000
+
+Copper Layer Stackup:
+    =============================================================
+    L1 :  F.Cu                      front
+    L2 :  B.Cu                      back
+
+
+Drill file 'nezha-qwiic-PTH.drl' contains
+    plated through holes:
+    =============================================================
+
+    Total plated holes count 0
+
+
+Drill file 'nezha-qwiic-NPTH.drl' contains
+    unplated through holes:
+    =============================================================
+    T1  3.000mm  0.1181"  (2 holes)
+
+    Total unplated holes count 2

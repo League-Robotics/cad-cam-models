@@ -1,0 +1,5 @@
+reference,description,manufacturer,manufacturer_part,mouser_part,quantity_per_board,board_count,order_quantity,unit_usd,extended_usd,packaging,status,url
+J1,4P4C latch-up SMT jack,Amphenol FCI,73306-111LF,649-73306-111LF,1,5,5,2.43,12.15,Cut tape,In signed-in Mouser cart; 5 ships now; not purchased,https://www.mouser.com/en/ProductDetail/Amphenol-FCI/73306-111LF?qs=yJYkLTYh576cZAwwAWqqNg%3D%3D
+J2,2.54 mm four-pin male SMT header,Samtec,TSM-104-01-L-SV,200-TSM10401LSV,1,5,5,0.46,2.30,Tube,In signed-in Mouser cart; 5 ships now; not purchased,https://www.mouser.com/en/ProductDetail/Samtec/TSM-104-01-L-SV?qs=0lQeLiL1qyYpRlwKT0ggbQ%3D%3D
+J3,1 mm top-entry Qwiic socket,JST,BM04B-SRSS-TB(LF)(SN),306-BM04BSRSSTBLFSN,1,5,5,0.53,2.65,Cut tape,In signed-in Mouser cart; 5 ships now; not purchased,https://www.mouser.com/en/ProductDetail/JST-Commercial/BM04B-SRSS-TBLFSN?qs=cdbOS8ANM9CTflNc9ycl0w%3D%3D
+R1,Insulated 1206 zero-ohm crossover,YAGEO,RC1206JR-070RL,603-RC1206JR-070RL,1,5,5,0.10,0.50,Cut tape,In signed-in Mouser cart; 5 ships now; not purchased,https://www.mouser.com/en/ProductDetail/YAGEO/RC1206JR-070RL?qs=stZGH%252BcYwe4ZstaKNiOb8Q%3D%3D

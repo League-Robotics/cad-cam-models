@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<export version="E">
+  <design>
+    <source>/home/ros/projects/nezha-qwiic/wire-hub/design/nezha-wire-hub.kicad_sch</source>
+    <date>2026-10-29T17:18:54+0000</date>
+    <tool>Eeschema 9.0.8+dfsg-1</tool>
+    <sheet number="1" name="/" tstamps="/">
+      <title_block>
+        <title>Nezha 3.3V wire / header / PH / Qwiic hub</title>
+        <company/>
+        <rev>A</rev>
+        <date>2026-10-29</date>
+        <source>nezha-wire-hub.kicad_sch</source>
+        <comment number="1" value="All connectors parallel. Bottom copper only. No crossover or active parts."/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+        <comment number="5" value=""/>
+        <comment number="6" value=""/>
+        <comment number="7" value=""/>
+        <comment number="8" value=""/>
+        <comment number="9" value=""/>
+      </title_block>
+    </sheet>
+  </design>
+  <components>
+    <comp ref="J1">
+      <value>WIRE BLACK RED YELLOW GREEN</value>
+      <footprint>WireHub:Wire_1x04_P2.54_D1.10</footprint>
+      <fields>
+        <field name="Footprint">WireHub:Wire_1x04_P2.54_D1.10</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="WireHub" part="Conn4" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="nezha-wire-hub.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>812880f7-5b28-539a-952b-da51d9c26f24</tstamps>
+    </comp>
+    <comp ref="J2">
+      <value>M20-7820442 FEMALE</value>
+      <footprint>WireHub:Harwin_M20_7820442_Female</footprint>
+      <fields>
+        <field name="Footprint">WireHub:Harwin_M20_7820442_Female</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="WireHub" part="Conn4" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="nezha-wire-hub.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>8a470d78-4e99-548f-87cc-405490798ff1</tstamps>
+    </comp>
+    <comp ref="J3">
+      <value>M20-9990446 MALE</value>
+      <footprint>WireHub:Harwin_M20_9990446_Male</footprint>
+      <fields>
+        <field name="Footprint">WireHub:Harwin_M20_9990446_Male</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="WireHub" part="Conn4" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="nezha-wire-hub.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>d194aff2-7a32-5934-b86e-e7faf0fec97f</tstamps>
+    </comp>
+    <comp ref="J4">
+      <value>B4B-PH-K-S</value>
+      <footprint>WireHub:JST_PH_B4B_4_BottomPads_D0.90</footprint>
+      <fields>
+        <field name="Footprint">WireHub:JST_PH_B4B_4_BottomPads_D0.90</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="WireHub" part="Conn4" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="nezha-wire-hub.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>18318805-4278-5905-886f-d755d8dd4a0e</tstamps>
+    </comp>
+    <comp ref="J5">
+      <value>BM04B-SRSS-TB</value>
+      <footprint>WireHub:JST_SH_BM04B_SRSS</footprint>
+      <fields>
+        <field name="Footprint">WireHub:JST_SH_BM04B_SRSS</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="WireHub" part="Conn4" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="nezha-wire-hub.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>fb40196f-0246-5130-8e7e-d81f33cc105e</tstamps>
+    </comp>
+  </components>
+  <libparts>
+    <libpart lib="WireHub" part="Conn4">
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">Conn4</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+        <pin num="3" name="3" type="passive"/>
+        <pin num="4" name="4" type="passive"/>
+      </pins>
+    </libpart>
+  </libparts>
+  <libraries>
+    <library logical="WireHub">
+      <uri>/home/ros/projects/nezha-qwiic/wire-hub/design/WireHub.kicad_sym</uri>
+    </library>
+  </libraries>
+  <nets>
+    <net code="1" name="/+3V3" class="Default">
+      <node ref="J1" pin="2" pinfunction="2" pintype="passive"/>
+      <node ref="J2" pin="2" pinfunction="2" pintype="passive"/>
+      <node ref="J3" pin="2" pinfunction="2" pintype="passive"/>
+      <node ref="J4" pin="2" pinfunction="2" pintype="passive"/>
+      <node ref="J5" pin="2" pinfunction="2" pintype="passive"/>
+    </net>
+    <net code="2" name="/GND" class="Default">
+      <node ref="J1" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="J2" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="J3" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="J4" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="J5" pin="1" pinfunction="1" pintype="passive"/>
+    </net>
+    <net code="3" name="/SCL" class="Default">
+      <node ref="J1" pin="4" pinfunction="4" pintype="passive"/>
+      <node ref="J2" pin="4" pinfunction="4" pintype="passive"/>
+      <node ref="J3" pin="4" pinfunction="4" pintype="passive"/>
+      <node ref="J4" pin="4" pinfunction="4" pintype="passive"/>
+      <node ref="J5" pin="4" pinfunction="4" pintype="passive"/>
+    </net>
+    <net code="4" name="/SDA" class="Default">
+      <node ref="J1" pin="3" pinfunction="3" pintype="passive"/>
+      <node ref="J2" pin="3" pinfunction="3" pintype="passive"/>
+      <node ref="J3" pin="3" pinfunction="3" pintype="passive"/>
+      <node ref="J4" pin="3" pinfunction="3" pintype="passive"/>
+      <node ref="J5" pin="3" pinfunction="3" pintype="passive"/>
+    </net>
+  </nets>
+</export>

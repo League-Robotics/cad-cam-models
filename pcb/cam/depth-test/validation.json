@@ -1,0 +1,73 @@
+{
+  "status": "PASS",
+  "revision": "B",
+  "jack": "Amphenol 73306-111LF",
+  "program_sha256": "8ec9c4bc873893245ee16b3fc4669130b5d51637ed799eada2bd3b43bb095d45",
+  "cam_version": "pcb2gcode 3.0.4 a5604c4",
+  "operation_min_z_mm": {
+    "1": -0.12,
+    "2": -1.55,
+    "3": -1.55
+  },
+  "through_cut_allowance_mm": 0.15,
+  "tool_changes": [
+    2,
+    3
+  ],
+  "stock_mm": [
+    150,
+    100,
+    1.4
+  ],
+  "board_lower_left_mm": [
+    15,
+    15
+  ],
+  "motion_bounds_xyz_minmax_mm": [
+    14.6,
+    14.60002,
+    -1.55,
+    59.39999,
+    39.4,
+    10.0
+  ],
+  "tab_widths_mm": [
+    2.496,
+    2.496,
+    2.496,
+    2.496
+  ],
+  "tab_remaining_thickness_mm": 0.5,
+  "holes_mm": [
+    [
+      19,
+      36,
+      3
+    ],
+    [
+      55,
+      18,
+      3
+    ]
+  ],
+  "isolated_cad_nets": [
+    "/+3V3",
+    "/GND",
+    "/SCL",
+    "/SCL_JACK",
+    "/SDA"
+  ],
+  "motion_estimate_minutes_excluding_probe_and_atc": 6.9,
+  "checks": [
+    "Supported command whitelist",
+    "Only slots 2 and 3; stopped spindle before ATC",
+    "No XY rapids below clearance",
+    "Cut-depth and stock bounds",
+    "Copper preservation with 10 um geometry tolerance",
+    "Nominal post-milling copper has no open or shorted CAD nets",
+    "Holes fully pocketed; no loose cores",
+    "Four 2.5 mm retaining tabs at through-cut depth",
+    "Controller origin and native leveling preserved"
+  ],
+  "limits": "Offline nominal geometry only; machine, tool identity/runout, clamping, copper thickness, probing and actual cuts not physically verified."
+}

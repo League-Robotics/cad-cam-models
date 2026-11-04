@@ -1,0 +1,83 @@
+{
+  "status": "PASS",
+  "exclusion_basis": "User says bottom row is already used; exclude the entire width through Y40, encompassing both prior 44 x 24 mm test jobs at nominal Y15.",
+  "excluded_regions": [
+    {
+      "id": "Bottom row - leave unused",
+      "bounds_xyxy_mm": [
+        0,
+        0,
+        150,
+        40
+      ]
+    }
+  ],
+  "program_sha256": "0a48a172feaa7ce50de2e5f1d16f0a0c6c50d1d3a5cc705785e4c514243bebcf",
+  "source_program_sha256": "0e57ef1c649f4a94fbe6fc33603af7bf12c8bc1b8952664b5d86cda9e8118296",
+  "new_boards": 4,
+  "planned_usable_total_if_test_passes": 5,
+  "board_lower_lefts_mm": {
+    "B3": [
+      15,
+      44
+    ],
+    "B4": [
+      75,
+      44
+    ],
+    "B5": [
+      15,
+      72
+    ],
+    "B6": [
+      75,
+      72
+    ]
+  },
+  "tool_changes": [
+    2,
+    3
+  ],
+  "cut_depth_mm": 1.45,
+  "through_cut_allowance_mm": 0.05,
+  "tabs_per_board": 4,
+  "tab_widths_mm": [
+    2.496,
+    2.496,
+    2.496,
+    2.496
+  ],
+  "tab_remaining_thickness_mm": 0.5,
+  "holes_count": 8,
+  "holes_diameter_mm": 3,
+  "cutter_sweep_bounds_xyxy_mm": [
+    14.2,
+    43.20002,
+    119.79999,
+    96.8
+  ],
+  "tool_center_and_expected_leveling_bounds_xyxy_mm": [
+    14.6,
+    43.60002,
+    119.39999,
+    96.4
+  ],
+  "minimum_tool_sweep_clearance_from_excluded_regions_mm": 3.2,
+  "probe_grid": [
+    12,
+    7
+  ],
+  "maximum_probe_spacing_mm": 9.527,
+  "motion_estimate_minutes_excluding_probe_and_atc": 24.7,
+  "checks": [
+    "Independent single-board CAD/copper connectivity, pockets and tabs check rerun",
+    "Every panel feed segment equals translated audited source segment",
+    "Feeds, spindle, supported commands and clearance moves verified",
+    "Only one T2 selection and one T3 selection",
+    "Every tool sweep inside stock; entire bottom row excluded",
+    "Adjacent cutter sweeps do not overlap",
+    "Entire leveling rectangle on stock and above the excluded bottom row",
+    "All isolation then all holes then all outlines"
+  ],
+  "limits": "Offline nominal geometry. Requires intact stock above the excluded Y0..40 strip. Machine, tools, workholding and physical probing not verified."
+}

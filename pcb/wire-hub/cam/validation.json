@@ -1,0 +1,66 @@
+{
+  "status": "PASS",
+  "date": "2026-10-29",
+  "cad_min_clearance_mm": 0.4,
+  "copper_layer": "B.Cu only; no top annuli flashed",
+  "electrical_nets": {
+    "1": "/GND",
+    "2": "/+3V3",
+    "3": "/SDA",
+    "4": "/SCL"
+  },
+  "headers_per_net": 5,
+  "holes_per_board": 16,
+  "total_panel_holes": 400,
+  "boards": 25,
+  "board_mm": [
+    26,
+    16,
+    1.4
+  ],
+  "stock_mm": [
+    150,
+    100,
+    1.4
+  ],
+  "operation_min_z_mm": {
+    "1": -0.12,
+    "2": -1.55,
+    "3": -1.55
+  },
+  "tab_neck_widths_mm": [
+    1.996,
+    1.996,
+    1.996,
+    1.996
+  ],
+  "tab_remaining_mm": 0.5,
+  "through_allowance_mm": 0.15,
+  "single_motion_minutes": 6.0,
+  "panel_motion_minutes": 148.2,
+  "panel_motion_bounds_mm": [
+    5.6,
+    5.60001,
+    -1.55,
+    144.39997,
+    94.4,
+    10.0
+  ],
+  "checks": [
+    "ERC/DRC/schematic parity zero violations",
+    "All 20 connector pins agree with independent net table",
+    "No vias or flashed top copper",
+    "Mirrored CAM connector centers match original CAD",
+    "400 holes pocketed without residual cores",
+    "Final nominal copper preserves all four nets without opens or shorts",
+    "25 copies identical to validated single-board motions",
+    "100 tabs; 2 mm neck and 0.5 mm remaining thickness",
+    "Safe clearance rapids, bounded feed/depth, stopped spindle at ATC",
+    "No origin reset or commands that disable native leveling"
+  ],
+  "limits": "Offline geometry validation. Actual cutter diameter, runout, stock flatness, tape support and probe accuracy remain operator-dependent; not physically test-cut.",
+  "program_sha256": {
+    "panel": "7d407f9b3326b2b56aceb3a3f88e096f42a0fdfdefc97bfb364b2000b84b1243",
+    "single": "02f67314f552694b7e6e642352611b7c2eacd2c9d733ce7020f872e609d6ca62"
+  }
+}

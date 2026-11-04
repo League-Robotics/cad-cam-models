@@ -1,0 +1,104 @@
+{
+  "revision": "B",
+  "stock_mm": [
+    150,
+    100,
+    1.4
+  ],
+  "board_mm": [
+    44,
+    24
+  ],
+  "source_program": "nezha-qwiic-revB-one-board-carvera-cut145.nc",
+  "source_sha256": "0e57ef1c649f4a94fbe6fc33603af7bf12c8bc1b8952664b5d86cda9e8118296",
+  "program_file": "nezha-qwiic-revB-four-more-carvera-cut145.nc",
+  "boards": [
+    {
+      "id": "B3",
+      "lower_left_mm": [
+        15,
+        44
+      ]
+    },
+    {
+      "id": "B4",
+      "lower_left_mm": [
+        75,
+        44
+      ]
+    },
+    {
+      "id": "B5",
+      "lower_left_mm": [
+        15,
+        72
+      ]
+    },
+    {
+      "id": "B6",
+      "lower_left_mm": [
+        75,
+        72
+      ]
+    }
+  ],
+  "probe_grid": [
+    12,
+    7
+  ],
+  "probe_lift_mm": 2,
+  "auto_z_probe_work_xy_mm": [
+    37,
+    56
+  ],
+  "work_origin": "G54 original stock lower left, copper top Z0; remove previous 60 mm shift",
+  "cut_depth_mm": 1.45,
+  "through_cut_allowance_mm": 0.05,
+  "tools": {
+    "2": "30 degree V-bit, 0.2 mm tip",
+    "3": "0.8 mm corn bit"
+  },
+  "assembly_part_sets_for_sheet": 5,
+  "existing_cut_reference_positions": [
+    {
+      "id": "B1",
+      "board_lower_left_mm": [
+        15,
+        15
+      ],
+      "bounds_xyxy_mm": [
+        14.2,
+        14.2,
+        59.8,
+        39.8
+      ]
+    },
+    {
+      "id": "B2",
+      "board_lower_left_mm": [
+        75,
+        15
+      ],
+      "bounds_xyxy_mm": [
+        74.2,
+        14.2,
+        119.8,
+        39.8
+      ]
+    }
+  ],
+  "excluded_regions": [
+    {
+      "id": "Bottom row - leave unused",
+      "bounds_xyxy_mm": [
+        0,
+        0,
+        150,
+        40
+      ]
+    }
+  ],
+  "exclusion_basis": "User says bottom row is already used; exclude the entire width through Y40, encompassing both prior 44 x 24 mm test jobs at nominal Y15.",
+  "assembly_basis": "One successful Rev B test board, if it passes, plus four new boards. Earlier obsolete test not counted.",
+  "minimum_clearance_from_excluded_regions_mm": 3
+}

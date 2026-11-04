@@ -4,23 +4,33 @@
 //
 // One print, made twice. Each plate stands triangles up on its two hinge
 // edges (x = +-), its top rounded about the hinge axis:
-//   fork (+x)    two tines with a slot between, a divot in each tine's inner face
-//   tongue (-x)  one triangle where the slot would be, a bump on each face
+//   fork (+x)    two tines with a slot between, a hole through each tine on the axis
+//   tongue (-x)  one triangle where the slot would be, a button on each face
 // Turned over (180 deg about y through the axis), a second copy's tongue
 // lands in the first's fork and the first's tongue in its fork. Each fork
-// clamps a tongue: the tines spring apart over the bumps, which snap into the
-// divots and are the pivot; the tongue is 2 * squeeze thicker than the slot,
-// so the tines stay sprung against its faces, and that preload is the
-// friction that holds the angle. (A first draft had one ear inside and one
+// clamps a tongue: the tines spring apart over the buttons, which snap into
+// the holes and are the pivot; the click teeth (below) hold the angle.
+// (Second print, 2026-11-03: shallow 0.4 bumps in 0.5 divots and a tongue
+// 0.2 over the slot did not lock: the tines bowed out over the extra
+// material and the bumps never seated, so it popped apart. Now the buttons
+// stand 1.2 proud into through holes (you can see them seat), the tongue is
+// the slot's width (squeeze 0), and the teeth are deeper and sharper.)
+// (A first draft had one ear inside and one
 // outside on each plate: the copy then sat to one side of the other on both
 // edges, nothing clamped, and it slid apart sideways.)
 //
 // Clicks (2026-11-01, after the first print): radial teeth round the axis on
 // the faces that meet, raised on the tongue's faces and the same teeth sunk
 // into the tines' faces, `clicks` round, 360 / clicks apart (flat is one). At
-// a click every ridge sits in a groove and the fit is the plain squeeze;
-// between clicks the ridges ride up out of the grooves and spread the tines
-// another click_h, so the table snaps to the next click. The teeth stay
+// a click every ridge sits in a groove; between clicks the ridges ride up
+// out of the grooves and spread the tines, so the table snaps to the next
+// click. The flanks are click_flank off the face at every radius (Hirth-like:
+// the teeth grow with the radius, 0.2 high inside to 0.4 outside; the second
+// print's 0.2 teeth came out as a texture, the third's 35 deg teeth, 0.4 to
+// 0.8, snapped well but locked: it could barely be turned, and not back from
+// the limit without pliers, so v4 halves them), and the grooves are click_clear
+// deeper than the ridges so printed crests bottom out nowhere. The buttons
+// stand taller than the teeth, so they stay in the holes while clicking. The teeth stay
 // inside the apex circle, which the tongue and tines always share, so all of
 // them are engaged at every angle. clicks = 0 is the smooth table.
 //
@@ -70,14 +80,19 @@ tine_t = 2.5;                  // each of the fork's two tines
 slot = 3.5;                    // between the tines
 slot_x = [half - tine_t - slot, half - tine_t];          // 13.8 .. 17.3
 clicks = 24;                   // teeth round the axis: a click every 15 deg; 0 = smooth (the first print)
-click_h = 0.2;                 // tooth height: the extra spread between clicks
-squeeze = 0.1;                 // per face: how far the tongue is over the slot (the friction)
+click_flank = atan(tan(35) / 2);   // 19.3: the teeth's flanks off the face, deg (constant: the teeth grow with r);
+                               // half the height of v3's 35 deg teeth, which locked too hard (2026-11-03)
+click_r = [4.5, 9];            // the teeth, inner and outer radius (wide enough at 4.5 to print sharp)
+click_clear = 0.1;             // the grooves this much deeper than the ridges
+squeeze = 0;                   // per face: how far the tongue is over the slot (0.1 bowed the tines out)
 edge_c = 0.6;                  // chamfer on the faces that meet, a lead-in when snapping together
-bump_r = 2.5;                  // the bump's radius at the face
-bump_h = 0.4;                  // how far it stands out; a 45 deg cone (prints on its side)
-divot_clear = 0.1;             // the divot is this much bigger all round and deeper
-click_r = [bump_r + divot_clear + 0.4, 7];   // the teeth: from outside the divot's rim (as the click print)
-click_taper = 0.4;             // each tooth's ends ramp down over this, so they slide in on assembly
+bump_r = 2.6;                  // the button's radius at the face
+bump_h = 1.2;                  // how far it stands out
+bump_flank = 50;               // its side off the face, deg (steeper holds better; 50 still prints on its side)
+hole_clear = 0.15;             // the tine's hole over the button's base, per side
+hole_r = bump_r + hole_clear;
+// a tooth's height at radius r: half its base (the chord of half a pitch) times tan(flank)
+function click_h(r) = clicks > 0 ? r * sin(180 / clicks) * tan(click_flank) : 0;
 
 gap = 2 * (axis_z - plate_t);
 tilt_max = 180 - 2 * atan(half / (axis_z - plate_t));
@@ -89,12 +104,14 @@ echo(gap = gap, axis_z = axis_z, tilt_max = tilt_max, height = 2 * axis_z, fork 
      apex_r = apex_r, ear_half = ear_half);
 assert(ear_half < half, "the sides land on the plate");
 assert(click_r[1] + edge_c + 0.4 < apex_r, "teeth inside the apex");
-assert(bump_h + divot_clear < tine_t - 1, "divot leaves a wall");
+assert(bump_h < tine_t - 0.5, "button inside the tine's hole");
+assert(click_r[0] - click_h(click_r[0]) > hole_r + 0.8, "teeth clear of the hole");
+assert(clicks == 0 || bump_h > click_h(click_r[1]) + 0.3, "buttons stay in the holes while clicking");
 assert(slot_x[0] - tine_t > hole_xy[3] + pd_cb_r, "inner tine clear of the next column's counterbores");
 assert(clicks % 2 == 0, "even, so a plate and its turned-over copy click at theta 0");
-assert(clicks == 0 || click_r[1] - click_r[0] > 2 * click_taper + 1, "room for the teeth");
-assert(clicks == 0 || click_h + divot_clear < tine_t - 1.5, "grooves leave a wall");
-echo(click_deg = clicks > 0 ? 360 / clicks : 0, tooth_base = clicks > 0 ? [for (r = click_r) 2 * r * sin(180 / clicks)] : 0);
+assert(clicks == 0 || click_h(click_r[1]) + click_clear < tine_t - 1, "grooves leave a wall");
+echo(click_deg = clicks > 0 ? 360 / clicks : 0, tooth_base = clicks > 0 ? [for (r = click_r) 2 * r * sin(180 / clicks)] : 0,
+     tooth_h = [for (r = click_r) click_h(r)], button = [bump_r, bump_h, bump_flank], hole_r = hole_r);
 
 // ---- the print ------------------------------------------------------------
 // A triangle's outline in the (y, z) plane: +-ear_half at the plate's top
@@ -112,18 +129,21 @@ module ear(x0, x1, c0 = false, c1 = false) translate([x0, 0, 0]) rotate([90, 0, 
     linear_extrude(x1 - x0) offset(delta = -edge_c) ear_profile();
 }
 
-// A 45 deg cone r at the face (x = 0) on the axis, h out along s * x.
-module cone_x(s, r, h) translate([0, 0, axis_z]) rotate([0, s * 90, 0]) cylinder(r1 = r, r2 = r - h, h = h);
+// A cone r at the face (x = 0) on the axis, h out along s * x, its side `flank` off the face.
+module cone_x(s, r, h, flank = 45) translate([0, 0, axis_z]) rotate([0, s * 90, 0])
+    cylinder(r1 = r, r2 = r - h / tan(flank), h = h);
 
 // The click teeth on a face at x = 0, standing out along s * x: `clicks`
 // ridges round the axis, one at each multiple of 360 / clicks (measured in
 // the (y, z) plane, so a plate and its turned-over copy agree at theta 0).
-// Each is a wedge the full pitch wide (the ridges meet at their feet), click_h
-// high along its crest, ramped down at both ends; base e behind the face.
-module click_teeth(s, e = 0.01) if (clicks > 0) translate([0, 0, axis_z]) rotate([0, s * 90, 0])
-    for (k = [0 : clicks - 1]) let(p = 360 / clicks, a = k * p) hull() polyhedron(
+// Each is a wedge the full pitch wide (the ridges meet at their feet),
+// click_h(r) + extra high along its crest, the crest ramped down at 45 deg at
+// both ends; base e behind the face.
+module click_teeth(s, e = 0.01, extra = 0) if (clicks > 0) translate([0, 0, axis_z]) rotate([0, s * 90, 0])
+    for (k = [0 : clicks - 1]) let(p = 360 / clicks, a = k * p,
+                                   rc = [click_r[0] + click_h(click_r[0]), click_r[1] - click_h(click_r[1])]) hull() polyhedron(
         points = [for (r = click_r, da = [-p / 2, p / 2]) [r * cos(a + da), r * sin(a + da), -e],
-                  for (r = [click_r[0] + click_taper, click_r[1] - click_taper]) [r * cos(a), r * sin(a), click_h]],
+                  for (r = rc) [r * cos(a), r * sin(a), click_h(r) + extra]],
         faces = [[0, 1, 2], [3, 4, 5]]);
 
 module plate(sq = squeeze) difference() {
@@ -133,14 +153,14 @@ module plate(sq = squeeze) difference() {
         ear(slot_x[1], half, c0 = true);                              //       outer tine
         ear(-slot_x[1] - sq, -slot_x[0] + sq, true, true);            // tongue
         for (s = [-1, 1]) translate([s < 0 ? -slot_x[1] - sq + 0.01 : -slot_x[0] + sq - 0.01, 0, 0]) {
-            cone_x(s, bump_r, bump_h + 0.01);
+            cone_x(s, bump_r, bump_h + 0.01, bump_flank);
             click_teeth(s);
         }
     }
-    for (s = [-1, 1]) translate([s < 0 ? slot_x[1] - 0.01 : slot_x[0] + 0.01, 0, 0]) {
-        cone_x(-s, bump_r + divot_clear, bump_h + divot_clear + 0.01);
-        translate([s < 0 ? 0.01 : -0.01, 0, 0]) click_teeth(-s, 0.02);
-    }
+    // the holes, through both tines on the axis
+    translate([slot_x[0] - tine_t - 1, 0, axis_z]) rotate([0, 90, 0]) cylinder(r = hole_r, h = half - slot_x[0] + tine_t + 2);
+    // the grooves: the teeth sunk into each tine's inner face, click_clear deeper
+    for (s = [-1, 1]) translate([s < 0 ? slot_x[1] : slot_x[0], 0, 0]) click_teeth(-s, 0.02, click_clear);
     for (x = hole_xy, y = hole_xy) translate([x, y, 0])
         if (abs(x) > half - unit) pd_blind_pin_hole(blind); else pd_pin_hole(plate_t);
 }

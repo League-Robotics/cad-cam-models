@@ -1,0 +1,12 @@
+{
+  "checked": "2026-10-29",
+  "drawings": {
+    "JST-SH.pdf": "https://www.jst-mfg.com/product/pdf/eng/eSH.pdf",
+    "JST-PH.pdf": "https://www.jst-mfg.com/product/pdf/eng/ePH.pdf",
+    "Harwin-M20-782.pdf": "https://content.harwin.com/asset/53851ba8-b32e-4ac5-a0c5-09d9271c0c0a/DRG-00385-Technical-Drawing-Datasheet-M20-782-pdf.pdf",
+    "Harwin-M20-999.pdf": "https://content.harwin.com/asset/640f59f4-1860-40fe-82ef-f2a104ffa7d8/DRG-00479-Technical-Drawing-Datasheet-M20-999-pdf.pdf"
+  },
+  "qwiic_pinout": "https://www.sparkfun.com/qwiic",
+  "makera_leveling": "https://wiki.makera.com/en/carvera/manual/software",
+  "footprints": "KiCad 9.0.7 library geometry for JST PH and SH; local adaptations documented in README.txt"
+}

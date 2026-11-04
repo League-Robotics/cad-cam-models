@@ -1,0 +1,80 @@
+{
+  "status": "PASS - conditional on existing cuts matching layout",
+  "existing_cut_positions_confirmed": false,
+  "program_sha256": "2551273bdb46769ae75a58697278275649fc7f23c6e0e89399ae15f83c4a9ef9",
+  "source_program_sha256": "0e57ef1c649f4a94fbe6fc33603af7bf12c8bc1b8952664b5d86cda9e8118296",
+  "new_boards": 6,
+  "total_including_existing": 8,
+  "board_lower_lefts_mm": {
+    "B3": [
+      11,
+      44
+    ],
+    "B4": [
+      57,
+      44
+    ],
+    "B5": [
+      103,
+      44
+    ],
+    "B6": [
+      11,
+      72
+    ],
+    "B7": [
+      57,
+      72
+    ],
+    "B8": [
+      103,
+      72
+    ]
+  },
+  "tool_changes": [
+    2,
+    3
+  ],
+  "cut_depth_mm": 1.45,
+  "through_cut_allowance_mm": 0.05,
+  "tabs_per_board": 4,
+  "tab_widths_mm": [
+    2.496,
+    2.496,
+    2.496,
+    2.496
+  ],
+  "tab_remaining_thickness_mm": 0.5,
+  "holes_count": 12,
+  "holes_diameter_mm": 3,
+  "cutter_sweep_bounds_xyxy_mm": [
+    10.2,
+    43.20002,
+    147.79999,
+    96.8
+  ],
+  "tool_center_and_expected_leveling_bounds_xyxy_mm": [
+    10.6,
+    43.60002,
+    147.39999,
+    96.4
+  ],
+  "minimum_tool_sweep_clearance_from_old_cut_regions_mm": 3.4,
+  "probe_grid": [
+    15,
+    7
+  ],
+  "maximum_probe_spacing_mm": 9.771,
+  "motion_estimate_minutes_excluding_probe_and_atc": 36.8,
+  "checks": [
+    "Independent single-board CAD/copper connectivity, pockets and tabs check rerun",
+    "Every panel feed segment equals translated audited source segment",
+    "Feeds, spindle, supported commands and clearance moves verified",
+    "Only one T2 selection and one T3 selection",
+    "Every tool sweep inside stock; existing cut regions excluded",
+    "Adjacent cutter sweeps do not overlap",
+    "Entire leveling rectangle on stock and clear of existing cutouts",
+    "All isolation then all holes then all outlines"
+  ],
+  "limits": "Offline nominal geometry. Old cut positions must be confirmed. Machine, tools, workholding and physical probing not verified."
+}

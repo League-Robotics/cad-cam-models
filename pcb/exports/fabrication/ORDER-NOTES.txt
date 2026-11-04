@@ -1,0 +1,10 @@
+NEZHA / QWIIC ADAPTER - REV B PROTOTYPE
+J1 footprint: Amphenol 73306-111LF, latch up. Replaces revision A Kycon jack.
+J2 pin 1 / GND is at the bottom in the component-side board drawing.
+Finished outline: 44.00 x 24.00 mm. Suggested FR-4, 1.40 mm, 1 oz copper.
+Conventional two-layer construction; back copper is intentionally empty.
+All electrical routing and components are on the front.
+Two 3.00 mm NON-PLATED holes. No plated holes or vias.
+Top silkscreen and solder mask. Paste file is for optional stencil production.
+All manufacturing files share the same origin. Do not resize or mirror.
+Review the fabricator's preview before ordering. Prototype not physically tested.

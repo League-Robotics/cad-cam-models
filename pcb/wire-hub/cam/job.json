@@ -1,0 +1,186 @@
+{
+  "name": "nezha-wire-hub",
+  "revision": "A",
+  "stock_mm": [
+    150,
+    100,
+    1.4
+  ],
+  "board_mm": [
+    26,
+    16
+  ],
+  "placements": [
+    {
+      "id": 1,
+      "x": 6,
+      "y": 6
+    },
+    {
+      "id": 2,
+      "x": 34,
+      "y": 6
+    },
+    {
+      "id": 3,
+      "x": 62,
+      "y": 6
+    },
+    {
+      "id": 4,
+      "x": 90,
+      "y": 6
+    },
+    {
+      "id": 5,
+      "x": 118,
+      "y": 6
+    },
+    {
+      "id": 6,
+      "x": 6,
+      "y": 24
+    },
+    {
+      "id": 7,
+      "x": 34,
+      "y": 24
+    },
+    {
+      "id": 8,
+      "x": 62,
+      "y": 24
+    },
+    {
+      "id": 9,
+      "x": 90,
+      "y": 24
+    },
+    {
+      "id": 10,
+      "x": 118,
+      "y": 24
+    },
+    {
+      "id": 11,
+      "x": 6,
+      "y": 42
+    },
+    {
+      "id": 12,
+      "x": 34,
+      "y": 42
+    },
+    {
+      "id": 13,
+      "x": 62,
+      "y": 42
+    },
+    {
+      "id": 14,
+      "x": 90,
+      "y": 42
+    },
+    {
+      "id": 15,
+      "x": 118,
+      "y": 42
+    },
+    {
+      "id": 16,
+      "x": 6,
+      "y": 60
+    },
+    {
+      "id": 17,
+      "x": 34,
+      "y": 60
+    },
+    {
+      "id": 18,
+      "x": 62,
+      "y": 60
+    },
+    {
+      "id": 19,
+      "x": 90,
+      "y": 60
+    },
+    {
+      "id": 20,
+      "x": 118,
+      "y": 60
+    },
+    {
+      "id": 21,
+      "x": 6,
+      "y": 78
+    },
+    {
+      "id": 22,
+      "x": 34,
+      "y": 78
+    },
+    {
+      "id": 23,
+      "x": 62,
+      "y": 78
+    },
+    {
+      "id": 24,
+      "x": 90,
+      "y": 78
+    },
+    {
+      "id": 25,
+      "x": 118,
+      "y": 78
+    }
+  ],
+  "gap_mm": 2,
+  "edge_margin_mm": 6,
+  "isolation": {
+    "depth_mm": 0.12,
+    "effective_diameter_mm": 0.26430780618346944,
+    "tip_mm": 0.2,
+    "angle_deg": 30
+  },
+  "through_depth_mm": 1.55,
+  "through_allowance_mm": 0.15,
+  "stepdown_mm": 0.25,
+  "tabs": {
+    "per_board": 4,
+    "width_mm": 2.0,
+    "remaining_mm": 0.5,
+    "z_mm": -0.9
+  },
+  "transform_from_top_view": "machineX=placementX+26-topX; machineY=placementY+16-topY",
+  "probe_grid": [
+    16,
+    11
+  ],
+  "probe_lift_mm": 2,
+  "auto_z_stock_point_mm": [
+    16,
+    8
+  ],
+  "tools": [
+    {
+      "slot": 2,
+      "tool": "30 degree V-bit, 0.2 mm tip",
+      "rpm": 12000,
+      "feed_mm_min": 300
+    },
+    {
+      "slot": 3,
+      "tool": "0.8 mm corn bit",
+      "rpm": 12000,
+      "feed_mm_min": 300,
+      "hole_helix_feed_mm_min": 100
+    }
+  ],
+  "programs": {
+    "panel": "nezha-wire-hub-A-25up-iso120-cut155.nc",
+    "single": "nezha-wire-hub-A-one-iso120-cut155.nc"
+  }
+}

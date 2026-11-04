@@ -1,0 +1,3 @@
+Superseded by cam/panel/nezha-qwiic-revB-four-more-carvera-cut145.nc.
+User requested four remaining boards and five parts sets.
+This folder retains the previous six-board review draft for history only.

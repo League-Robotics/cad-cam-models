@@ -1,0 +1,3 @@
+slot,tool,shank_mm,rpm,feed_mm_min,vertical_feed_mm_min,operation
+2,30 degree V-bit with 0.2 mm tip,3.175,12000,300,100,Copper isolation to 0.08 mm depth
+3,0.8 mm corn bit,3.175,12000,300,100,3 mm hole pockets and tabbed outline; 0.25 mm maximum stepdown

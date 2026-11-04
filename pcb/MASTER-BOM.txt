@@ -1,0 +1,39 @@
+NEZHA TO QWIIC ADAPTER REVISION B - MASTER BOM
+Five boards. Cart checked after user sign-in on 2026-10-05 (Pacific time).
+
+Ref Qty  Mouser part              Manufacturer part          Extended USD
+J1    5  649-73306-111LF          73306-111LF                       12.15
+J2    5  200-TSM10401LSV          TSM-104-01-L-SV                    2.30
+J3    5  306-BM04BSRSSTBLFSN      BM04B-SRSS-TB(LF)(SN)              2.65
+R1    5  603-RC1206JR-070RL       RC1206JR-070RL                     0.50
+
+Board parts merchandise:                                          17.60
+UPS Ground estimate:                                               8.49
+Estimated tariffs:                                                 2.00
+Displayed subtotal before sales tax:                              28.09
+
+All four lines show 5 Ships Now. Mouser also displays a general notice
+that unusually high order volume may delay processing.
+J1, J3 and R1: cut tape. J2: standard tube packaging. No MouseReel.
+See master-bom.csv for exact descriptions and product links.
+
+R1 is a required insulated 1206 zero-ohm jumper at the SCL/SDA crossing.
+Each board needs all four parts. No level shifter or pull-ups are added.
+The two 3 mm holes per board are mechanical features, not purchased parts.
+The milled boards, existing cables, and printed enclosures are not in this cart.
+
+ASSEMBLY SUPPLIES - NOT ADDED; AWAITING USER SELECTION
+One small spool of 0.3-0.5 mm electronics flux-core solder (alloy pending).
+One electronics no-clean flux pen.
+One fine solder-wick spool (approximately 1-1.5 mm wide).
+One Weller ETH 0.8 mm chisel tip for the WES50 original PES50 handpiece,
+if a suitable fine tip is not already on hand.
+Hand soldering with wire is the intended process; solder paste is not required.
+Tweezers, a board holder, magnification and a multimeter are useful shop tools;
+no additional tools have been selected or added to the cart.
+
+CART STATUS
+https://www.mouser.com/en/Cart/
+Existing cart verified after sign-in; no duplicate board parts added.
+No named Mouser project was created. No checkout or payment submitted.
+Prices, availability, tariffs, shipping and taxes may change at checkout.

@@ -1,0 +1,10 @@
+# Generated local editor state and CAM intermediates.
+design/*.kicad_prl
+design/*-backups/
+design/~*.lck
+cam/raw/
+exports/milling/*.kicad_pro
+exports/**/*.gbrjob
+checks/cut-diagnostic.png
+checks/build-output.json
+checks/cam-check-output.txt

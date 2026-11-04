@@ -1,0 +1,6 @@
+reference,description,manufacturer,manufacturer_part,per_board,full_panel,notes,supplier_part,url
+J1,Four stripped Nezha cable wires,Existing cable,User cable,1,25,1.10 mm holes at 2.54 mm pitch; black red yellow green,,
+J2,Female header 1x4 2.54 mm THT,Harwin,M20-7820442,1,25,Top side; 1.05 mm holes,855-M20-7820442,https://www.harwin.com/products/M20-7820442
+J3,Male header 1x4 2.54 mm THT,Harwin,M20-9990446,1,25,Top side; 1.05 mm holes,855-M20-9990446,https://www.mouser.com/en/ProductDetail/Harwin/M20-9990446?qs=ulE8k0yEMYaW%252BOM7jiG6%252Bw%3D%3D
+J4,JST PH 1x4 2.00 mm vertical THT,JST,B4B-PH-K-S(LF)(SN),1,25,Top side; 0.90 mm milled holes; pin1 GND pin2 3V3 pin3 SDA pin4 SCL,455-1706-ND (DigiKey),https://www.digikey.com/en/products/detail/jst-sales-america-inc/B4B-PH-K-S/926613
+J5,JST SH 1x4 1.00 mm Qwiic socket SMT,JST,BM04B-SRSS-TB(LF)(SN),1,25,BOTTOM side; top-entry socket; cut tape,306-BM04BSRSSTBLFSN,https://www.mouser.com/en/ProductDetail/JST-Commercial/BM04B-SRSS-TBLFSN?qs=cdbOS8ANM9CTflNc9ycl0w%3D%3D

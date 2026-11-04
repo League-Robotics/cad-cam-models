@@ -51,8 +51,8 @@ def main():
     a.axhline(AXIS_Z, color="#c0392b", lw=0.8, ls="--")
     a.text(22, AXIS_Z + 0.6, "hinge axis", color="#c0392b", fontsize=9)
     a.set_title("Cut through the hinge axis, flat: the same print twice,\nthe top one turned over")
-    label(a, (18.5, 12), "bottom's fork\n(a divot in each\ntine's inner face)", (31, 5))
-    label(a, (15.5, 28), "top's tongue in it\n(a bump on each face)", (31, 33))
+    label(a, (18.5, 12), "bottom's fork\n(a hole through\neach tine)", (31, 5))
+    label(a, (15.5, 28), "top's tongue in it\n(a button on each face)", (31, 33))
     label(a, (-15.5, 12), "bottom's tongue", (-31, 5))
     label(a, (-18.5, 28), "top's fork", (-31, 33))
     label(a, (-8, 3.8), "through pin holes, taper on\nthe bed (outer) face", (-12, -6))
@@ -66,9 +66,9 @@ def main():
     draw_geom(b, section_geom(bot, *cut), GREEN)
     draw_geom(b, section_geom(top0, *cut), YELLOW)
     b.set_title("Close up: the right fork clamping the top's tongue")
-    label(b, (17.5, AXIS_Z), "bumps: 45 deg\ncones, r 2.5,\n0.4 high", (21.3, 23.0))
-    label(b, (18.0, AXIS_Z - 2.0), "divots: 0.1 bigger\nall round", (21.2, 12.8))
-    label(b, (13.8, 16.0), "tongue 3.7 in a 3.5 slot:\n0.1 over each face\n(squeeze: the friction)", (12.6, 12.8))
+    label(b, (18.0, AXIS_Z), "buttons: r 2.6,\n1.2 high,\nsides 50 deg", (21.3, 23.0))
+    label(b, (19.5, AXIS_Z - 2.4), "holes through\nthe tines, r 2.75", (21.2, 12.8))
+    label(b, (13.8, 16.0), "tongue 3.5 in a 3.5 slot\n(no squeeze: the teeth\nhold the angle)", (12.6, 12.8))
     dim(b, (11.3, 26.8), (13.8, 26.8), "2.5", off=(0, 0.6))
     dim(b, (13.8, 26.8), (17.3, 26.8), "slot 3.5", off=(0, 0.6))
     dim(b, (17.3, 26.8), (19.8, 26.8), "2.5", off=(0, 0.6))
@@ -94,14 +94,14 @@ def main():
     d.plot([0], [AXIS_Z], "o", color="#c0392b")
     d.axhline(CLICK_CUT, color="#555", lw=0.8, ls=":")
     d.text(9, CLICK_CUT + 0.4, "cut for the right-hand views", fontsize=9, color="#555")
-    d.set_title("The tongue face-on, cut through its teeth:\n24 ridges, 15 deg apart, 0.2 high (the tines have the same as grooves)")
-    label(d, (0, AXIS_Z + 5.5), "teeth from r 3 to r 7,\nends ramped", (-12, 33))
-    label(d, (0, AXIS_Z), "bump (pivot)", (-12, 8))
+    d.set_title("The tongue face-on, cut through its teeth: 24 ridges, 15 deg apart,\nflanks 19.3 deg: 0.2 high at r 4.5 to 0.4 at r 9 (grooves in the tines, 0.1 deeper)")
+    label(d, (0, AXIS_Z + 5.5), "teeth from r 4.5 to r 9,\nends ramped", (-12, 33))
+    label(d, (0, AXIS_Z), "button (pivot)", (-12, 8))
     d.set_xlim(-14, 14), d.set_ylim(6, 36)
 
     # e, f: a level cut across the teeth (z = axis + 5), the right fork and the top plate's tongue, from above
-    for ax, top, title in ((e, top0, "At a click (every 15 deg, flat is one):\nevery ridge in a groove, just the 0.1 squeeze"),
-                           (f, top_half, "Halfway between (7.5 deg): the ridges ride out of the grooves\nand spread each tine another 0.2: the click")):
+    for ax, top, title in ((e, top0, "At a click (every 15 deg, flat is one):\nevery ridge in its groove"),
+                           (f, top_half, "Halfway between (7.5 deg): the ridges ride out of the grooves and spread\neach tine up to 0.37 (the click); the 1.2 buttons stay 0.83 in their holes")):
         draw_geom(ax, section_geom(bot, (0, 0, CLICK_CUT), (0, 0, 1), (0, 1)), GREEN)
         draw_geom(ax, section_geom(top, (0, 0, CLICK_CUT), (0, 0, 1), (0, 1)), YELLOW)
         ax.set_title(title)

@@ -1,0 +1,5 @@
+reference,mouser_part,manufacturer,manufacturer_part,description,proposed_quantity_pending_confirmation,unit_usd,observed_stock,packaging,url
+J1,649-73306-111LF,Amphenol FCI,73306-111LF,4P4C latch-up SMT jack,10,2.07,845,Cut tape,https://www.mouser.com/en/ProductDetail/Amphenol-FCI/73306-111LF?qs=yJYkLTYh576cZAwwAWqqNg%3D%3D
+J2,200-TSM10401LSV,Samtec,TSM-104-01-L-SV,2.54 mm four-pin male SMT header,10,0.46,5617,Tube,https://www.mouser.com/en/ProductDetail/Samtec/TSM-104-01-L-SV?qs=0lQeLiL1qyYpRlwKT0ggbQ%3D%3D
+J3,306-BM04BSRSSTBLFSN,JST,BM04B-SRSS-TB(LF)(SN),1 mm top-entry Qwiic socket,10,0.449,23737,Cut tape,https://www.mouser.com/en/ProductDetail/JST-Commercial/BM04B-SRSS-TBLFSN?qs=cdbOS8ANM9CTflNc9ycl0w%3D%3D
+R1,603-RC1206JR-070RL,YAGEO,RC1206JR-070RL,Insulated 1206 zero-ohm crossover,10,0.02,1186835,Cut tape,https://www.mouser.com/en/ProductDetail/YAGEO/RC1206JR-070RL?qs=stZGH%252BcYwe4ZstaKNiOb8Q%3D%3D
