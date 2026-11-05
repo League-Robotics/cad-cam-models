@@ -18,6 +18,8 @@
 #   view/pi_frame.html           the open frame round a Raspberry Pi 4: base with the weld posts, two windows, top bars
 #   view/laser_cam_mount.html    two Arducams and a line laser under the Carvera camera bracket's cap
 #   view/plug_tail.html          the 4P4C plug-tail PCBs, a checkbox per layer (tools/plug_tail_view.py)
+#   view/l_bracket.html          the 5 x 5 LEGO L bracket, 2L pins in a few holes
+#   view/cutebot_cage.html       LEGO cage round the Cutebot Pro (v3): a closed ring of bulkheads, skirts and front wall, decks over the wheels and the front; robot stand-in from the scan
 # Usage: bash tools/make_views.sh [view ...]   (default: all; add --open to open them)
 #
 # How it works: each assembly .scad has a `show` parameter ("all" or one
@@ -31,7 +33,7 @@ S="openscad --backend=manifold --export-format=binstl"
 one() { $S -o "$T/$1.stl" "${@:2}" 2>&1 | grep -iE '^error|warning:' || true; }
 open_=0; views=()
 for a in "$@"; do [ "$a" = --open ] && open_=1 || views+=("$a"); done
-[ ${#views[@]} -eq 0 ] && views=(servo9g nezha plate front plates robot_level robot_low robot_front cutebot tiltpan brickframe tilttable batteryframe piframe lasercam plugtail)
+[ ${#views[@]} -eq 0 ] && views=(servo9g nezha plate front plates robot_level robot_low robot_front cutebot tiltpan brickframe tilttable batteryframe piframe lasercam plugtail lbracket cutebotcage)
 
 for v in "${views[@]}"; do case $v in
 servo9g)
@@ -184,13 +186,30 @@ piframe)
   [ $open_ = 1 ] && open -a "Google Chrome" view/pi_frame.html ;;
 lasercam)
   for c in mount bracket cameras laser; do one lc_$c -D 'part="assembly"' -D "show=\"$c\"" scad/laser_cam_mount.scad & done; wait
-  python3 tools/mockup_html.py view/laser_cam_mount.html "Two Arducams and a line laser on the Carvera (first draft)" \
-    "+Mount=$T/lc_mount.stl:#3b7dd8" "Camera bracket=$T/lc_bracket.stl:#888888" \
+  python3 tools/mockup_html.py view/laser_cam_mount.html "Two Arducams and a line laser on the Carvera, with their bracket" \
+    "+Mount=$T/lc_mount.stl:#3b7dd8" "+Bracket (new)=$T/lc_bracket.stl:#888888" \
     "+Cameras (stand-ins)=$T/lc_cameras.stl:#1f7a3a" "+Laser=$T/lc_laser.stl:#c9a227"
   [ $open_ = 1 ] && open -a "Google Chrome" view/laser_cam_mount.html ;;
 plugtail)
   uv run tools/plug_tail_view.py
   [ $open_ = 1 ] && open -a "Google Chrome" view/plug_tail.html ;;
-*) echo "unknown view $v (servo9g, nezha, plate, front, plates, robot_level, robot_low, robot_front, cutebot, tiltpan, brickframe, tilttable, batteryframe, piframe, lasercam, plugtail)"; exit 1 ;;
+lbracket)
+  for c in bracket pins; do one lb_$c -D "part=\"$c\"" scad/l_bracket.scad & done; wait
+  python3 tools/mockup_html.py view/l_bracket.html "5 x 5 LEGO L bracket: holes the whole unit, 1 mm skin inside" \
+    "Bracket=$T/lb_bracket.stl:#3cb371" "+2L pins=$T/lb_pins.stl:#333333"
+  [ $open_ = 1 ] && open -a "Google Chrome" view/l_bracket.html ;;
+cutebotcage)
+  for c in nose lobe_l lobe_r rail_l rail_r wall_l wall_r front_l front_r skirt_l skirt_r deck_l deck_r rear fwall fside_l fside_r fdeck robot caster pins screws; do one cc_$c -D "part=\"$c\"" scad/cutebot_cage.scad & done; wait
+  python3 tools/mockup_html.py view/cutebot_cage.html "Cutebot Pro cage v3 (Lift raises the decks)" \
+    "Nose=$T/cc_nose.stl:#e67e22" "Lobe L=$T/cc_lobe_l.stl:#3cb371" "Lobe R=$T/cc_lobe_r.stl:#3cb371" \
+    "Rail L=$T/cc_rail_l.stl:#4169e1" "Rail R=$T/cc_rail_r.stl:#4169e1" "Wall L=$T/cc_wall_l.stl:#5dade2" "Wall R=$T/cc_wall_r.stl:#5dade2" \
+    "Front bulkhead L=$T/cc_front_l.stl:#c0392b" "Front bulkhead R=$T/cc_front_r.stl:#c0392b" "Rear bulkhead=$T/cc_rear.stl:#a93226" \
+    "Skirt L=$T/cc_skirt_l.stl:#d35400" "Skirt R=$T/cc_skirt_r.stl:#d35400" \
+    "Front wall=$T/cc_fwall.stl:#a93226" "Front side L=$T/cc_fside_l.stl:#d35400" "Front side R=$T/cc_fside_r.stl:#d35400" \
+    "+Deck L=$T/cc_deck_l.stl:#8e44ad" "+Deck R=$T/cc_deck_r.stl:#8e44ad" "+Front deck=$T/cc_fdeck.stl:#7d3c98" \
+    "M3 screws=$T/cc_screws.stl:#7f8c8d" "2L pins=$T/cc_pins.stl:#222222" "EV3 ball caster=$T/cc_caster.stl:#444444" \
+    "Cutebot Pro (scan stand-in)=$T/cc_robot.stl:#dddddd:0.6"
+  [ $open_ = 1 ] && open -a "Google Chrome" view/cutebot_cage.html ;;
+*) echo "unknown view $v (servo9g, nezha, plate, front, plates, robot_level, robot_low, robot_front, cutebot, tiltpan, brickframe, tilttable, batteryframe, piframe, lasercam, plugtail, lbracket, cutebotcage)"; exit 1 ;;
 esac; done
 rm -rf "$T"

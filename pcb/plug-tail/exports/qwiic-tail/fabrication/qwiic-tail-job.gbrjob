@@ -5,13 +5,13 @@
       "Application": "Pcbnew",
       "Version": "9.0.8+dfsg-1"
     },
-    "CreationDate": "2026-11-04T14:20:53+00:00"
+    "CreationDate": "2026-11-04T14:39:47+00:00"
   },
   "GeneralSpecs": {
     "ProjectId": {
       "Name": "qwiic-tail",
       "GUID": "71776969-632d-4746-9169-6c2e6b696361",
-      "Revision": "B"
+      "Revision": "C"
     },
     "Size": {
       "X": 9.05,

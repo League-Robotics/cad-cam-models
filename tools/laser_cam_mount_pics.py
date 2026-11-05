@@ -3,13 +3,14 @@
 # requires-python = ">=3.10"
 # dependencies = ["trimesh", "numpy", "matplotlib", "shapely", "networkx", "scipy", "rtree"]
 # ///
-"""Labelled drawing of the two-camera line-laser mount (scad/laser_cam_mount.scad).
+"""Labelled drawing of the two-camera line-laser mount and its bracket (scad/laser_cam_mount.scad).
 
     uv run tools/laser_cam_mount_pics.py   ->  view/laser_cam_mount.png
 
-As mounted under the camera bracket's cap: two 3D views, a cut down the
-middle from the left (front on the right), the underside (camera pockets,
-standoffs, laser bore) and the top (cap recess, cable slots).
+As mounted: two 3D views, the side from the left (bracket's triangles over a
+cut down the mount's middle, front on the right), the mount's underside
+(camera pockets, standoffs, the rib with the laser bore) and the top (the bracket's
+glue pad on it, its one hole over the laser, cable slots).
 """
 import subprocess
 import tempfile
@@ -28,10 +29,12 @@ OUT = ROOT / "view" / "laser_cam_mount.png"
 BLUE, GREEN, GOLD, GREY, RED = "#3b7dd8", "#1f7a3a", "#c9a227", "#777", "#c0392b"
 
 # as in the scad
-PITCH, POCKET, POD, POD_H, GAP = 28, 39, 43, 17.1, 30
-CAM_Y = GAP / 2 + POD / 2
-INS_D, INS_LEN, LASER_TOP, BOSS_BOTTOM, BORE_D = 6.35, 13.5, -19, -35, 9.3
-SOCKET_IN, SOCKET_H = 25.8, 3
+PITCH, POCKET, POD, POD_H, BASELINE = 28, 39, 43, 17.1, 52
+CAM_Y = BASELINE / 2
+BORE_D, LASER_LEN = 9.3, 22
+BRACKET_Y, BRACKET_H, END_Y = 20, 62, 47.5   # bracket_off (cap centre), bracket_l + cap_t, the mount's ends
+LEG_Y = BRACKET_Y - 12.7                       # the bracket's front leg, where the triangles start
+CABLE_Z, CABLE_D = 12.35, 12.7                 # the laser cable's hole through the front triangle
 SLOT_OFF = 14.65
 
 
@@ -46,12 +49,12 @@ def main():
     with tempfile.TemporaryDirectory() as tmp:
         t = Path(tmp)
         m = {}
-        for p in ("mount", "cameras", "laser"):
+        for p in ("mount", "bracket", "cameras", "laser"):
             openscad(t / f"{p}.stl", 'part="assembly"', f'show="{p}"')
             m[p] = trimesh.load(t / f"{p}.stl")
         imgs = []
-        for name, defs, cam in (("iso", ('part="assembly"',), "-140,-170,110,0,0,-5"),
-                                ("under", ('part="mount"',), "110,-150,-120,0,0,-12")):
+        for name, defs, cam in (("iso", ('part="assembly"',), "-170,-180,120,0,0,15"),
+                                ("under", ('part="mount"',), "100,-140,-120,0,0,-6")):
             png = t / f"{name}.png"
             openscad(png, *defs, extra=(f"--camera={cam}", "--projection=p", "--imgsize=1000,800",
                                         "--colorscheme=Tomorrow"))
@@ -61,55 +64,63 @@ def main():
     gs = fig.add_gridspec(2, 3, height_ratios=[1, 1.1])
     i3, i3b, cut = fig.add_subplot(gs[0, 0]), fig.add_subplot(gs[0, 1]), fig.add_subplot(gs[0, 2])
     under, top = fig.add_subplot(gs[1, 0:2]), fig.add_subplot(gs[1, 2])
-    for ax, img, title in ((i3, imgs[0], "As mounted under the bracket's cap,\nfrom in front and to the left"),
-                           (i3b, imgs[1], "From below and to the right:\ncamera pockets, standoffs, laser bore")):
+    for ax, img, title in ((i3, imgs[0], "As mounted, from in front and to the left:\nthe bracket (grey) glued on, the 1/2 in cable hole"),
+                           (i3b, imgs[1], "The mount from below and to the right: two camera pockets,\nthe laser in the rib between them")):
         ax.imshow(img), ax.set_axis_off(), ax.set_title(title, fontsize=12)
 
-    # cut down the middle (x = 0), seen from the left: y to the left, front (-y) on the right
+    # from the left: the bracket's outline over a cut down the mount's middle (x = 0); front (-y) on the right
+    draw_geom(cut, silhouette(m["bracket"], (1, 2)), GREY, alpha=0.35)
     draw_geom(cut, section_geom(m["mount"], (0, 0, 0), (1, 0, 0), (1, 2)), BLUE)
     draw_geom(cut, silhouette(m["cameras"], (1, 2)), GREEN, alpha=0.35)
     draw_geom(cut, silhouette(m["laser"], (1, 2)), GOLD, alpha=0.6)
     cut.invert_xaxis()
-    cut.set_title("Cut down the middle, from the left (front on the right)", fontsize=12)
-    label(cut, (0, -7), f"heat-set insert hole\nØ{INS_D} x {INS_LEN} (screw from the cap)", (-30, 14))
-    label(cut, (3, -26), f"laser Ø9 in a Ø{BORE_D} bore,\n16 deep; turn it, then lock", (38, -44))
-    label(cut, (-4, -17.5), "wire channel\nout the -x side", (-38, -44))
-    label(cut, (CAM_Y, -18), "camera board,\nback up", (CAM_Y + 6, 14))
-    dim(cut, (CAM_Y, -54), (-CAM_Y, -54), f"{2 * CAM_Y:g} between the cameras", off=(0, -2.6))
-    dim(cut, (65, SOCKET_H), (65, SOCKET_H - POD_H), f"{POD_H}", off=(4, 0))
-    dim(cut, (12, 0), (12, BOSS_BOTTOM), f"{-BOSS_BOTTOM:g}", off=(-4, 0))
-    cut.text(66, 3.5, "back", color=GREY, fontsize=10), cut.text(-56, 3.5, "front", color=GREY, fontsize=10)
-    cut.set_xlim(70, -70), cut.set_ylim(-62, 22)
+    cut.set_title("From the left: the bracket over a cut down the mount (front on the right)", fontsize=12)
+    label(cut, (BRACKET_Y, 50), "the old bracket\n(angle + cap, same holes)", (20, 88))
+    label(cut, (-30, 20), "triangle to the\nfront end", (-42, 72))
+    label(cut, (-20.1 + 3, 33 - 4), "3 zip-tie slots", (-30, 88))
+    label(cut, (44, 12), "triangle to\nthe back end", (58, 72))
+    label(cut, (-3, CABLE_Z + 4), f"NEW: Ø{CABLE_D} (1/2 in) hole\nfor the laser's cable", (-45, 38))
+    cut.plot([0, 0], [-POD_H - 8, 4], color=RED, lw=1.2, ls="--")
+    label(cut, (-40, 2), "glue pad 25.4 wide, 4 thick,\nthe mount's whole length", (-36, -50))
+    label(cut, (-3, -LASER_LEN + 1), f"laser sticks out {LASER_LEN - POD_H:.1f}\n(laser 22, a guess)", (25, -48))
+    dim(cut, (CAM_Y, -30), (-CAM_Y, -30), f"{BASELINE:g} between cameras,\nlaser halfway", off=(0, -6))
+    dim(cut, (60, 0), (60, BRACKET_H), f"{BRACKET_H}", off=(4, 0))
+    cut.text(66, -12, "back", color=GREY, fontsize=10), cut.text(-55, -12, "front", color=GREY, fontsize=10)
+    cut.set_xlim(72, -65), cut.set_ylim(-62, 95)
 
     # from below: y to the right (front, -y, on the left), x down the page (-x at the top)
     draw_geom(under, section_geom(m["mount"], (0, 0, -10), (0, 0, 1), (1, 0)), BLUE)
-    draw_geom(under, section_geom(m["mount"], (0, 0, -25), (0, 0, 1), (1, 0)), BLUE, alpha=0.6)
-    under.set_title("From below, cut 10 under the cap (the cameras' standoffs), front on the left, -x at the top", fontsize=12)
+    draw_geom(under, section_geom(m["mount"], (0, 0, -1), (0, 0, 1), (1, 0)), BLUE, alpha=0.6)
+    under.set_title("The mount from below, cut 10 under its top, front on the left, -x at the top. Both cameras "
+                    "turned 90°:\nthe 1280 px side runs front to back, cable slots on the +x side", fontsize=12)
     under.invert_yaxis()
     for s in (-1, 1):
         dim(under, (s * CAM_Y - PITCH / 2, -24), (s * CAM_Y + PITCH / 2, -24), f"{PITCH} (as your mount)", off=(0, -2))
-        dim(under, (s * CAM_Y - POCKET / 2, 25), (s * CAM_Y + POCKET / 2, 25), f"{POCKET} pocket (38 board)", off=(0, 2))
-    label(under, (CAM_Y + PITCH / 2, -PITCH / 2), "standoff Ø5, Ø2.2 hole\n11.5 long (connector room)",
-          (CAM_Y + 10, 3))
-    label(under, (0, -10), "set screw: M3 insert\nfrom -x", (-18, 3))
-    dim(under, (-POD - GAP / 2, 30), (POD + GAP / 2, 30), f"{2 * POD + GAP:g}", off=(0, 2.4))
-    under.set_xlim(-65, 65), under.set_ylim(36, -32)
+        dim(under, (s * CAM_Y - POCKET / 2, 27), (s * CAM_Y + POCKET / 2, 27), f"{POCKET} pocket", off=(0, 2))
+    label(under, (CAM_Y + PITCH / 2, -PITCH / 2), "standoff Ø5, Ø2.2 hole\n11.5 long", (CAM_Y + 36, -12))
+    label(under, (CAM_Y + 8, SLOT_OFF), "cable slot 24 x 4.6", (CAM_Y + 36, 14))
+    label(under, (0, -14), "set screw: M3 insert from -x,\nthrough the 13 rib", (-56, -16))
+    label(under, (2, 3), "laser Ø9.3 bore,\n1.85 wall each side", (-50, 12))
+    dim(under, (-END_Y, 36), (END_Y, 36), f"{2 * END_Y:g} overall", off=(0, 2.4))
+    dim(under, (-CAM_Y, -30), (CAM_Y, -30), f"{BASELINE:g} between the cameras", off=(0, -2.4))
+    under.set_xlim(-72, 72), under.set_ylim(42, -38)
 
-    # from above: the cap recess and cable slots, front at the bottom
+    # from above: the mount's flat top, the bracket's footprint on it, front at the bottom
     draw_geom(top, silhouette(m["mount"], (0, 1)), BLUE, alpha=0.3)
-    draw_geom(top, section_geom(m["mount"], (0, 0, 1.5), (0, 0, 1), (0, 1)), RED, alpha=0.5)
-    top.set_title("From above: the cap's recess, cable slots (front at the bottom)", fontsize=12)
-    label(top, (SOCKET_IN / 2 + 1, -6), f"recess {SOCKET_IN} square, {SOCKET_H} deep\ninto the flat top: the 25.4 cap\nsits in it, so one screw\ncan't turn it; the top\nprints flat on the bed",
-          (38, -38))
-    label(top, (10, CAM_Y + SLOT_OFF), "cable slot 24 x 4.6\n(as in your mount)", (40, CAM_Y + 4))
-    label(top, (0, 0), "screw", (-38, 20))
-    top.text(0, -70, "front", ha="center", color=GREY)
-    top.set_xlim(-55, 70), top.set_ylim(-74, 70)
+    draw_geom(top, section_geom(m["mount"], (0, 0, -1), (0, 0, 1), (0, 1)), BLUE, alpha=0.5)
+    draw_geom(top, section_geom(m["bracket"], (0, 0, 1), (0, 0, 1), (0, 1)), GREY, alpha=0.6)
+    top.set_title("From above: the bracket's glue pad (grey) on the flat top,\nnotched clear of the cable slots (front at the bottom)", fontsize=12)
+    label(top, (6, BRACKET_Y), "the old cap", (36, 40))
+    label(top, (-11, -30), "front triangle\n(the cable hole)", (-45, -40))
+    label(top, (0, 0), "laser hole", (-42, 8))
+    label(top, (14.6, CAM_Y), "cable slot,\npad notched", (42, CAM_Y - 6))
+    top.text(0, -60, "front", ha="center", color=GREY), top.text(0, 56, "back", ha="center", color=GREY)
+    top.set_xlim(-62, 62), top.set_ylim(-64, 62)
 
     for ax in (cut, under, top):
         ax.set_aspect("equal"), ax.grid(alpha=0.2)
-    fig.suptitle("Two Arducams and a line laser under the Carvera camera bracket (first draft): camera, laser, camera, "
-                 "front to back, all facing down", fontsize=15)
+    fig.suptitle("Two Arducams and a line laser on the Carvera (2026-11-04, v3): cameras 52 apart with the laser between, "
+                 "turned 90°; 1/2 in cable hole in the front triangle", fontsize=15)
     fig.tight_layout(rect=(0, 0, 1, 0.96))
     fig.savefig(OUT, dpi=90)
     print(OUT)

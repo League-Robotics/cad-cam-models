@@ -15,7 +15,8 @@ from matplotlib.patches import Rectangle
 ROOT = Path(__file__).resolve().parents[1]; CAM = ROOT / 'cam'
 GEO = json.loads((ROOT / 'checks/geometry.json').read_text()); JOB = json.loads((CAM / 'job.json').read_text())
 EXPECTED = {
-    'servo-tail': {'/GND': {('J1', '1'), ('J2', '1')}, '/VS': {('J1', '2'), ('J2', '2')}, '/SIG': {('J1', '3'), ('J2', '3')}},
+    'header-tail': {'/GND': {('J1', '1'), ('J2', '1')}, '/VCC': {('J1', '2'), ('J2', '2')}, '/S1': {('J1', '3'), ('J2', '3')},
+                    '/S2': {('J1', '4'), ('J2', '4')}},
     'qwiic-tail': {'/GND': {('J1', '1'), ('J2', '1')}, '/+3V3': {('J1', '2'), ('J2', '2')}, '/SCL': {('J1', '3'), ('R1', '1')},
                    '/SDA': {('J1', '4'), ('J2', '3')}, '/SCL_QWIIC': {('R1', '2'), ('J2', '4')}}}
 report = {'status': 'PASS', 'boards': {}}
@@ -142,8 +143,8 @@ for b in JOB['placements']:
     assert depths == {1: -JOB['isolation']['depth_mm'], 2: JOB['through_z_mm']}, depths
     report['boards'][str(b['id'])] = {'name': name, 'cad_min_clearance_mm': clear, 'tab_necks_mm': sorted(round(q.length, 2) for q in pieces), 'min_z': depths}
 
-colors = {'/GND': '#263d47', '/+3V3': '#cb4a38', '/VS': '#cb4a38', '/SDA': '#1d88a8', '/SCL': '#b48a09', '/SCL_QWIIC': '#b48a09', '/SIG': '#d8811f', 'MECH': '#969e9c'}
-LABELS = {'servo-tail': (['GND', 'VS', 'SIG', 'n/c'], ['G', 'V', 'S']), 'qwiic-tail': (['GND', '3V3', 'SCL', 'SDA'], None)}
+colors = {'/GND': '#263d47', '/+3V3': '#cb4a38', '/VS': '#cb4a38', '/SDA': '#1d88a8', '/SCL': '#b48a09', '/SCL_QWIIC': '#b48a09', '/SIG': '#d8811f', '/VCC': '#cb4a38', '/S1': '#3a9a3a', '/S2': '#d4b106', 'MECH': '#969e9c'}
+LABELS = {'header-tail': (['GND', 'VCC', 'S1', 'S2'], ['G', 'V', 'S1', 'S2']), 'qwiic-tail': (['GND', '3V3', 'SCL', 'SDA'], None)}
 
 
 def draw(ax, name, dx=0, dy=0, labels=True):
@@ -167,18 +168,19 @@ def draw(ax, name, dx=0, dy=0, labels=True):
     ax.text(dx, dy + L + 15 - pad_end + .6, 'into plug\n(pins run on to the contacts)', ha='center', fontsize=7)
     if LABELS[name][1]:
         for i, s in enumerate(LABELS[name][1]):
-            ax.add_patch(Rectangle((dx + (i - 1) * 2.54 - .32, dy - 6), .64, 11, color='#9aa5a8', alpha=.55))
-            ax.text(dx + (i - 1) * 2.54, dy - 6.6, s, ha='center', va='top', fontsize=9, weight='bold')
-        ax.text(dx, dy - 8.4, 'servo plug pushes on here', ha='center', va='top', fontsize=7)
+            px = dx + (i - (len(LABELS[name][1]) - 1) / 2) * 2.54
+            ax.add_patch(Rectangle((px - .32, dy - 6), .64, 11, color='#9aa5a8', alpha=.55))
+            ax.text(px, dy - 6.6, s, ha='center', va='top', fontsize=9, weight='bold')
+        ax.text(dx, dy - 8.4, 'servo plug on G V S1;\na J-port device uses all four', ha='center', va='top', fontsize=7)
     else:
         ax.text(dx, dy - 1, 'Qwiic cable', ha='center', va='top', fontsize=8)
 
 
 fig, axs = plt.subplots(1, 2, figsize=(11, 7.5))
-for ax, name, title in [(axs[0], 'servo-tail', 'SERVO TAIL  {:.1f} × {:.1f} mm'), (axs[1], 'qwiic-tail', 'QWIIC TAIL  {:.1f} × {:.1f} mm\nR1 = 0 Ω 1206 crossover')]:
+for ax, name, title in [(axs[0], 'header-tail', 'HEADER TAIL  {:.1f} × {:.1f} mm'), (axs[1], 'qwiic-tail', 'QWIIC TAIL  {:.1f} × {:.1f} mm\nR1 = 0 Ω 1206 crossover')]:
     draw(ax, name); ax.set_title(title.format(*GEO[name]['board_mm'][:2]), fontsize=11); ax.set_aspect('equal'); ax.grid(alpha=.15); ax.set_xlim(-9, 14); ax.set_ylim(-11, 32)
-fig.suptitle('Nezha 4P4C plug tails, rev B — copper side up, plug end at the top (1 mm grid)', fontsize=13)
-fig.text(.5, .02, 'Pad order is as seen from the plug contacts with the nose away. The servo order G/V/S assumes the servo port is wired GND, V, SIG, unused: check before use.', ha='center', fontsize=8.5)
+fig.suptitle('Nezha 4P4C plug tails, rev C — copper side up, plug end at the top (1 mm grid)', fontsize=13)
+fig.text(.5, .02, 'Pad order is as seen from the plug contacts with the nose away. Header pins follow the plug contacts 1-4 (GND, VCC, S1, S2 by cable colour): check a port before use.', ha='center', fontsize=8.5)
 fig.tight_layout(rect=[0, .05, 1, .95])
 for ext in ['pdf', 'svg', 'png']: fig.savefig(ROOT / f'exports/assembly-preview.{ext}', dpi=200)
 plt.close(fig)
@@ -190,7 +192,7 @@ for b in JOB['placements']:
     ax.text(b['x'] + W / 2, b['y'] - 1.6, str(b['id']), ha='center', fontsize=8)
 ax.plot(0, 0, 'ko'); ax.annotate('G54 (0,0)', (0, 0), (1, -3), fontsize=9)
 ax.set_aspect('equal'); ax.set_xlim(-2, A[0] + 2); ax.set_ylim(-5, A[1] + 2); ax.grid(alpha=.15)
-ax.set_title(f'Strip: 2 servo + 2 Qwiic tails in {A[0]:.0f} × {A[1]:.0f} mm of free stock, copper up', fontsize=11)
+ax.set_title(f'Strip: 2 header + 2 Qwiic tails in {A[0]:.0f} × {A[1]:.0f} mm of free stock, copper up', fontsize=11)
 fig.tight_layout()
 for ext in ['pdf', 'svg', 'png']: fig.savefig(CAM / f'strip-layout.{ext}', dpi=200)
 

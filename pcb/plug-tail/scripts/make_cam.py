@@ -9,11 +9,11 @@ ROOT = Path(__file__).resolve().parents[1]; CAM = ROOT / 'cam'
 GEO = json.loads((ROOT / 'checks/geometry.json').read_text())
 ISO_Z, THROUGH_Z, STEP, TAB_Z, TAB_W, R = -.12, -1.55, .25, -.9, 1.5, .4
 VBIT = .2 + 2 * -ISO_Z * math.tan(math.radians(15))
-TABS = {'servo-tail': [(-1, 0, 15.8), (1, 0, 15.8), (0, 1, None)],      # (normal x, normal y, along) on the body sides and tail end
+TABS = {'header-tail': [(-1, 0, 15.8), (1, 0, 15.8), (0, 1, None)],      # (normal x, normal y, along) on the body sides and tail end
         'qwiic-tail': [(-1, 0, 17.8), (1, 0, 17.8), (0, 1, None)]}
-STRIP = [('servo-tail', 3.0), ('servo-tail', 14.0), ('qwiic-tail', 25.0), ('qwiic-tail', 37.0)]
+STRIP = [('header-tail', 3.0), ('header-tail', 16.0), ('qwiic-tail', 29.0), ('qwiic-tail', 41.0)]
 MARGIN_Y = 3.0
-AREA = (49.0, 30.0)
+AREA = (53.0, 30.0)
 
 
 def millproject(name):
@@ -120,7 +120,7 @@ def tool(n): return ['M5', 'G4 P3', f'M6 T{n}', 'G0 Z5', 'M3 S12000', 'G4 P3']
 if __name__ == '__main__':
     raw = {n: millproject(n) for n in GEO}
     placements = [{'id': i + 1, 'name': n, 'x': x, 'y': MARGIN_Y} for i, (n, x) in enumerate(STRIP)]
-    out = ['(NEZHA PLUG TAILS REV B - 2 SERVO + 2 QWIIC - ORIGINAL CARVERA)',
+    out = ['(NEZHA PLUG TAILS REV C - 2 HEADER + 2 QWIIC - ORIGINAL CARVERA)',
            '(1.4 MM SINGLE-SIDED PCB - COPPER FACING UP - NOTHING MIRRORED)',
            f'(G54 XY0 = LOWER LEFT OF A FREE AREA AT LEAST X{AREA[0]:.0f} Y{AREA[1]:.0f} - Z0 COPPER SURFACE)',
            '(TONGUES POINT +Y)',
@@ -135,9 +135,9 @@ if __name__ == '__main__':
     for b in placements:
         out.append(f"(BOARD {b['id']} {b['name'].upper()})"); out += outline(b['name'], b['x'], b['y'])
     out += ['G0 Z10', 'M5', 'G4 P3', 'M9', 'M30']
-    name = 'plug-tails-B-4up-iso120-cut155.nc'
+    name = 'plug-tails-C-4up-iso120-cut155.nc'
     (CAM / name).write_text('\n'.join(out) + '\n')
-    job = {'name': 'nezha-plug-tails', 'revision': 'B', 'program': name, 'area_mm': AREA, 'placements': placements,
+    job = {'name': 'nezha-plug-tails', 'revision': 'C', 'program': name, 'area_mm': AREA, 'placements': placements,
            'stock_thickness_mm': 1.4, 'isolation': {'depth_mm': -ISO_Z, 'effective_diameter_mm': VBIT, 'tip_mm': .2, 'angle_deg': 30},
            'through_z_mm': THROUGH_Z, 'stepdown_mm': STEP, 'cutter_mm': 2 * R,
            'tabs': {'width_mm': TAB_W, 'z_mm': TAB_Z, 'remaining_mm': round(1.4 + TAB_Z, 2), 'where': TABS},

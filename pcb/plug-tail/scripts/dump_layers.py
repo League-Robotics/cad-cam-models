@@ -64,7 +64,7 @@ def dump(name):
 
 
 if __name__ == '__main__':
-    res = {n: dump(n) for n in ('servo-tail', 'qwiic-tail')}
+    res = {n: dump(n) for n in ('header-tail', 'qwiic-tail')}
     (ROOT / 'exports/layers.json').write_text(json.dumps(res))
     for n, d in res.items():
         print(n, {k: len(v) for k, v in d['layers'].items()}, [q['ref'] for q in d['parts']])

@@ -1,0 +1,83 @@
+(footprint "PlugPins_1x04_P1.02_SMD"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "Four 0.64 mm square pins lying flat, as they leave a 4P4C plug; origin at the tongue tip")
+	(property "Reference" "REF**"
+		(at 0 0 0)
+		(layer "F.SilkS")
+		(uuid "51b31eef-f8fa-4813-8f8d-62f48440d512")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "PlugPins_1x04_P1.02_SMD"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "e58668af-c4e7-425f-9bc7-a9b2dd575891")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d519f20b-f4f8-45a7-9a68-fbd4ab262a00")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "329b667e-050c-4735-87c1-a805fc66eceb")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(pad "1" smd rect
+		(at -1.53 5.25)
+		(size 0.62 10)
+		(layers "F.Cu" "F.Mask")
+		(thermal_bridge_angle 45)
+		(uuid "8a76d091-5909-4bfe-b2a8-dd39ef11c3f9")
+	)
+	(pad "2" smd rect
+		(at -0.51 5.25)
+		(size 0.62 10)
+		(layers "F.Cu" "F.Mask")
+		(thermal_bridge_angle 45)
+		(uuid "f2a06cfc-23d1-4e8d-891d-6e9fca7f2880")
+	)
+	(pad "3" smd rect
+		(at 0.51 5.25)
+		(size 0.62 10)
+		(layers "F.Cu" "F.Mask")
+		(thermal_bridge_angle 45)
+		(uuid "8abf98ec-6e9d-439e-ae44-eeb6e535f2a3")
+	)
+	(pad "4" smd rect
+		(at 1.53 5.25)
+		(size 0.62 10)
+		(layers "F.Cu" "F.Mask")
+		(thermal_bridge_angle 45)
+		(uuid "e957d50b-4a12-4565-be01-4eafedd6d9bb")
+	)
+	(embedded_fonts no)
+)

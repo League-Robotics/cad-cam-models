@@ -4,7 +4,7 @@ from pathlib import Path
 import subprocess as sp
 
 ROOT = Path(__file__).resolve().parents[1]
-NAMES = ['servo-tail', 'qwiic-tail']
+NAMES = ['header-tail', 'qwiic-tail']
 
 
 def run(*args): sp.run(args, cwd=ROOT, check=True, stdout=sp.DEVNULL)

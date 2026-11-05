@@ -9,7 +9,7 @@
 
 Layers come from pcb/plug-tail/exports/layers.json (scripts/dump_layers.py on Buzzkill, from the saved KiCad
 boards); the milling from the Carvera program itself (boards 1 and 3 of cam/plug-tails-*.nc, mapped back through
-cam/job.json's placements). Servo tail on the left, Qwiic tail on the right, tongues pointing +y into the plug.
+cam/job.json's placements). Header tail on the left, Qwiic tail on the right, tongues pointing +y into the plug.
 
 Thin layers are drawn thicker than they are so they show: copper 0.035 -> 0.05, mask/paste/silk 0.02-0.05.
 Pins, the Qwiic socket, R1 and the 4P4C plug are stand-ins. The plug is NOT measured beyond the 5.5 x 3.15 cavity:
@@ -38,14 +38,14 @@ GEO = json.loads((PT / 'checks' / 'geometry.json').read_text())
 JOB = json.loads((PT / 'cam' / 'job.json').read_text())
 NC = max((PT / 'cam').glob('plug-tails-*.nc'))   # the current revision's program
 
-OFFSET = {'servo-tail': -7.5, 'qwiic-tail': 7.5}   # board centrelines along x
-NC_BOARD = {'servo-tail': 1, 'qwiic-tail': 3}      # which placement in the program to draw
+OFFSET = {'header-tail': -8.0, 'qwiic-tail': 8.0}   # board centrelines along x
+NC_BOARD = {'header-tail': 1, 'qwiic-tail': 3}      # which placement in the program to draw
 CU = 0.05                                          # copper, drawn (0.035 real)
 PIN = 0.64
 PIN_LEN = 15.0                                     # double-length header pin
 CAV_W, CAV_H = 5.5, 3.15                           # measured cavity
 PLUG = (7.6, 6.6, 18.0)                            # stand-in body: width, height, length (not measured)
-CAV_DEPTH = GEO['servo-tail']['tongue_mm'][1]      # back face to channel wall = the tongue length (not measured)
+CAV_DEPTH = GEO['header-tail']['tongue_mm'][1]      # back face to channel wall = the tongue length (not measured)
 
 
 def world(g, name):
@@ -139,12 +139,13 @@ def build(t):
         for pad in parts['J1']['pads']:
             x = pad['at'][0] + OFFSET[name]; yend = pad['at'][1] + pad['size'][1] / 2
             meshes['pins'].append(bar(x - PIN / 2, x + PIN / 2, -yend, -yend + PIN_LEN, pz, pz + PIN))
-        if name == 'servo-tail':
+        if name == 'header-tail':
             for pad in parts['J2']['pads']:
                 x = pad['at'][0] + OFFSET[name]; y0 = pad['at'][1] - pad['size'][1] / 2 + .4
                 meshes['pins'].append(bar(x - PIN / 2, x + PIN / 2, -(Lb + 6), -y0, pz, pz + PIN))
-            # a 3-way 2.54 servo housing (7.6 x 2.5 x 14) pushed onto the overhang, 0.5 off the board end
-            cx, cz, y1 = OFFSET[name], pz + PIN / 2, -(Lb + .5)
+            # a 3-way 2.54 servo housing (7.6 x 2.5 x 14) on G V S1, 0.5 off the board end
+            cx = sum(sorted(q['at'][0] for q in parts['J2']['pads'])[:3]) / 3 + OFFSET[name]
+            cz, y1 = pz + PIN / 2, -(Lb + .5)
             meshes['servo_plug'].append(bar(cx - 3.8, cx + 3.8, y1 - 14, y1, cz - 1.25, cz + 1.25))
         if 'R1' in parts:
             r = parts['R1']
@@ -198,7 +199,7 @@ def main():
         ]
         OUT.parent.mkdir(exist_ok=True)
         subprocess.run([sys.executable, str(ROOT / 'tools' / 'mockup_html.py'), str(OUT),
-                        f"Nezha 4P4C plug tails rev {JOB['revision']}: servo (left), Qwiic (right)", *specs], check=True)
+                        f"Nezha 4P4C plug tails rev {JOB['revision']}: header (left), Qwiic (right)", *specs], check=True)
     print(OUT)
     if '--open' in sys.argv:
         subprocess.run(['open', '-a', 'Google Chrome', str(OUT)])

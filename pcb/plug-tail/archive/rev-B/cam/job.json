@@ -1,0 +1,87 @@
+{
+ "name": "nezha-plug-tails",
+ "revision": "B",
+ "program": "plug-tails-B-4up-iso120-cut155.nc",
+ "area_mm": [
+  49.0,
+  30.0
+ ],
+ "placements": [
+  {
+   "id": 1,
+   "name": "servo-tail",
+   "x": 3.0,
+   "y": 3.0
+  },
+  {
+   "id": 2,
+   "name": "servo-tail",
+   "x": 14.0,
+   "y": 3.0
+  },
+  {
+   "id": 3,
+   "name": "qwiic-tail",
+   "x": 25.0,
+   "y": 3.0
+  },
+  {
+   "id": 4,
+   "name": "qwiic-tail",
+   "x": 37.0,
+   "y": 3.0
+  }
+ ],
+ "stock_thickness_mm": 1.4,
+ "isolation": {
+  "depth_mm": 0.12,
+  "effective_diameter_mm": 0.26430780618346944,
+  "tip_mm": 0.2,
+  "angle_deg": 30
+ },
+ "through_z_mm": -1.55,
+ "stepdown_mm": 0.25,
+ "cutter_mm": 0.8,
+ "tabs": {
+  "width_mm": 1.5,
+  "z_mm": -0.9,
+  "remaining_mm": 0.5,
+  "where": {
+   "servo-tail": [
+    [
+     -1,
+     0,
+     15.8
+    ],
+    [
+     1,
+     0,
+     15.8
+    ],
+    [
+     0,
+     1,
+     null
+    ]
+   ],
+   "qwiic-tail": [
+    [
+     -1,
+     0,
+     17.8
+    ],
+    [
+     1,
+     0,
+     17.8
+    ],
+    [
+     0,
+     1,
+     null
+    ]
+   ]
+  }
+ },
+ "transform": "machineX = placementX + W/2 + x; machineY = placementY + L - y (local y runs from the tongue tip)"
+}

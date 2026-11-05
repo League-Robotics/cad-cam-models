@@ -59,7 +59,7 @@ from pathlib import Path
 
 import paho.mqtt.client as mqtt
 
-from bambu_slice import MACHINE, flatten
+from bambu_slice import PROFILES, flatten
 
 NETWORK = Path("/Volumes/Proj/proj/home-projects/busboom-home-network")
 PRINTERS = {   # name: (ip, serial, model)
@@ -90,7 +90,7 @@ def access_code(name):
 def a1_wipe_gcode():
     """Home, the start G-code's wipe block, then heaters and fan off and the head up, as a list of
     lines without comments, display-only M1002s or bed commands (the chunk markers use the bed)."""
-    g = flatten("machine", MACHINE)["machine_start_gcode"]
+    g = flatten("machine", PROFILES["a1"][0])["machine_start_gcode"]
     block = g[g.index(";===== wipe nozzle ====="):g.index(";===== wipe nozzle end")]
     block = re.sub(r"\{nozzle_temperature_initial_layer\[initial_extruder\]-50\}", str(WIPE_TEMP), block)
     assert "{" not in block and "[" not in block, "unresolved placeholder in the wipe block"

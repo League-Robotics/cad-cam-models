@@ -1,4 +1,11 @@
-NEZHA 4P4C PLUG TAILS - REVISION B - 2026-11-04
+NEZHA 4P4C PLUG TAILS - REVISION C - 2026-11-04
+
+REV C (the user, 2026-11-04): the servo tail is now the HEADER TAIL
+(design/header-tail), 10.0 x 19.0, with all FOUR lines out on four flat 2.54
+pins in plug-contact order: GND, VCC, S1, S2 (cable black, red, green,
+yellow). A servo plug goes on G V S1; a J-port device uses all four. Program
+cam/plug-tails-C-4up-iso120-cut155.nc, area 53 x 30. Rev B is in
+archive/rev-B; the 3-pin servo tail's files were moved out of the live tree.
 
 REV B (the user, 2026-11-04): the narrow tongue is 10 mm long, not 6, and the
 pin pads run 10 mm along it (0.25-10.25 from the tip), so the wires/pins from

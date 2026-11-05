@@ -1,0 +1,76 @@
+(footprint "FlatPins_1x03_P2.54_SMD"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "Three 0.64 mm square pins lying flat, overhanging the board end for a servo plug")
+	(property "Reference" "REF**"
+		(at 0 0 0)
+		(layer "F.SilkS")
+		(uuid "b0c1aaf8-7e53-4807-a0f3-c72470169af9")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "FlatPins_1x03_P2.54_SMD"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "6898eea9-0bdf-42d3-8463-5d18605f0356")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "b3bf6dc7-203b-4be2-8ef1-4e49cf629faa")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "47945aa5-11aa-489d-ac53-2fff4ab2b3af")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(pad "1" smd rect
+		(at -2.54 0)
+		(size 1 5)
+		(layers "F.Cu" "F.Mask")
+		(thermal_bridge_angle 45)
+		(uuid "55ed2303-e379-49b3-a016-4855ada1fedf")
+	)
+	(pad "2" smd rect
+		(at 0 0)
+		(size 1 5)
+		(layers "F.Cu" "F.Mask")
+		(thermal_bridge_angle 45)
+		(uuid "05adeeeb-9dc9-4ae5-a879-d1ee87790e00")
+	)
+	(pad "3" smd rect
+		(at 2.54 0)
+		(size 1 5)
+		(layers "F.Cu" "F.Mask")
+		(thermal_bridge_angle 45)
+		(uuid "42f81710-26ec-406a-b6b6-6f50f47b417f")
+	)
+	(embedded_fonts no)
+)

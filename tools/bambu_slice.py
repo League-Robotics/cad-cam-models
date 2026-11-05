@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Slice an STL for a garage Bambu printer with the Bambu Studio CLI.
 
-    python3 tools/bambu_slice.py part.stl out_dir [--plate "Textured PEI Plate"] [--brim 5]
+    python3 tools/bambu_slice.py part.stl out_dir [--printer a1|p1p] [--plate "Textured PEI Plate"] [--brim 5]
 
 The CLI does not resolve a system profile's `inherits` chain or its `include`
 templates when it is handed the JSON files directly: on 2026-11-02 that sent
@@ -18,9 +18,12 @@ from pathlib import Path
 
 APP = Path("/Applications/BambuStudio.app/Contents")
 BBL = APP / "Resources" / "profiles" / "BBL"
-MACHINE = "Bambu Lab A1 0.4 nozzle"
-PROCESS = "0.20mm Standard @BBL A1"
-FILAMENT = "Generic PLA @BBL A1"
+# machine, process, filament profiles per printer (verlet, slerp, catmull: A1; nurbs: P1P).
+# The P1P has no Generic PLA of its own; plain "Generic PLA" is the X1/P1S one.
+PROFILES = {
+    "a1": ("Bambu Lab A1 0.4 nozzle", "0.20mm Standard @BBL A1", "Generic PLA @BBL A1"),
+    "p1p": ("Bambu Lab P1P 0.4 nozzle", "0.20mm Standard @BBL P1P", "Generic PLA"),
+}
 
 
 def flatten(kind, name):
@@ -37,12 +40,14 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("stl", type=Path)
     ap.add_argument("out_dir", type=Path)
+    ap.add_argument("--printer", choices=PROFILES, default="a1")
     ap.add_argument("--plate", default="Textured PEI Plate")
     ap.add_argument("--brim", type=float, default=0, help="outer brim width, mm (0: none)")
     a = ap.parse_args()
     a.out_dir.mkdir(parents=True, exist_ok=True)
 
-    machine, process, filament = flatten("machine", MACHINE), flatten("process", PROCESS), flatten("filament", FILAMENT)
+    names = PROFILES[a.printer]
+    machine, process, filament = (flatten(k, n) for k, n in zip(("machine", "process", "filament"), names))
     process["curr_bed_type"] = a.plate        # the CLI otherwise slices for the Cool Plate
     if a.brim:
         process.update(brim_type="outer_only", brim_width=str(a.brim))

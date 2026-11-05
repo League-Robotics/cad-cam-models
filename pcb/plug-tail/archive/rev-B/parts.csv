@@ -1,0 +1,6 @@
+board,reference,quantity,manufacturer,part_number,description,notes
+both,P1,1,,,4P4C modular plug,User's stock; tongue sized for a 5.5 x 3.15 mm cable cavity
+both,J1,4,,,0.64 mm square double-length header pin,User's stock; soldered flat on the tongue pads
+servo-tail,J2,3,,,0.64 mm square header pin,Any standard pin; about 6 mm overhangs the board end for the servo socket
+qwiic-tail,J2,1,JST,SM04B-SRSS-TB(LF)(SN),4-position 1.0 mm side-entry SMT Qwiic socket,Horizontal SM04B; not the BM04B used on the first adapter; supplier not yet checked
+qwiic-tail,R1,1,YAGEO,RC1206JR-070RL,0 ohm insulated-body 1206 resistor,SCL crossover over SDA; Mouser 603-RC1206JR-070RL

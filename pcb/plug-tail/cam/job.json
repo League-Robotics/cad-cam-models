@@ -1,34 +1,34 @@
 {
  "name": "nezha-plug-tails",
- "revision": "B",
- "program": "plug-tails-B-4up-iso120-cut155.nc",
+ "revision": "C",
+ "program": "plug-tails-C-4up-iso120-cut155.nc",
  "area_mm": [
-  49.0,
+  53.0,
   30.0
  ],
  "placements": [
   {
    "id": 1,
-   "name": "servo-tail",
+   "name": "header-tail",
    "x": 3.0,
    "y": 3.0
   },
   {
    "id": 2,
-   "name": "servo-tail",
-   "x": 14.0,
+   "name": "header-tail",
+   "x": 16.0,
    "y": 3.0
   },
   {
    "id": 3,
    "name": "qwiic-tail",
-   "x": 25.0,
+   "x": 29.0,
    "y": 3.0
   },
   {
    "id": 4,
    "name": "qwiic-tail",
-   "x": 37.0,
+   "x": 41.0,
    "y": 3.0
   }
  ],
@@ -47,7 +47,7 @@
   "z_mm": -0.9,
   "remaining_mm": 0.5,
   "where": {
-   "servo-tail": [
+   "header-tail": [
     [
      -1,
      0,

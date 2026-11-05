@@ -1,0 +1,83 @@
+(footprint "FlatPins_1x04_P2.54_SMD"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "Four 0.64 mm square pins lying flat, overhanging the board end for a header plug")
+	(property "Reference" "REF**"
+		(at 0 0 0)
+		(layer "F.SilkS")
+		(uuid "0e22a1a9-5c3c-481a-acbf-8e0ce6435c63")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "FlatPins_1x04_P2.54_SMD"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "0e14bce7-a6ea-4a66-97cc-d6a537cbf7ae")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "5f3791c8-fad9-4af3-97fd-0e6eddeba5b5")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "27c66bfc-23b7-4e26-8a1f-ead4cf1d7bef")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(pad "1" smd rect
+		(at -3.81 0)
+		(size 1 5)
+		(layers "F.Cu" "F.Mask")
+		(thermal_bridge_angle 45)
+		(uuid "76a4fb1e-e91e-4df4-bec3-298368fd1bb6")
+	)
+	(pad "2" smd rect
+		(at -1.27 0)
+		(size 1 5)
+		(layers "F.Cu" "F.Mask")
+		(thermal_bridge_angle 45)
+		(uuid "5a5e568a-e1da-4b40-99cd-7667f9158478")
+	)
+	(pad "3" smd rect
+		(at 1.27 0)
+		(size 1 5)
+		(layers "F.Cu" "F.Mask")
+		(thermal_bridge_angle 45)
+		(uuid "84088572-d8c8-4fad-8545-74e0018c1248")
+	)
+	(pad "4" smd rect
+		(at 3.81 0)
+		(size 1 5)
+		(layers "F.Cu" "F.Mask")
+		(thermal_bridge_angle 45)
+		(uuid "ea33a7c2-e5ce-4b2d-a0a7-e04b2e5402e3")
+	)
+	(embedded_fonts no)
+)

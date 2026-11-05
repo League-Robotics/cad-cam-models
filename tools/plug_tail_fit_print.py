@@ -5,15 +5,16 @@
 # ///
 """Printed stand-ins for the 4P4C plug-tail PCBs (pcb/plug-tail), to try in a plug before cutting copper.
 
-    uv run tools/plug_tail_fit_print.py   ->  pcb/plug-tail/print/fit_test_plate.stl
+    uv run tools/plug_tail_fit_print.py [THICK ...]   ->  pcb/plug-tail/print/fit_test_plate.stl
 
 Each board's outline at full size with its copper (F.Cu: traces and pads) standing one 0.2 layer proud, so the
-pins can be laid on the pads. Printed at four thicknesses, measured to the top of the pads where the pins sit
-(real board: 1.4 FR-4 + 0.035 copper): which one slides in under the pins is the board stock to cut on.
-Notches in the +x edge, outside the plug, tell them apart: none = 1.4 (rev A), 1 = 1.2, 2 = 1.0, 3 = 0.8.
-Columns by thickness, servo tails in the back row, Qwiic tails in front; copper up, tongues pointing +y.
+pins can be laid on the pads. One of each board per thickness given (default 1.4, the stock), measured to the
+top of the pads where the pins sit (real board: 1.4 FR-4 + 0.035 copper). With several thicknesses, notches in
+the +x edge, outside the plug, tell them apart in the order given: none, 1, 2, 3 (rev A/B prints: 1.4, 1.2, 1.0, 0.8).
+Columns by thickness, header tails in the back row, Qwiic tails in front; copper up, tongues pointing +y.
 """
 import json
+import sys
 from pathlib import Path
 
 import manifold3d as m3
@@ -29,11 +30,11 @@ OUT = PT / 'print' / 'fit_test_plate.stl'
 DATA = json.loads((PT / 'exports' / 'layers.json').read_text())
 GEO = json.loads((PT / 'checks' / 'geometry.json').read_text())
 
-THICK = [1.4, 1.2, 1.0, 0.8]     # to the top of the pads
+THICK = [float(a) for a in sys.argv[1:]] or [1.4]   # to the top of the pads
 CU = 0.2                         # copper drawn one layer proud
 NOTCH = (0.5, 0.8)               # depth into the +x edge, length along it
 NOTCH_Y = [12.0, 13.5, 15.0]     # local y (from the tongue tip): on the wide part past the 10 tongue, clear of copper
-PITCH_X, ROW_Y = 14.0, {'servo-tail': 14.0, 'qwiic-tail': -14.0}
+PITCH_X, ROW_Y = 14.0, {'header-tail': 14.0, 'qwiic-tail': -14.0}
 
 
 def area(polys):
@@ -63,7 +64,7 @@ def main():
     for i, t in enumerate(THICK):
         for name, row in ROW_Y.items():
             L = GEO[name]['board_mm'][1]
-            parts.append(board(name, t, i).translate([(i - 1.5) * PITCH_X, row + L / 2, 0]))
+            parts.append(board(name, t, i).translate([(i - (len(THICK) - 1) / 2) * PITCH_X, row + L / 2, 0]))
     mesh = m3.Manifold.batch_boolean(parts, m3.OpType.Add).to_mesh()
     OUT.parent.mkdir(exist_ok=True)
     tm = trimesh.Trimesh(np.asarray(mesh.vert_properties)[:, :3], np.asarray(mesh.tri_verts))

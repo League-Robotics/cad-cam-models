@@ -2,7 +2,7 @@
  "status": "PASS",
  "boards": {
   "1": {
-   "name": "servo-tail",
+   "name": "header-tail",
    "cad_min_clearance_mm": 0.3212,
    "tab_necks_mm": [
     1.55,
@@ -15,7 +15,7 @@
    }
   },
   "2": {
-   "name": "servo-tail",
+   "name": "header-tail",
    "cad_min_clearance_mm": 0.3212,
    "tab_necks_mm": [
     1.55,
@@ -54,9 +54,9 @@
    }
   }
  },
- "program": "plug-tails-B-4up-iso120-cut155.nc",
- "program_sha256": "4daaf066aaccc0f17e51a50fe7307d63b1907f4325f2cb5be65e02e3d3812b58",
- "motion_minutes": 13.2,
+ "program": "plug-tails-C-4up-iso120-cut155.nc",
+ "program_sha256": "b6e9ad942d8df37f9766db9cbe2fcb6504309abb6b0b04b857c82b641c17f34e",
+ "motion_minutes": 13.9,
  "checks": [
   "Schematic netlists match the independent net table",
   "Front copper only, SMD only, no vias",

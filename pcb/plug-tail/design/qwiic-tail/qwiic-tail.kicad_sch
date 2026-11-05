@@ -1,5 +1,5 @@
 (kicad_sch (version 20250114) (generator "eeschema") (uuid 6226515f-1461-5405-937f-89842d1b1e12) (paper "A4")
- (title_block (title "Nezha 4P4C plug to Qwiic") (date "2026-11-04") (rev "B") (comment 1 "Front copper only. J1 pads are the plug contacts, left to right seen from the contact side, nose away."))
+ (title_block (title "Nezha 4P4C plug to Qwiic") (date "2026-11-04") (rev "C") (comment 1 "Front copper only. J1 pads are the plug contacts, left to right seen from the contact side, nose away."))
  (lib_symbols (symbol "PlugTail:Conn2" (pin_names (offset 1.016) hide) (in_bom yes) (on_board yes)
  (property "Reference" "J" (at 0 5.08 0) (effects (font (size 1.27 1.27))))
  (property "Value" "Conn2" (at 0 2.54 0) (effects (font (size 1.27 1.27))))

@@ -22,13 +22,16 @@ IO = p.PCB_IO_KICAD_SEXPR()
 KLIB = '/usr/share/kicad/footprints'
 
 VARIANTS = {
-    'servo-tail': dict(
-        title='Nezha 4P4C plug to servo pins', width=8.0, length=19.0,
-        plug=['GND', 'VS', 'SIG', None],
-        parts={'J2': ('FlatPins_1x03_P2.54_SMD', 'SERVO G V S', (0, 16.2), 0, ['GND', 'VS', 'SIG'])},
-        tracks=[('GND', [(-1.53, 6.725), (-1.53, 11), (-2.54, 12.01), (-2.54, 16.2)]),
-                ('VS', [(-.51, 6.725), (-.51, 11), (0, 11.51), (0, 16.2)]),
-                ('SIG', [(.51, 6.725), (.51, 11), (2.54, 13.03), (2.54, 16.2)])]),
+    # rev C (the user, 2026-11-04): all four lines out on four 2.54 pins, in contact order; a servo plug goes on
+    # G V S1, a J-port device uses all four. 10 wide: four 1.0 pads at 2.54 pitch plus edge clearance.
+    'header-tail': dict(
+        title='Nezha 4P4C plug to four header pins', width=10.0, length=19.0,
+        plug=['GND', 'VCC', 'S1', 'S2'],
+        parts={'J2': ('FlatPins_1x04_P2.54_SMD', 'HEADER G V S1 S2', (0, 16.2), 0, ['GND', 'VCC', 'S1', 'S2'])},
+        tracks=[('GND', [(-1.53, 6.725), (-1.53, 11), (-3.81, 13.28), (-3.81, 16.2)]),
+                ('VCC', [(-.51, 6.725), (-.51, 11), (-1.27, 11.76), (-1.27, 16.2)]),
+                ('S1', [(.51, 6.725), (.51, 11), (1.27, 11.76), (1.27, 16.2)]),
+                ('S2', [(1.53, 6.725), (1.53, 11), (3.81, 13.28), (3.81, 16.2)])]),
     'qwiic-tail': dict(
         title='Nezha 4P4C plug to Qwiic', width=9.0, length=24.0,
         plug=['GND', '+3V3', 'SCL', 'SDA'],
@@ -72,8 +75,8 @@ def libraries(lib):
     w, y1, y2 = PLUG_PAD
     IO.FootprintSave(str(lib), smd_row('PlugPins_1x04_P1.02_SMD', 4, PIN_PITCH, w, y2 - y1, (y1 + y2) / 2,
                                        'Four 0.64 mm square pins lying flat, as they leave a 4P4C plug; origin at the tongue tip'))
-    IO.FootprintSave(str(lib), smd_row('FlatPins_1x03_P2.54_SMD', 3, 2.54, 1.0, 5.0, 0,
-                                       'Three 0.64 mm square pins lying flat, overhanging the board end for a servo plug'))
+    IO.FootprintSave(str(lib), smd_row('FlatPins_1x04_P2.54_SMD', 4, 2.54, 1.0, 5.0, 0,
+                                       'Four 0.64 mm square pins lying flat, overhanging the board end for a header plug'))
     sh = p.FootprintLoad(f'{KLIB}/Connector_JST.pretty', 'JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal')
     sh.SetFPID(p.LIB_ID('PlugTail', 'JST_SH_SM04B-SRSS-TB_Horizontal'))
     for a in sh.Pads():
@@ -88,7 +91,7 @@ def build(name, spec):
     W, L = spec['width'], spec['length']; X0 = O + W / 2
     def k(x, y): return v(X0 + x, O + y)
     board = p.BOARD(); ds = board.GetDesignSettings(); ds.SetBoardThickness(p.FromMM(1.4)); ds.SetAuxOrigin(v(O, O))
-    tb = board.GetTitleBlock(); tb.SetTitle(spec['title']); tb.SetRevision('B'); tb.SetDate('2026-11-04')
+    tb = board.GetTitleBlock(); tb.SetTitle(spec['title']); tb.SetRevision('C'); tb.SetDate('2026-11-04')
     names = sorted({n for n in spec['plug'] if n} | {n for *_, ns in spec['parts'].values() for n in ns})
     nets = {}
     for n in names:
@@ -155,7 +158,7 @@ def schematic(name, spec, parts, out):
     (out / 'PlugTail.kicad_sym').write_text('(kicad_symbol_lib (version 20241209) (generator "kicad_symbol_editor")\n' + '\n'.join(symbol(n) for n in sizes) + '\n)')
     sheet = uid(name + 'sheet')
     s = [f'''(kicad_sch (version 20250114) (generator "eeschema") (uuid {sheet}) (paper "A4")
- (title_block (title {q(spec["title"])}) (date "2026-11-04") (rev "B") (comment 1 "Front copper only. J1 pads are the plug contacts, left to right seen from the contact side, nose away."))
+ (title_block (title {q(spec["title"])}) (date "2026-11-04") (rev "C") (comment 1 "Front copper only. J1 pads are the plug contacts, left to right seen from the contact side, nose away."))
  (lib_symbols {" ".join(symbol(n, "PlugTail:") for n in sizes)})''']
     for col, (ref, (fn, value, _, _, pinnets)) in enumerate(parts.items()):
         x, y = 63.5 + col * 63.5, 63.5
