@@ -16,9 +16,9 @@
 #   view/battery_frame.html      the 6 x 6 x 11 LEGO frame round the USB battery: two halves (one print twice), 2L pins
 #   view/tilt_table.html         the friction tilt table: two 5 x 5 plates hinged on snap-together triangles; the Tilt slider tilts it
 #   view/pi_frame.html           the open frame round a Raspberry Pi 4: base with the weld posts, two windows, top bars
-#   view/laser_cam_mount.html    two Arducams and a line laser under the Carvera camera bracket's cap
 #   view/plug_tail.html          the 4P4C plug-tail PCBs, a checkbox per layer (tools/plug_tail_view.py)
 #   view/l_bracket.html          the 5 x 5 LEGO L bracket, 2L pins in a few holes
+#   view/usb_hub_rack.html       the Waveshare USB hub hung on the Carvera PSU's back face: plate with six slide-down hooks, angle over the PSU top
 #   view/cutebot_cage.html       LEGO cage round the Cutebot Pro (v3): a closed ring of bulkheads, skirts and front wall, decks over the wheels and the front; robot stand-in from the scan
 # Usage: bash tools/make_views.sh [view ...]   (default: all; add --open to open them)
 #
@@ -33,7 +33,7 @@ S="openscad --backend=manifold --export-format=binstl"
 one() { $S -o "$T/$1.stl" "${@:2}" 2>&1 | grep -iE '^error|warning:' || true; }
 open_=0; views=()
 for a in "$@"; do [ "$a" = --open ] && open_=1 || views+=("$a"); done
-[ ${#views[@]} -eq 0 ] && views=(servo9g nezha plate front plates robot_level robot_low robot_front cutebot tiltpan brickframe tilttable batteryframe piframe lasercam plugtail lbracket cutebotcage)
+[ ${#views[@]} -eq 0 ] && views=(servo9g nezha plate front plates robot_level robot_low robot_front cutebot tiltpan brickframe tilttable batteryframe piframe plugtail lbracket cutebotcage usbhub)
 
 for v in "${views[@]}"; do case $v in
 servo9g)
@@ -184,12 +184,6 @@ piframe)
     "Base (weld posts)=$T/pf_base.stl:#3cb371" "+y window=$T/pf_window_a.stl:#f29a00" "-y window=$T/pf_window_b.stl:#4169e1" \
     "Top bars=$T/pf_top_bars.stl:#2e8b57" "2L pins=$T/pf_pins.stl:#333333" "+Raspberry Pi 4=$T/pf_pi.stl:#1f7a3a"
   [ $open_ = 1 ] && open -a "Google Chrome" view/pi_frame.html ;;
-lasercam)
-  for c in mount bracket cameras laser; do one lc_$c -D 'part="assembly"' -D "show=\"$c\"" scad/laser_cam_mount.scad & done; wait
-  python3 tools/mockup_html.py view/laser_cam_mount.html "Two Arducams and a line laser on the Carvera, with their bracket" \
-    "+Mount=$T/lc_mount.stl:#3b7dd8" "+Bracket (new)=$T/lc_bracket.stl:#888888" \
-    "+Cameras (stand-ins)=$T/lc_cameras.stl:#1f7a3a" "+Laser=$T/lc_laser.stl:#c9a227"
-  [ $open_ = 1 ] && open -a "Google Chrome" view/laser_cam_mount.html ;;
 plugtail)
   uv run tools/plug_tail_view.py
   [ $open_ = 1 ] && open -a "Google Chrome" view/plug_tail.html ;;
@@ -210,6 +204,12 @@ cutebotcage)
     "M3 screws=$T/cc_screws.stl:#7f8c8d" "2L pins=$T/cc_pins.stl:#222222" "EV3 ball caster=$T/cc_caster.stl:#444444" \
     "Cutebot Pro (scan stand-in)=$T/cc_robot.stl:#dddddd:0.6"
   [ $open_ = 1 ] && open -a "Google Chrome" view/cutebot_cage.html ;;
-*) echo "unknown view $v (servo9g, nezha, plate, front, plates, robot_level, robot_low, robot_front, cutebot, tiltpan, brickframe, tilttable, batteryframe, piframe, lasercam, plugtail, lbracket, cutebotcage)"; exit 1 ;;
+usbhub)
+  for c in plate angle hub psu panel; do one uh_$c -D "part=\"$c\"" scad/usb_hub_rack.scad & done; wait
+  python3 tools/mockup_html.py view/usb_hub_rack.html "USB hub rack on the Carvera PSU (Lift raises the hub off its hooks)" \
+    "Plate=$T/uh_plate.stl:#3b7dd8" "Angle=$T/uh_angle.stl:#f29a00" "+USB hub (stand-in)=$T/uh_hub.stl:#333333:0.85" \
+    "Power supply=$T/uh_psu.stl:#b0b0b0:0.5" "-Back panel=$T/uh_panel.stl:#c0392b:0.25"
+  [ $open_ = 1 ] && open -a "Google Chrome" view/usb_hub_rack.html ;;
+*) echo "unknown view $v (servo9g, nezha, plate, front, plates, robot_level, robot_low, robot_front, cutebot, tiltpan, brickframe, tilttable, batteryframe, piframe, plugtail, lbracket, cutebotcage, usbhub)"; exit 1 ;;
 esac; done
 rm -rf "$T"

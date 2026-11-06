@@ -54,6 +54,10 @@ below on the 8 mm cell grid, for marking up changes.
 
 ## Sources
 
+Carvera parts are moving to `/Volumes/Proj/proj/robot-projects/carvera/design/`
+(read its `AGENTS.md`). The camera bracket (was `carvera_angle.scad`) and the
+two-camera laser mount (was `laser_cam_mount.scad`) moved there on 2026-11-06.
+
 `scad/` holds the OpenSCAD sources:
 
 | File | What |
