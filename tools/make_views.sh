@@ -18,8 +18,8 @@
 #   view/pi_frame.html           the open frame round a Raspberry Pi 4: base with the weld posts, two windows, top bars
 #   view/plug_tail.html          the 4P4C plug-tail PCBs, a checkbox per layer (tools/plug_tail_view.py)
 #   view/l_bracket.html          the 5 x 5 LEGO L bracket, 2L pins in a few holes
-#   view/usb_hub_rack.html       the Waveshare USB hub hung on the Carvera PSU's back face: plate with six slide-down hooks, angle over the PSU top
 #   view/cutebot_cage.html       LEGO cage round the Cutebot Pro (v3): a closed ring of bulkheads, skirts and front wall, decks over the wheels and the front; robot stand-in from the scan
+#   view/tt_case_3.html, tt_case_5.html  LEGO cases for the Red TT motor, 3 and 5 units high, on the 11 x 19 plates
 # Usage: bash tools/make_views.sh [view ...]   (default: all; add --open to open them)
 #
 # How it works: each assembly .scad has a `show` parameter ("all" or one
@@ -33,7 +33,7 @@ S="openscad --backend=manifold --export-format=binstl"
 one() { $S -o "$T/$1.stl" "${@:2}" 2>&1 | grep -iE '^error|warning:' || true; }
 open_=0; views=()
 for a in "$@"; do [ "$a" = --open ] && open_=1 || views+=("$a"); done
-[ ${#views[@]} -eq 0 ] && views=(servo9g nezha plate front plates robot_level robot_low robot_front cutebot tiltpan brickframe tilttable batteryframe piframe plugtail lbracket cutebotcage usbhub)
+[ ${#views[@]} -eq 0 ] && views=(servo9g nezha plate front plates robot_level robot_low robot_front cutebot tiltpan brickframe tilttable batteryframe piframe plugtail lbracket cutebotcage ttcase)
 
 for v in "${views[@]}"; do case $v in
 servo9g)
@@ -204,12 +204,14 @@ cutebotcage)
     "M3 screws=$T/cc_screws.stl:#7f8c8d" "2L pins=$T/cc_pins.stl:#222222" "EV3 ball caster=$T/cc_caster.stl:#444444" \
     "Cutebot Pro (scan stand-in)=$T/cc_robot.stl:#dddddd:0.6"
   [ $open_ = 1 ] && open -a "Google Chrome" view/cutebot_cage.html ;;
-usbhub)
-  for c in plate angle hub psu panel; do one uh_$c -D "part=\"$c\"" scad/usb_hub_rack.scad & done; wait
-  python3 tools/mockup_html.py view/usb_hub_rack.html "USB hub rack on the Carvera PSU (Lift raises the hub off its hooks)" \
-    "Plate=$T/uh_plate.stl:#3b7dd8" "Angle=$T/uh_angle.stl:#f29a00" "+USB hub (stand-in)=$T/uh_hub.stl:#333333:0.85" \
-    "Power supply=$T/uh_psu.stl:#b0b0b0:0.5" "-Back panel=$T/uh_panel.stl:#c0392b:0.25"
-  [ $open_ = 1 ] && open -a "Google Chrome" view/usb_hub_rack.html ;;
-*) echo "unknown view $v (servo9g, nezha, plate, front, plates, robot_level, robot_low, robot_front, cutebot, tiltpan, brickframe, tilttable, batteryframe, piframe, plugtail, lbracket, cutebotcage, usbhub)"; exit 1 ;;
+ttcase)
+  for n in 3 5; do
+    for c in body cap motor plates; do one ttc${n}_$c -D "cells=$n" -D "part=\"$c\"" scad/tt_motor_case.scad & done; wait
+    python3 tools/mockup_html.py view/tt_case_$n.html "TT motor case, $n units high" \
+      "Case=$T/ttc${n}_body.stl:#3f73c4" "Cap=$T/ttc${n}_cap.stl:#e67e22" \
+      "Red TT motor=$T/ttc${n}_motor.stl:#d94040" "11 x 19 plates=$T/ttc${n}_plates.stl:#bbbbbb:0.35"
+  done
+  [ $open_ = 1 ] && open -a "Google Chrome" view/tt_case_3.html ;;
+*) echo "unknown view $v (servo9g, nezha, plate, front, plates, robot_level, robot_low, robot_front, cutebot, tiltpan, brickframe, tilttable, batteryframe, piframe, plugtail, lbracket, cutebotcage)"; exit 1 ;;
 esac; done
 rm -rf "$T"
