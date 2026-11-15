@@ -31,12 +31,15 @@ Eric chose the BUTT one on 2026-11-14 ("B, butted edge-on"):
                     in ring pads; it needed 3.3 mm of free board behind the
                     pad edge, which the STEP model does not promise.
 The case (robot-projects/watch-display, case/) extends past the pad edge
-and encloses the whole tail and jack (66.8 mm end to end): a 24.4-wide slot
-in the pad-edge wall from 1.7 above to 1.5 below the PCB's back face, a
-pocket 0.5 round the jack body, and a plug opening in its end wall of
-11.8 x 15.3 (0.3 beyond the jack each side, from 0.3 above the copper face
-to 1.0 beyond the jack's top, so the latch is clear), centred on the jack. The case was built from this
-tail's numbers on 2026-11-14; if the tail changes, tell that project.
+and encloses the whole tail and jack (66.8 mm end to end). Since the
+evening of 2026-11-14 it is a one-piece body (LEGO plate on the back,
+open at the front) with a snap-on front bezel: the extension is a
+front-loading well under the tail, the tail passes through a 24.4-wide
+gap in the ledge and inner wall, the jack sits in its own well, and the
+plug opening in the end wall is 11.8 x 15.3 (0.3 beyond the jack each
+side, from 0.3 above the copper face to 1.0 beyond the jack's top, so the
+latch is clear), centred on the jack. The case was built from this tail's
+numbers; if the tail changes, tell that project.
 
 WIRING (netlist checked by scripts/check_and_draw.py against this table)
  Net       J1 jack contact  Display pad (J2 pin)  Display function (UART)      Robot side (Nezha J2)

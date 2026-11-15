@@ -19,6 +19,7 @@
 #   view/plug_tail.html          the 4P4C plug-tail PCBs, a checkbox per layer (tools/plug_tail_view.py)
 #   view/l_bracket.html          the 5 x 5 LEGO L bracket, 2L pins in a few holes
 #   view/cutebot_cage.html       LEGO cage round the Cutebot Pro (v3): a closed ring of bulkheads, skirts and front wall, decks over the wheels and the front; robot stand-in from the scan
+#   view/huskylens_case.html     LEGO tray for the HuskyLens (the Robot Garage viewer, tools/viewer3d: On / Ghost / Off, Explode, Section)
 #   view/tt_case_3.html, tt_case_5.html  LEGO cases for the Red TT motor, 3 and 5 units high, on the 11 x 19 plates
 # Usage: bash tools/make_views.sh [view ...]   (default: all; add --open to open them)
 #
@@ -33,7 +34,7 @@ S="openscad --backend=manifold --export-format=binstl"
 one() { $S -o "$T/$1.stl" "${@:2}" 2>&1 | grep -iE '^error|warning:' || true; }
 open_=0; views=()
 for a in "$@"; do [ "$a" = --open ] && open_=1 || views+=("$a"); done
-[ ${#views[@]} -eq 0 ] && views=(servo9g nezha plate front plates robot_level robot_low robot_front cutebot tiltpan brickframe tilttable batteryframe piframe plugtail lbracket cutebotcage ttcase)
+[ ${#views[@]} -eq 0 ] && views=(servo9g nezha plate front plates robot_level robot_low robot_front cutebot tiltpan brickframe tilttable batteryframe piframe plugtail lbracket cutebotcage ttcase huskylens)
 
 for v in "${views[@]}"; do case $v in
 servo9g)
@@ -187,6 +188,12 @@ piframe)
 plugtail)
   uv run tools/plug_tail_view.py
   [ $open_ = 1 ] && open -a "Google Chrome" view/plug_tail.html ;;
+huskylens)
+  mkdir -p "$T/hl"
+  for c in case board parts screws; do $S -o "$T/hl/$c.stl" -D 'part="assembly"' -D "show=\"$c\"" scad/huskylens_case.scad 2>&1 | grep -iE '^error|warning:' || true & done; wait
+  sed "s|@STL@|$T/hl|" tools/viewer3d/huskylens_case.json > "$T/hl/config.json"
+  uv run -q --with numpy python tools/viewer3d/pack.py "$T/hl/config.json" view/huskylens_case.html
+  [ $open_ = 1 ] && open -a "Google Chrome" view/huskylens_case.html ;;
 lbracket)
   for c in bracket pins; do one lb_$c -D "part=\"$c\"" scad/l_bracket.scad & done; wait
   python3 tools/mockup_html.py view/l_bracket.html "5 x 5 LEGO L bracket: holes the whole unit, 1 mm skin inside" \

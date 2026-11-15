@@ -1,0 +1,21 @@
+{
+  "title": "HuskyLens LEGO tray (first draft)",
+  "sub": "One print. The board drops in screen up, camera through the back, and two M3 screws through its tab hold it. Pin holes in the two columns and the bar under the tab.",
+  "stl_dir": "@STL@",
+  "size_of": ["case"],
+  "size_note": "tray outside (across × tall × deep)",
+  "axes": [["x", "across, left to right as you look at the screen; 0 the centre line"], ["y", "up the board; the tab and both cables at −y, the buttons at +y"], ["z", "front to back; 0 the tray's back face (the bed), the screen faces +z"]],
+  "ends": ["USB side", "SD side"],
+  "groups": [
+    {"name": "Print", "items": [
+      {"id": "case", "label": "Tray", "note": "Columns 5 × 1 holes each, bar 3 × 2 under the tab, floor with the camera notch", "move": -1, "meshes": [["case", "#e8c547"]]}
+    ]},
+    {"name": "HuskyLens (GrabCAD model)", "items": [
+      {"id": "board", "label": "Board, screen, camera", "note": "52 × 44.5 with the tab; screen up, camera down", "move": 1, "meshes": [["board", "#27456e"]]},
+      {"id": "parts", "label": "Buttons and sockets", "note": "Dial and learn button on top, USB and UART out of the bottom, SD on the right", "move": 1, "meshes": [["parts", "#b9bec4"]]}
+    ]},
+    {"name": "Hardware", "items": [
+      {"id": "screws", "label": "M3 screws", "note": "2 × M3 × 8 through the tab into heat-set inserts (or bolts and nuts)", "move": 1, "meshes": [["screws", "#6f767d"]]}
+    ]}
+  ]
+}

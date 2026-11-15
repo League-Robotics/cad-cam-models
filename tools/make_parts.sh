@@ -21,6 +21,7 @@
 #   grippers/brick_frame     the cage round the Nezha brick (2026-11-02): plate (all four pieces on one
 #                            bed), side_j, side_iic, end_bar (print two), each on its outer face;
 #                            11 2L pins to put it together
+#   grippers/huskylens_case  the LEGO tray for the HuskyLens (2026-11-14): one print, back face down
 #   grippers/pi_frame        the open frame round a Raspberry Pi (2026-11-03): plate (all five pieces on
 #                            one bed), base (with the weld posts), window (print two), top_bar (print
 #                            two); 8 2L pins
@@ -30,7 +31,7 @@ cd "$(dirname "$0")/.."
 S="openscad --backend=manifold"
 out() { mkdir -p "grippers/$1"; echo "grippers/$1/$2.stl"; $S -o "grippers/$1/$2.stl" "${@:3}" 2>&1 | grep -iE '^error|warning:' || true; }
 
-sets=${*:-"arms nezha servo_standard servo_9g extensions plates block_gripper tilt_table brick_frame pi_frame"}
+sets=${*:-"arms nezha servo_standard servo_9g extensions plates block_gripper tilt_table brick_frame pi_frame huskylens_case"}
 for s in $sets; do case $s in
 arms)   # one copy for every set, at the servo sets' smoothness
   out arms left_arm -D 'part="nub_print"' -D side=-1 -D '$fn=72' scad/swap_gripper.scad
@@ -65,6 +66,8 @@ tilt_table)
 brick_frame)
   out brick_frame plate -D 'part="print"' -D '$fn=64' scad/brick_frame.scad
   for p in side_j side_iic end_bar; do out brick_frame $p -D "part=\"print_$p\"" -D '$fn=64' scad/brick_frame.scad; done ;;
+huskylens_case)
+  out huskylens_case huskylens_case -D 'part="print"' -D '$fn=64' scad/huskylens_case.scad ;;
 pi_frame)
   out pi_frame plate -D 'part="print"' -D '$fn=64' scad/pi_frame.scad
   for p in base window top_bar; do out pi_frame $p -D "part=\"print_$p\"" -D '$fn=64' scad/pi_frame.scad; done ;;
