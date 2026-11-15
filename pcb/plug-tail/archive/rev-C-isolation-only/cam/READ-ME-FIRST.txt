@@ -1,0 +1,32 @@
+NEZHA PLUG TAILS A - ORIGINAL SIX-SLOT CARVERA - 1.4 mm PCB
+
+plug-tails-A-4up-iso120-cut155.nc cuts boards 1-2 (servo) and 3-4 (Qwiic).
+See strip-layout.pdf.
+
+Check the assumptions in ../README.txt first (servo pinout, pin pitch,
+cavity height and depth). A changed constant means regenerating this file.
+
+1. Single-sided 1.4 mm PCB, COPPER FACING UP, on a flat backer with firm,
+   even, full-area tape. Nothing is mirrored.
+2. Needs a free area at least 49 mm in X by 25 mm in Y. Set G54 X0 Y0 at
+   that area's lower-left corner and Z0 on the copper. The tongues point +Y.
+   The cutter reaches about 0.4 mm outside each board, nowhere outside the
+   area.
+3. ATC SLOT 2: 30-degree V-bit, 0.2 mm tip (isolation).
+   ATC SLOT 3: 0.8 mm corn bit (outlines). No holes are drilled.
+4. Fresh Auto Z and Auto Leveling over the area (about X2.5..46.5,
+   Y2.5..22.5), e.g. a 6 x 4 matrix, 2 mm lift.
+5. The program isolates all four boards, changes tool once, then cuts the
+   outlines.
+
+SETTINGS
+12,000 RPM, 300 mm/min XY, 100 mm/min plunges. Isolation Z -0.12
+(nominal V-bit width 0.264 mm). Outline Z -1.55 in 0.25 mm steps, climb
+direction. Three tabs per board (both long sides of the wide part and the
+tail end), 1.5 mm wide, leaving 0.5 mm; none on the tongue. File the tab
+stubs flush, and deburr the tongue so it slides into the plug.
+Pads on the tongue have 0.40 mm gaps; confirm the isolation is clean there
+with a loupe and a meter before soldering.
+
+Offline checks only (validation.json); not test-cut. Motion time about
+11 minutes, excluding probing and tool change.

@@ -1,0 +1,55 @@
+{
+ "status": "PASS",
+ "boards": {
+  "display-tail-butt/1": {
+   "cad_min_clearance_mm": 0.4,
+   "copper_left_mm2": 83.102,
+   "cad_copper_mm2": 83.029,
+   "tab_necks_mm": [
+    1.5,
+    1.5,
+    1.55
+   ],
+   "min_z": {
+    "1": -0.12,
+    "2": -0.1,
+    "3": -1.55
+   },
+   "holes": 0
+  },
+  "display-tail-butt/2": {
+   "cad_min_clearance_mm": 0.4,
+   "copper_left_mm2": 83.102,
+   "cad_copper_mm2": 83.029,
+   "tab_necks_mm": [
+    1.5,
+    1.5,
+    1.55
+   ],
+   "min_z": {
+    "1": -0.12,
+    "2": -0.1,
+    "3": -1.55
+   },
+   "holes": 0
+  }
+ },
+ "programs": {
+  "display-tail-butt": {
+   "program": "display-tail-butt-A-2up-clear-cut155.nc",
+   "sha256": "31e5fcf180ad41465c659d677240fd97171a3b938008d463489d13f68819841c",
+   "motion_minutes": 19.6
+  }
+ },
+ "checks": [
+  "Schematic netlist matches the independent net table (J1 1-4 = GND 3V3 DISP_TX DISP_RX; J2 G 3V3 18 17)",
+  "Front copper only, no vias; solder holes have no back copper",
+  "Every net one piece in CAD; clearance at least 0.30 mm; copper 0.2 mm inside the outline",
+  "Replayed V-bit, flat and corn sweeps leave every pad and track undamaged, every net whole and no two nets joined; holes cut through",
+  "All spare copper cleared: no floating copper, each net no more than 0.15 mm2 bigger than in CAD",
+  "Vacuum: M851 S100 right after every M3, M852 right after every M5",
+  "Each board has exactly 3 tabs of 1.5 mm, none on the display edge",
+  "Bounded feeds and depths, safe rapids, spindle on for every cut, tools T4 (V-bit), T3 (1 mm flat), T5 (0.8 corn)"
+ ],
+ "limits": "Offline geometry only. The display pad positions, the flex and the parts near its edge are from Waveshare drawings and the STEP model, not measured; not test-cut."
+}

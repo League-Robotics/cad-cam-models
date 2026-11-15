@@ -5,6 +5,7 @@ This folder holds the PCBs milled on the Carvera; each board has its own folder 
 - This top level: the Nezha 4P4C jack to Qwiic adapter, revision B (below).
 - [wire-hub/](wire-hub/README.txt): Nezha cable wires to 2.54 mm, JST PH and Qwiic connectors.
 - [plug-tail/](plug-tail/README.txt): boards that slide into the back of a 4P4C plug, for servos and Qwiic.
+- [display-tail/](display-tail/README.txt): a 4P4C jack that solders onto the back pads of the Waveshare ESP32-S3-Touch-LCD-1.69 robot display, butted edge-on with four flat pins (designed and checked 2026-11-14, not cut; the lapped variant is archived there).
 
 # Nezha 4P4C to Qwiic adapter — revision B
 

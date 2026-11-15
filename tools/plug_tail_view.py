@@ -8,7 +8,7 @@
     uv run tools/plug_tail_view.py [--open]   ->  view/plug_tail.html
 
 Layers come from pcb/plug-tail/exports/layers.json (scripts/dump_layers.py on Buzzkill, from the saved KiCad
-boards); the milling from the Carvera program itself (boards 1 and 3 of cam/plug-tails-*.nc, mapped back through
+boards); the milling from the Carvera program itself (boards 1 and 3 of cam/plug-tails-*.nc, tools from cam/job.json, mapped back through
 cam/job.json's placements). Header tail on the left, Qwiic tail on the right, tongues pointing +y into the plug.
 
 Thin layers are drawn thicker than they are so they show: copper 0.035 -> 0.05, mask/paste/silk 0.02-0.05.
@@ -104,7 +104,7 @@ def nc_moves():
 
 def build(t):
     runs = nc_moves()
-    meshes = {k: [] for k in ('board', 'cu', 'iso', 'outline', 'mask', 'paste', 'silk', 'fab', 'crtyd', 'edge',
+    meshes = {k: [] for k in ('board', 'cu', 'cad_cu', 'iso', 'flat', 'outline', 'mask', 'paste', 'silk', 'fab', 'crtyd', 'edge',
                               'pins', 'parts', 'plug', 'servo_plug')}
     for name, d in DATA.items():
         T = d['thickness']
@@ -113,7 +113,7 @@ def build(t):
         W, Lb = GEO[name]['board_mm'][:2]
         top = T + CU
         meshes['board'].append(slab(outline, 0, T))
-        meshes['cu'].append(slab(lay['F.Cu'], T, top))
+        meshes['cad_cu'].append(slab(lay['F.Cu'], T, top))
         meshes['mask'].append(slab(outline.difference(lay['F.Mask']), top, top + .03))
         meshes['paste'].append(slab(lay['F.Paste'], top, top + .06))
         meshes['silk'].append(slab(lay['F.SilkS'], top + .03, top + .05))
@@ -124,11 +124,17 @@ def build(t):
         # milling, from the program: machine -> local -> viewer
         pl = next(p for p in JOB['placements'] if p['id'] == NC_BOARD[name])
         def loc(pts): return [(x - pl['x'] - W / 2, pl['y'] + Lb - y) for x, y in pts]
-        iso = unary_union([LineString(loc(p)).buffer(JOB['isolation']['effective_diameter_mm'] / 2)
-                           for z, p in runs[(NC_BOARD[name], 2)] if len(p) > 1])
-        meshes['iso'].append(slab(world(iso, name), T + min(z for z, _ in runs[(NC_BOARD[name], 2)]), top + .02))
+        tv, tf, to = (JOB['tools'][k]['slot'] for k in ('v', 'flat', 'outline'))
+        def swept(tool, r):
+            return unary_union([LineString(loc(p)).buffer(r) for z, p in runs[(NC_BOARD[name], tool)] if len(p) > 1])
+        iso = swept(tv, JOB['tools']['v']['effective_diameter_mm'] / 2)
+        flat = swept(tf, JOB['tools']['flat']['diameter_mm'] / 2)
+        meshes['iso'].append(slab(world(iso, name), T + JOB['tools']['v']['z_mm'], top + .02))
+        meshes['flat'].append(slab(world(flat.difference(iso), name), T + JOB['tools']['flat']['z_mm'], top + .01))
+        # the copper the program leaves: the board's face minus every top cut
+        meshes['cu'].append(slab(world(Polygon(GEO[name]['outline']).difference(iso).difference(flat), name), T, top))
         by_z = {}
-        for z, p in runs[(NC_BOARD[name], 3)]:
+        for z, p in runs[(NC_BOARD[name], to)]:
             if len(p) > 1:
                 by_z.setdefault(z, []).append(LineString(loc(p)).buffer(JOB['cutter_mm'] / 2))
         meshes['outline'] += [slab(world(unary_union(g), name), T + z, top + .02) for z, g in by_z.items()]
@@ -183,13 +189,15 @@ def main():
         f = build(Path(tmp))
         specs = [
             f"Board, FR-4 1.4={f['board']}:#d9c7a0",
-            f"F.Cu copper={f['cu']}:#c87533",
-            f"Isolation cuts, V-bit (from the NC)={f['iso']}:#3a2a1a",
-            f"Outline cuts, 0.8 bit with tabs (from the NC)={f['outline']}:#ff8c1a:0.35",
+            f"Copper left after milling (from the NC)={f['cu']}:#d4823a",
+            f"-F.Cu as drawn in KiCad={f['cad_cu']}:#c87533",
+            f"T4 V-bit cuts: round pads and tracks, narrow gaps={f['iso']}:#3a2a1a",
+            f"T3 1 mm flat: open copper cleared={f['flat']}:#a89068",
+            f"T5 0.8 corn: outline with tabs={f['outline']}:#ff8c1a:0.35",
             f"Edge.Cuts={f['edge']}:#e0002a",
             f"-F.Mask (not on milled boards)={f['mask']}:#1f8a3a:0.45",
             f"-F.Paste={f['paste']}:#b8bcc0",
-            f"F.Silkscreen={f['silk']}:#ffffff",
+            f"-F.Silkscreen (not on milled boards)={f['silk']}:#ffffff",
             f"-F.Fab={f['fab']}:#7a5cc0",
             f"-F.Courtyard={f['crtyd']}:#e040e0",
             f"Pins, 0.64 square={f['pins']}:#d4d8dc",
@@ -199,7 +207,7 @@ def main():
         ]
         OUT.parent.mkdir(exist_ok=True)
         subprocess.run([sys.executable, str(ROOT / 'tools' / 'mockup_html.py'), str(OUT),
-                        f"Nezha 4P4C plug tails rev {JOB['revision']}: header (left), Qwiic (right)", *specs], check=True)
+                        f"Nezha 4P4C plug tails rev {JOB['revision']}, all spare copper cleared: header (left), Qwiic (right)", *specs], check=True)
     print(OUT)
     if '--open' in sys.argv:
         subprocess.run(['open', '-a', 'Google Chrome', str(OUT)])

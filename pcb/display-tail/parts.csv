@@ -1,0 +1,4 @@
+board,reference,quantity,manufacturer,part_number,description,notes
+display-tail-butt,J1,1,Amphenol,73306-111LF,4P4C right-angle latch-up SMT modular jack,Stock part; Mouser 649-73306-111LF; same footprint as the rev B adapter
+display-tail-butt,P1,4,,,0.64 mm square header pin 7 mm long,User's stock; lies flat along the tail pad and the display pad
+display-tail-butt,,1,Waveshare,ESP32-S3-Touch-LCD-1.69,The display this tail solders to,Not part of the board

@@ -1,7 +1,7 @@
 {
  "name": "nezha-plug-tails",
  "revision": "C",
- "program": "plug-tails-C-4up-iso120-cut155.nc",
+ "program": "plug-tails-C-clear-4up-cut155.nc",
  "area_mm": [
   53.0,
   30.0
@@ -33,9 +33,36 @@
   }
  ],
  "stock_thickness_mm": 1.4,
+ "safe_z_mm": 5.0,
+ "tools": {
+  "v": {
+   "slot": 4,
+   "tool": "30 deg V-bit, 0.2 mm tip",
+   "z_mm": -0.12,
+   "effective_diameter_mm": 0.2643,
+   "passes_round_copper": 2,
+   "pass_step_mm": 0.15,
+   "rest_step_mm": 0.18
+  },
+  "flat": {
+   "slot": 3,
+   "tool": "1.0 mm flat end mill",
+   "z_mm": -0.1,
+   "diameter_mm": 1.0,
+   "stepover_mm": 0.45,
+   "edge_to_copper_mm": 0.3
+  },
+  "outline": {
+   "slot": 5,
+   "tool": "0.8 mm corn cutter",
+   "diameter_mm": 0.8,
+   "through_z_mm": -1.55,
+   "stepdown_mm": 0.25
+  }
+ },
  "isolation": {
   "depth_mm": 0.12,
-  "effective_diameter_mm": 0.26430780618346944,
+  "effective_diameter_mm": 0.2643,
   "tip_mm": 0.2,
   "angle_deg": 30
  },
@@ -81,6 +108,42 @@
      null
     ]
    ]
+  }
+ },
+ "feeds": {
+  "rpm": 12000,
+  "feed_mm_min": 300,
+  "plunge_mm_min": 100
+ },
+ "vacuum": "M851 S100 after every M3, M852 after every M5",
+ "path_mm": {
+  "header-tail": {
+   "v_iso": 264.4,
+   "v_rest": 247.1,
+   "flat": 24.9
+  },
+  "qwiic-tail": {
+   "v_iso": 296.0,
+   "v_rest": 150.7,
+   "flat": 105.3
+  }
+ },
+ "clearing_checks": {
+  "header-tail": {
+   "copper_hit_by_v_mm2": 0.0,
+   "copper_hit_by_flat_mm2": 0.0,
+   "flat_nearest_copper_mm": 0.299,
+   "inside_corner_fillets": 24,
+   "largest_fillet_mm2": 0.00377,
+   "floating_copper_bits": 0
+  },
+  "qwiic-tail": {
+   "copper_hit_by_v_mm2": 0.0,
+   "copper_hit_by_flat_mm2": 0.0,
+   "flat_nearest_copper_mm": 0.299,
+   "inside_corner_fillets": 27,
+   "largest_fillet_mm2": 0.00377,
+   "floating_copper_bits": 0
   }
  },
  "transform": "machineX = placementX + W/2 + x; machineY = placementY + L - y (local y runs from the tongue tip)"

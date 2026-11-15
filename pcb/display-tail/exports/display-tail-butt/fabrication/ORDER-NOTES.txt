@@ -1,0 +1,1 @@
+Single copper layer on TOP (F.Cu), no vias. Nominal thickness 1.4 mm. Do not mirror.

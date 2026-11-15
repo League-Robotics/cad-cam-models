@@ -59,22 +59,28 @@ def cad(name):
     return nets, terminals, outline, round(clear, 4)
 
 
-ALLOWED = {'G0', 'G1', 'G4', 'G17', 'G21', 'G54', 'G90', 'M3', 'M5', 'M6', 'M9', 'M30'}
+ALLOWED = {'G0', 'G1', 'G4', 'G17', 'G21', 'G54', 'G90', 'M3', 'M5', 'M6', 'M9', 'M30', 'M851', 'M852'}
+TOOLS = [JOB['tools'][k]['slot'] for k in ('v', 'flat', 'outline')]   # OP1 V-bit, OP2 flat, OP3 outline
 
 
 def parse(path):
     pos = {'X': None, 'Y': None, 'Z': None}; op = bid = tool = feed = None; spin = False; changes = []; minutes = 0.0
-    segs = defaultdict(list); last = None; place = {b['id']: b for b in JOB['placements']}; deepest = defaultdict(float)
+    segs = defaultdict(list); last = None; vac = False; place = {b['id']: b for b in JOB['placements']}; deepest = defaultdict(float)
     for no, raw in enumerate(path.read_text().splitlines(), 1):
         if raw.startswith('(OPERATION '): op = int(re.search(r'OPERATION (\d+)', raw)[1]); bid = None
         if raw.startswith('(BOARD '): bid = int(re.search(r'BOARD (\d+)', raw)[1])
         s = re.sub(r'\([^)]*\)', '', raw).strip()
         if not s: continue
         words = re.findall(r'([A-Z])(-?\d+(?:\.\d+)?)', s); assert ''.join(k + v for k, v in words) == s.replace(' ', ''), (no, s)
-        cmd = words[0][0] + words[0][1]; assert cmd in ALLOWED, (no, s); last = cmd
+        cmd = words[0][0] + words[0][1]; assert cmd in ALLOWED, (no, s)
+        if last == 'M3': assert cmd == 'M851', (no, 'vacuum must come on right after M3')
+        if last == 'M5': assert cmd == 'M852', (no, 'vacuum must go off right after M5')
+        last = cmd
         data = {k: float(v) for k, v in words[1:]}
         if cmd == 'M6': assert not spin and (tool is None or pos['Z'] >= 5); tool = int(data['T']); changes.append(tool)
-        if cmd == 'M3': assert data['S'] == 12000 and tool in (2, 3); spin = True
+        if cmd == 'M3': assert data['S'] == 12000 and tool in TOOLS; spin = True
+        if cmd == 'M851': assert data['S'] == 100; vac = True
+        if cmd == 'M852': vac = False
         if cmd == 'M5': spin = False
         if cmd == 'G4': minutes += data['P'] / 60
         if 'F' in data: feed = data['F']; assert 0 < feed <= 300
@@ -87,9 +93,9 @@ def parse(path):
             if cmd == 'G0': assert (a[:2] == c[:2] and c[2] >= 5) or min(a[2], c[2]) >= 5, (no, s)
             if min(a[2], c[2]) < 0 and cmd == 'G0': assert spin  # vertical retract out of the cut
             elif min(a[2], c[2]) < 0:
-                assert spin and feed, (no, s)
+                assert spin and feed and vac, (no, s)
                 if max(a[2], c[2]) > 0: assert a[:2] == c[:2], (no, 'plunge with XY motion')
-                if op == 2:
+                if op == 3:
                     assert c[2] >= deepest[bid] - .25 - 1e-5, (no, 'more than one step below anything cut so far')
                     deepest[bid] = min(deepest[bid], c[2])
                 b = place[bid]; L = GEO[b['name']]['board_mm'][1]; W = GEO[b['name']]['board_mm'][0]
@@ -98,7 +104,7 @@ def parse(path):
                 segs[(bid, op)].append((local(a), local(c)))
             minutes += math.dist(a, c) / (feed if cmd == 'G1' else 2000)
         pos = new
-    assert changes == [2, 3] and not spin and pos['Z'] == 10 and last == 'M30'
+    assert changes == TOOLS and not spin and not vac and pos['Z'] == 10 and last == 'M30'
     return segs, round(minutes, 1)
 
 
@@ -118,7 +124,8 @@ prog = CAM / JOB['program']; segs, minutes = parse(prog)
 for b in JOB['placements']:
     name = b['name']; nets, terminals, outline, clear = cad(name)
     iso = sweep(segs[(b['id'], 1)], -.001, JOB['isolation']['effective_diameter_mm'] / 2)
-    top = iso.union(sweep(segs[(b['id'], 2)], -.001, .4)); bottom = sweep(segs[(b['id'], 2)], JOB['through_z_mm'] + .1, .4)
+    flat = sweep(segs[(b['id'], 2)], -.001, JOB['tools']['flat']['diameter_mm'] / 2)
+    top = iso.union(flat).union(sweep(segs[(b['id'], 3)], -.001, .4)); bottom = sweep(segs[(b['id'], 3)], JOB['through_z_mm'] + .1, .4)
     copper = unary_union(list(nets.values()))
     assert copper.buffer(-.01).intersection(top).area < 1e-6, ('copper damaged', name, copper.buffer(-.01).intersection(top).area)
     residual = outline.difference(top); islands = list(residual.geoms) if hasattr(residual, 'geoms') else [residual]; seen = {}
@@ -128,7 +135,12 @@ for b in JOB['placements']:
         assert len(hit) == 1, (name, ref, num, 'pad lost')
         assert seen.setdefault(net, hit[0]) == hit[0], (name, net, 'open')
     assert len(set(seen.values())) == len(seen), (name, 'nets shorted')
-    for net, i in seen.items(): assert islands[i].area < nets[net].area * 1.25 + .2, (name, net, 'joined to background copper')
+    for net, i in seen.items(): assert islands[i].area < nets[net].area + .15, (name, net, 'spare copper left on the net')
+    mech = [s.buffer(-.05).representative_point() for (r, n_, net), s in terminals.items() if net == 'MECH']
+    mech += [g.buffer(-.05).representative_point() for g in getattr(nets.get('MECH'), 'geoms', [nets['MECH']] if 'MECH' in nets else [])]
+    stray = [isl for i, isl in enumerate(islands) if i not in seen.values() and not any(isl.covers(q) for q in mech) and isl.area > 1e-3]
+    assert not stray, (name, 'floating copper left', [round(x.area, 4) for x in stray])
+    assert residual.area < copper.area + .3, (name, 'spare copper', residual.area, copper.area)
     path = outline.buffer(.4, quad_segs=16).exterior
     left = path.difference(bottom.buffer(.002)); pieces = [left] if left.geom_type == 'LineString' else list(left.geoms)
     pieces = [q for q in pieces if q.length > .05]
@@ -139,9 +151,9 @@ for b in JOB['placements']:
         assert min(y for _, y in q.coords) > tongue + .5, (name, 'tab on the tongue')
     uncut = outline.buffer(.35).difference(outline.buffer(.05)).difference(bottom).intersection(box(-10, -1, 10, tongue))
     assert uncut.is_empty or uncut.bounds[1] > tongue - .45, ('tongue not cut free', uncut.bounds)  # only the 0.4 mm root fillet the 0.8 mm cutter leaves
-    depths = {op: round(min(min(a[2], c[2]) for a, c in segs[(b['id'], op)]), 3) for op in (1, 2)}
-    assert depths == {1: -JOB['isolation']['depth_mm'], 2: JOB['through_z_mm']}, depths
-    report['boards'][str(b['id'])] = {'name': name, 'cad_min_clearance_mm': clear, 'tab_necks_mm': sorted(round(q.length, 2) for q in pieces), 'min_z': depths}
+    depths = {op: round(min(min(a[2], c[2]) for a, c in segs[(b['id'], op)]), 3) for op in (1, 2, 3)}
+    assert depths == {1: -JOB['isolation']['depth_mm'], 2: JOB['tools']['flat']['z_mm'], 3: JOB['through_z_mm']}, depths
+    report['boards'][str(b['id'])] = {'name': name, 'cad_min_clearance_mm': clear, 'copper_left_mm2': round(residual.area, 3), 'cad_copper_mm2': round(copper.area, 3), 'tab_necks_mm': sorted(round(q.length, 2) for q in pieces), 'min_z': depths}
 
 colors = {'/GND': '#263d47', '/+3V3': '#cb4a38', '/VS': '#cb4a38', '/SDA': '#1d88a8', '/SCL': '#b48a09', '/SCL_QWIIC': '#b48a09', '/SIG': '#d8811f', '/VCC': '#cb4a38', '/S1': '#3a9a3a', '/S2': '#d4b106', 'MECH': '#969e9c'}
 LABELS = {'header-tail': (['GND', 'VCC', 'S1', 'S2'], ['G', 'V', 'S1', 'S2']), 'qwiic-tail': (['GND', '3V3', 'SCL', 'SDA'], None)}
@@ -192,15 +204,17 @@ for b in JOB['placements']:
     ax.text(b['x'] + W / 2, b['y'] - 1.6, str(b['id']), ha='center', fontsize=8)
 ax.plot(0, 0, 'ko'); ax.annotate('G54 (0,0)', (0, 0), (1, -3), fontsize=9)
 ax.set_aspect('equal'); ax.set_xlim(-2, A[0] + 2); ax.set_ylim(-5, A[1] + 2); ax.grid(alpha=.15)
-ax.set_title(f'Strip: 2 header + 2 Qwiic tails in {A[0]:.0f} × {A[1]:.0f} mm of free stock, copper up', fontsize=11)
+ax.set_title(f'Strip (all spare copper cleared): 2 header + 2 Qwiic tails in {A[0]:.0f} × {A[1]:.0f} mm of free stock, copper up', fontsize=11)
 fig.tight_layout()
 for ext in ['pdf', 'svg', 'png']: fig.savefig(CAM / f'strip-layout.{ext}', dpi=200)
 
 report.update({'program': JOB['program'], 'program_sha256': hashlib.sha256(prog.read_bytes()).hexdigest(), 'motion_minutes': minutes,
                'checks': ['Schematic netlists match the independent net table', 'Front copper only, SMD only, no vias',
                           'Every net one piece in CAD; clearance at least 0.30 mm; copper 0.2 mm inside the outline',
-                          'Replayed V-bit and outline sweeps leave copper undamaged, every net whole and no two nets joined',
+                          'Replayed V-bit, flat and outline sweeps leave every pad and track undamaged, every net whole and no two nets joined',
+                          'All spare copper cleared: no floating copper, each net no more than 0.15 mm2 bigger than in CAD (inside-corner fillets)',
+                          'Vacuum: M851 S100 right after every M3, M852 right after every M5, on for every cut, off at the end',
                           'Each board has exactly 3 tabs of 1.5 mm, none on the tongue; the tongue is cut free all round',
-                          'Bounded feeds and depths, safe rapids, spindle on for every cut, tools T2 then T3'],
+                          'Bounded feeds and depths, safe rapids, spindle on for every cut, tools T4 (V-bit), T3 (1 mm flat), T5 (0.8 corn)'],
                'limits': 'Offline geometry only. The plug cavity, pin pitch and servo-port pinout are not yet measured; not test-cut.'})
 (CAM / 'validation.json').write_text(json.dumps(report, indent=1) + '\n'); print(json.dumps(report, indent=1))

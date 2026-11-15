@@ -1,0 +1,83 @@
+(footprint "DisplayPads_4of11"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "Waveshare ESP32-S3-Touch-LCD-1.69 back pads 18, 17, 3V3, G at 2.15 mm pitch; pad 18 at the origin")
+	(property "Reference" "REF**"
+		(at 0 0 0)
+		(layer "F.SilkS")
+		(uuid "db29d5e1-6857-4e33-a838-1f25585eb83d")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "DisplayPads_4of11"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "48d1b2d8-c151-40f4-948f-855bca76b0b3")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "442d2b79-94c3-4f6c-b67f-d4b161bf9073")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "2bc85394-e0c7-4a20-b54c-f27f2371fcde")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(pad "3V3" smd rect
+		(at 17.2 0)
+		(size 1.7 3)
+		(layers "F.Cu" "F.Mask")
+		(thermal_bridge_angle 45)
+		(uuid "979006c3-c0b3-46c5-a61e-d9ef48c2cd71")
+	)
+	(pad "17" smd rect
+		(at 2.15 0)
+		(size 1.7 3)
+		(layers "F.Cu" "F.Mask")
+		(thermal_bridge_angle 45)
+		(uuid "818cd06f-0ec7-4514-8ef7-26c16c9b7f12")
+	)
+	(pad "18" smd rect
+		(at 0 0)
+		(size 1.7 3)
+		(layers "F.Cu" "F.Mask")
+		(thermal_bridge_angle 45)
+		(uuid "6af97bb1-a782-4f57-8790-433e0e93cab4")
+	)
+	(pad "G" smd rect
+		(at 19.349999 0)
+		(size 1.7 3)
+		(layers "F.Cu" "F.Mask")
+		(thermal_bridge_angle 45)
+		(uuid "ac98428f-1939-4231-85da-c7ddbd1aa6cd")
+	)
+	(embedded_fonts no)
+)

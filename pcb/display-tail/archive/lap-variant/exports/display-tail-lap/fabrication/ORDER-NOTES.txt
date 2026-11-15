@@ -1,0 +1,2 @@
+Single copper layer on TOP (F.Cu), no vias. Nominal thickness 1.4 mm. Do not mirror.
+4 solder-through holes of 1.0 mm are NON-PLATED with a copper ring on the top only; the drill file lists them as PTH because KiCad draws the ring as a through-hole pad.

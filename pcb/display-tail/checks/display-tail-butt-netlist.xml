@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<export version="E">
+  <design>
+    <source>/home/eric/projects/gears-pcb/display-tail/design/display-tail-butt/display-tail-butt.kicad_sch</source>
+    <date>2026-11-14T18:58:26+0000</date>
+    <tool>Eeschema 9.0.8+dfsg-1</tool>
+    <sheet number="1" name="/" tstamps="/">
+      <title_block>
+        <title>Display tail: 4P4C jack to the Waveshare 1.69 LCD, butted, UART</title>
+        <company/>
+        <rev>A</rev>
+        <date>2026-11-14</date>
+        <source>display-tail-butt.kicad_sch</source>
+        <comment number="1" value="Front copper only. J1 pads 4 3 2 1 left to right into the latch-up mouth (as the rev B adapter). J2 pins are the display's pad names. UART: DISP_RX = pad 17 (robot TX), DISP_TX = pad 18 (robot RX)."/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+        <comment number="5" value=""/>
+        <comment number="6" value=""/>
+        <comment number="7" value=""/>
+        <comment number="8" value=""/>
+        <comment number="9" value=""/>
+      </title_block>
+    </sheet>
+  </design>
+  <components>
+    <comp ref="J1">
+      <value>73306-111LF</value>
+      <footprint>DisplayTail:Amphenol_73306-111LF</footprint>
+      <fields>
+        <field name="Footprint">DisplayTail:Amphenol_73306-111LF</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="DisplayTail" part="Jack4" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="display-tail-butt.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>0f0e17e5-b395-58a7-91dd-fdd8987bb749</tstamps>
+    </comp>
+    <comp ref="J2">
+      <value>DISPLAY PADS 18 17 3V3 G</value>
+      <footprint>DisplayTail:DisplayPads_4of11</footprint>
+      <fields>
+        <field name="Footprint">DisplayTail:DisplayPads_4of11</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="DisplayTail" part="DisplayPads4" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="display-tail-butt.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>741fc724-28e9-56e8-aae8-e168e90cdb44</tstamps>
+    </comp>
+  </components>
+  <libparts>
+    <libpart lib="DisplayTail" part="DisplayPads4">
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">DisplayPads4</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="3V3" name="3V3" type="passive"/>
+        <pin num="17" name="17" type="passive"/>
+        <pin num="18" name="18" type="passive"/>
+        <pin num="G" name="G" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="DisplayTail" part="Jack4">
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">Jack4</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+        <pin num="3" name="3" type="passive"/>
+        <pin num="4" name="4" type="passive"/>
+      </pins>
+    </libpart>
+  </libparts>
+  <libraries>
+    <library logical="DisplayTail">
+      <uri>/home/eric/projects/gears-pcb/display-tail/design/display-tail-butt/DisplayTail.kicad_sym</uri>
+    </library>
+  </libraries>
+  <nets>
+    <net code="1" name="/+3V3" class="Default">
+      <node ref="J1" pin="2" pinfunction="2" pintype="passive"/>
+      <node ref="J2" pin="3V3" pinfunction="3V3" pintype="passive"/>
+    </net>
+    <net code="2" name="/DISP_RX" class="Default">
+      <node ref="J1" pin="4" pinfunction="4" pintype="passive"/>
+      <node ref="J2" pin="17" pinfunction="17" pintype="passive"/>
+    </net>
+    <net code="3" name="/DISP_TX" class="Default">
+      <node ref="J1" pin="3" pinfunction="3" pintype="passive"/>
+      <node ref="J2" pin="18" pinfunction="18" pintype="passive"/>
+    </net>
+    <net code="4" name="/GND" class="Default">
+      <node ref="J1" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="J2" pin="G" pinfunction="G" pintype="passive"/>
+    </net>
+  </nets>
+</export>

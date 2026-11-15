@@ -1,0 +1,128 @@
+{
+ "frame": "case: pad edge y=0 (+y away from the display), x=0 display PCB centre (+x buttons side), z=0 tail copper face (+z toward the lid)",
+ "board_to_case": {
+  "X": "12.265 - x",
+  "Y": "23.5 - y",
+  "Z": "z"
+ },
+ "units": "mm",
+ "pieces": {
+  "tail_fr4": {
+   "bounds_min": [
+    -11.135,
+    1.2,
+    -1.4
+   ],
+   "bounds_max": [
+    12.265,
+    23.5,
+    0.0
+   ],
+   "volume_mm3": 730.548,
+   "faces": 12
+  },
+  "tail_copper": {
+   "bounds_min": [
+    -8.785,
+    4.4,
+    0.0
+   ],
+   "bounds_max": [
+    10.965,
+    13.7,
+    0.035
+   ],
+   "volume_mm3": 0.925,
+   "faces": 304
+  },
+  "tail_pads": {
+   "bounds_min": [
+    -9.435,
+    1.4,
+    0.0
+   ],
+   "bounds_max": [
+    11.615,
+    19.6,
+    0.035
+   ],
+   "volume_mm3": 1.981,
+   "faces": 168
+  },
+  "tail_pins": {
+   "bounds_min": [
+    -9.435,
+    -2.79,
+    0.0
+   ],
+   "bounds_max": [
+    11.615,
+    4.4,
+    0.775
+   ],
+   "volume_mm3": 26.733,
+   "faces": 144
+  },
+  "jack_body": {
+   "bounds_min": [
+    -5.275,
+    9.8,
+    0.35
+   ],
+   "bounds_max": [
+    6.405,
+    22.5,
+    14.0
+   ],
+   "volume_mm3": 1828.672,
+   "faces": 144
+  },
+  "jack_metal": {
+   "bounds_min": [
+    -5.81,
+    6.51,
+    0.0
+   ],
+   "bounds_max": [
+    6.94,
+    21.055,
+    6.583
+   ],
+   "volume_mm3": 24.56,
+   "faces": 288
+  }
+ },
+ "jack": {
+  "part": "Amphenol 73306-111LF",
+  "drawing": "pcb/references/Amphenol-73306-revM.pdf",
+  "housing_mm": {
+   "width_at_mouth": 11.18,
+   "width_at_rear": 11.68,
+   "depth_top": 12.7,
+   "depth_base": 11.68,
+   "height": 14.0,
+   "standoff": 0.35
+  },
+  "mouth_face_case_y": 22.5,
+  "centre_case_x": 0.565,
+  "opening_mm": {
+   "width": 7.9,
+   "height": 7.1,
+   "floor_z": 3.3,
+   "lever_step_w": 5.75,
+   "lever_step_h": 1.9,
+   "latch_keyway_w": 2.6,
+   "latch_keyway_h": 0.9,
+   "keyway_top_z": 13.2
+  },
+  "tails_tip_from_mouth": 15.989999999999998,
+  "guesses": [
+   "J_UNDERCUT_H",
+   "J_FLARE_D",
+   "CAVITY_D",
+   "HOLD_LEG_H",
+   "spring shape",
+   "DISPLAY_PAD"
+  ]
+ }
+}

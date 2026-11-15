@@ -1,0 +1,89 @@
+{
+ "display-tail-butt": {
+  "name": "display-tail-butt",
+  "revision": "A",
+  "program": "display-tail-butt-A-2up-clear-cut155.nc",
+  "area_mm": [
+   55.8,
+   28.3
+  ],
+  "placements": [
+   {
+    "id": 1,
+    "name": "display-tail-butt",
+    "x": 3.0,
+    "y": 3.0
+   },
+   {
+    "id": 2,
+    "name": "display-tail-butt",
+    "x": 29.4,
+    "y": 3.0
+   }
+  ],
+  "stock_thickness_mm": 1.4,
+  "safe_z_mm": 5.0,
+  "tools": {
+   "v": {
+    "slot": 4,
+    "tool": "30 deg V-bit, 0.2 mm tip",
+    "z_mm": -0.12,
+    "effective_diameter_mm": 0.2643,
+    "passes_round_copper": 2,
+    "pass_step_mm": 0.15,
+    "rest_step_mm": 0.18
+   },
+   "flat": {
+    "slot": 3,
+    "tool": "1.0 mm flat end mill",
+    "z_mm": -0.1,
+    "diameter_mm": 1.0,
+    "stepover_mm": 0.45,
+    "edge_to_copper_mm": 0.3
+   },
+   "outline": {
+    "slot": 5,
+    "tool": "0.8 mm corn cutter",
+    "diameter_mm": 0.8,
+    "through_z_mm": -1.55,
+    "stepdown_mm": 0.25
+   }
+  },
+  "isolation": {
+   "depth_mm": 0.12,
+   "effective_diameter_mm": 0.2643,
+   "tip_mm": 0.2,
+   "angle_deg": 30
+  },
+  "through_z_mm": -1.55,
+  "stepdown_mm": 0.25,
+  "cutter_mm": 0.8,
+  "holes": [],
+  "tabs": {
+   "width_mm": 1.5,
+   "z_mm": -0.9,
+   "remaining_mm": 0.5,
+   "where": "left, right and jack edges; none on the display edge"
+  },
+  "feeds": {
+   "rpm": 12000,
+   "feed_mm_min": 300,
+   "plunge_mm_min": 100
+  },
+  "vacuum": "M851 S100 after every M3, M852 after every M5",
+  "path_mm": {
+   "v_iso": 406.5,
+   "v_rest": 79.9,
+   "flat": 725.1
+  },
+  "clearing_checks": {
+   "copper_hit_by_v_mm2": 0.0,
+   "copper_hit_by_flat_mm2": 0.0,
+   "flat_nearest_copper_mm": 0.299,
+   "inside_corner_fillets": 24,
+   "largest_fillet_mm2": 0.00377,
+   "floating_copper_bits": 0
+  },
+  "transform": "machineX = placementX + x; machineY = placementY + L - y (board y runs down from the jack edge)"
+ }
+}

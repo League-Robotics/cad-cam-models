@@ -16,3 +16,6 @@ __pycache__/
 # OS / editor
 .DS_Store
 .claude/settings.local.json
+
+# PlatformIO build output and downloaded libraries
+.pio/
